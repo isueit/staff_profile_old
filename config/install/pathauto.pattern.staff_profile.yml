@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: staff_profile
+label: 'Staff Profile'
+type: 'canonical_entities:node'
+pattern: '[node:title]'
+selection_criteria:
+  821c7b50-0486-4c9a-b0fe-cfeb25b581d8:
+    id: node_type
+    bundles:
+      staff_profile: staff_profile
+    negate: false
+    context_mapping:
+      node: node
+    uuid: 821c7b50-0486-4c9a-b0fe-cfeb25b581d8
+selection_logic: and
+weight: -5
+relationships: {  }

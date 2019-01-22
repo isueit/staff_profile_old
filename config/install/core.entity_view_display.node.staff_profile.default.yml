@@ -1,0 +1,164 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.staff_profile.body
+    - field.field.node.staff_profile.field_address_1
+    - field.field.node.staff_profile.field_address_2
+    - field.field.node.staff_profile.field_base_county
+    - field.field.node.staff_profile.field_base_region
+    - field.field.node.staff_profile.field_city
+    - field.field.node.staff_profile.field_counties_served
+    - field.field.node.staff_profile.field_department_id
+    - field.field.node.staff_profile.field_email
+    - field.field.node.staff_profile.field_fax
+    - field.field.node.staff_profile.field_first_name
+    - field.field.node.staff_profile.field_last_name
+    - field.field.node.staff_profile.field_location
+    - field.field.node.staff_profile.field_phone
+    - field.field.node.staff_profile.field_positiontitle
+    - field.field.node.staff_profile.field_profile_image
+    - field.field.node.staff_profile.field_program_area_s_
+    - field.field.node.staff_profile.field_state
+    - field.field.node.staff_profile.field_zip
+    - image.style.medium
+    - node.type.staff_profile
+  module:
+    - image
+    - text
+    - user
+id: node.staff_profile.default
+targetEntityType: node
+bundle: staff_profile
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_address_1:
+    weight: 3
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_address_2:
+    weight: 4
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_base_county:
+    weight: 13
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_base_region:
+    weight: 12
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_city:
+    weight: 5
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_counties_served:
+    weight: 14
+    label: inline
+    settings:
+      link: true
+      view_mode: default
+    third_party_settings: {  }
+    type: entity_reference_entity_view
+    region: content
+  field_e:
+    weight: 10
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: content
+  field_fax:
+    weight: 9
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_location:
+    weight: 15
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_phone:
+    weight: 8
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_profile_image:
+    weight: 1
+    label: hidden
+    settings:
+      image_style: medium
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  field_program_area_s_:
+    weight: 11
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_state:
+    weight: 6
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_zio:
+    weight: 7
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  links:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_department_id: true
+  field_first_name: true
+  field_last_name: true
+  field_positiontitle: true
