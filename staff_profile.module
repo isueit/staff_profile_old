@@ -1,0 +1,15 @@
+<?php
+/**
+ * @file staff_profile.module
+ * Contains staff_profile.module
+ */
+
+/**
+ * Implements hook_cron()
+ */
+ function staff_profile_cron() {
+   //Run once per day, currently best option unless installing ultimate cron module
+   if () {
+     
+   }
+ }
