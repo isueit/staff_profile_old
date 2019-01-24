@@ -1,0 +1,24 @@
+# TODO Testing purposes only, remove on final build
+entity.staff_profile.profile:
+  path: '/people/{field_first_name}-{field_last_name}'
+  defaults:
+    _entity_view: 'entity_view_display.node.staff_profile.default'
+    _title: 'View profile'
+  requirements:
+    _entity_access: 'staff_profile.view'
+
+entity.staff_profile.edit_profile:
+  path: '/people/{field_first_name}-{field_last_name}/edit'
+  defaults:
+    _entity_view: 'entity_form_display.node.staff_profile.default'
+    _title: 'Edit profile'
+  requirements:
+    _entity_access: 'staff_profile.edit'
+
+entity.staff_profile.add_profile:
+  path: '/people/add'
+  defaults:
+    _entity_view: 'staff_profile.add'
+    _title: 'Add profile'
+  requirements:
+    _entity_access: 'staff_profile.add'

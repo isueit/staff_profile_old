@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_db_tracked
+    - node.type.staff_profile
+id: node.staff_profile.field_db_tracked
+field_name: field_db_tracked
+entity_type: node
+bundle: staff_profile
+label: 'In Staff DB'
+description: 'Staff netid was found in staff db and should be updated'
+required: false
+translatable: false
+default_value: 0
+default_value_callback: ''
+field-type: boolean
+settings: {}

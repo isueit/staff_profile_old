@@ -88,7 +88,7 @@ content:
     third_party_settings: {  }
     type: entity_reference_entity_view
     region: content
-  field_e:
+  field_email:
     weight: 10
     label: inline
     settings: {  }
@@ -144,7 +144,7 @@ content:
     third_party_settings: {  }
     type: string
     region: content
-  field_zio:
+  field_zip:
     weight: 7
     label: hidden
     settings:

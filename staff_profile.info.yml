@@ -1,9 +1,10 @@
 name: 'Staff Directory Updater'
 type: module
-description: 'Keeps site's staff directory up to date with central database'
+description: 'Keeps sites staff directory up to date with central database'
 core: '8.x'
 version: '8.x-1.0-dev'
 package: 'ISUEO'
-#dependencies:
-  #TODO, none yet
-#configure TODO if needed
+dependencies:
+  - options
+  - entity_reference
+#configure TODO add settings form if needed

@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.staff_profile.field_base_region
     - field.field.node.staff_profile.field_city
     - field.field.node.staff_profile.field_counties_served
+    - field.field.node.staff_profile.field_db_tracked
     - field.field.node.staff_profile.field_department_id
     - field.field.node.staff_profile.field_email
     - field.field.node.staff_profile.field_fax
@@ -105,7 +106,7 @@ content:
     third_party_settings: {  }
     type: string_textfield
     region: content
-  field_e:
+  field_email:
     weight: 11
     settings:
       size: 60
@@ -183,7 +184,7 @@ content:
     third_party_settings: {  }
     type: string_textfield
     region: content
-  field_zio:
+  field_zip:
     weight: 8
     settings:
       size: 60
@@ -240,4 +241,5 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  field_db_tracked: true
