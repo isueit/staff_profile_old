@@ -1,13 +1,23 @@
-# TODO Testing purposes only, remove on final build
-entity.staff_profile.profile:
+#Display list of staff_profiles
+entity.staff_profile.collection:
+  path: '/people'
+  defaults:
+    _entity_view: 'entity_view_display.node.staff_profile.list'
+    _title: 'Staff'
+  requirements:
+    _entity_access: 'staff_profile.list'
+
+#Display individual profile
+entity.staff_profile.canonical:
   path: '/people/{field_first_name}-{field_last_name}'
   defaults:
     _entity_view: 'entity_view_display.node.staff_profile.default'
-    _title: 'View profile'
+    _title: '{field_first_name} {field_last_name}'
   requirements:
     _entity_access: 'staff_profile.view'
 
-entity.staff_profile.edit_profile:
+#Form to edit individual profile
+entity.staff_profile.edit_form:
   path: '/people/{field_first_name}-{field_last_name}/edit'
   defaults:
     _entity_view: 'entity_form_display.node.staff_profile.default'
@@ -15,10 +25,20 @@ entity.staff_profile.edit_profile:
   requirements:
     _entity_access: 'staff_profile.edit'
 
-entity.staff_profile.add_profile:
+#Form to add profile
+entity.staff_profile.add_form:
   path: '/people/add'
   defaults:
     _entity_view: 'staff_profile.add'
     _title: 'Add profile'
   requirements:
     _entity_access: 'staff_profile.add'
+
+#Form to remove a profile
+entity.staff_profile.delete_form:
+  path: '/people/{field_first_name}-{field_last_name}/delete'
+  defaults:
+    _entity_view: #TODO
+    _title: "Delete Profile for {field_first_name} {field_last_name}"
+  requirements:
+    _entity_access: "staff_profile.delete"

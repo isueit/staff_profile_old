@@ -1,5 +1,5 @@
 {
   "name": "isuit/staff_profile",
   "type": "drupal-custom-module",
-  "description": "Module to keep the staff directory updated with central database"
+  "description": "Module to Create staff_profile content type"
 }

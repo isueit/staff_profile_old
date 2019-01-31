@@ -1,7 +1,6 @@
-name: 'Staff Directory Updater'
+name: 'Staff Profile Entity Creator'
 type: module
-description: 'Keeps sites staff directory up to date with central database'
-core: '8.x'
+description: 'Creates the entity type staff_profile'
 version: '8.x-1.0-dev'
 package: 'ISUEO'
 dependencies:
