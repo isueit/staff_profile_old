@@ -1,9 +1,11 @@
 name: 'Staff Profile Entity Creator'
 type: module
+core: 8.x
 description: 'Creates the entity type staff_profile'
 version: '8.x-1.0-dev'
 package: 'ISUEO'
 dependencies:
   - options
   - entity_reference
+  - telephone
 #configure TODO add settings form if needed
