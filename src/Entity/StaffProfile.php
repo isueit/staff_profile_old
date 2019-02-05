@@ -107,347 +107,615 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface {
     $fields['id'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('ID'))
       ->setReadOnly(TRUE);
+
     $fields['uuid'] = BaseFieldDefinition::create('uuid')
       ->setLabel(t('UUID'))
       ->setReadOnly(TRUE);
+
+    $fields['langcode'] = BaseFieldDefinition::create('language')
+      ->setLabel(t('Language code'));
+
     $fields['body'] = BaseFieldDefinition::create('text_with_summary')
       ->setLabel(t('Biography/Area(s) of Expertise'))
-      ->setSettings('teaser', array(
-        'label' => 'hidden'
-        'type' => 'text_summary_or_trimmed'
-      ))
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', TRUE)
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-    $fields['address_1'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Address 1'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', )
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-    $fields['address_2'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Address 2'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', )
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-    $fields['base_county'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Base County'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', )
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-    $fields['base_region'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Base Region'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', )
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-    $fields['city'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('City'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', )
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-    $fields['counties_served'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Counties Served'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', )
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-    $fields['department_id'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Department ID'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', )
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-    $fields['email'] = BaseFieldDefinition::create('email')
-      ->setLabel(t('E-Mail'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-    $fields['fax'] = BaseFieldDefinition::create('telephone')
-      ->setLabel(t('Telephone Number'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', )
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-    $fields['from_staff_directory'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Managed by Staff Profile Sync'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', )
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-    $fields['first_name'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('First Name'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', )
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-    $fields['last_name'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Last Name'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', )
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-    $fields['location'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Location'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', )
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-    $fields['phone'] = BaseFieldDefinition::create('telephone')
-      ->setLabel(t('Phone Number'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', )
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-    $fields['position_title'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Position Title'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', )
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-    $fields['profile_image'] = BaseFieldDefinition::create('image')
-      ->setLabel(t('Profile Image'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', )
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-    $fields['program_area_s_'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Program Areas'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', )
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-    $fields['state'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('State'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', )
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-    $fields['zip'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('ZIP Code'))
-      ->setSettings('teaser', array())
-      ->setSettings('view', array())
-      ->setSettings('form', array())
-      ->setDisplayConfigurable('teaser', )
-      ->setDisplayConfigurable('view', )
-      ->setDisplayConfigurable('form', )
-
-
-
-
-
-
-
-//TODO Remove this, it is replaced with above, more organized
-
-    $fields['id'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('NETID'))
-      ->setDescription(t('NETID of the Staff Profile entity'))
+      ->setRevisionable(TRUE)
+      ->setRequired(FALSE)
+      ->setTranslatable(TRUE)
       ->setSettings(array(
         'default_value' => '',
-        'max_length'=> 255,
-        'text_processing' => 0,
       ))
-      ->SetDisplayOptions('form', array(
-        'label' => 'above',
-        'type' => 'string',
-        'weight' => -6,
+      ->setDisplayOptions('teaser', array(
+        'type' => 'text_summary_or_trimmed',
+        'weight' => 101,
+        'settings' => array(
+          'display_label' => TRUE,
+          'trim_length' => 600,
+        ),
       ))
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', FALSE)
-      ->setReadOnly(TRUE);
-    //UUID, unique outside of project scope
-    $fields['uuid'] = BaseFieldDefinition::create('uuid')
-      ->setLabel(t('UUID'))
-      ->setDescription(t('The uuid of the Staff Profile Entity'))
-      ->setReadOnly(TRUE);
+      ->setDisplayOptions('view', array(
+        'type' => 'text_default',
+        'weight' => 2,
+        'region' => 'content',
+        'settings' => array(
+          'display_label' => FALSE,
+        ),
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'text_textarea_with_summary',
+        'weight' => 12,
+        'region' => 'content'
+        'settings' => array(
+          'rows' => 9,
+          'placeholder' => '',
+          'summary_rows' => 3,
+        ),
+      ))
+      ->setDisplayConfigurable('teaser', TRUE)
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
 
-    //User Defined fields
-    //First Name
-    $fields['first_name'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('First Name'))
-      ->setDescription(t('First name of the Staff Profile'))
+    $fields['field_address_1'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Address 1'))
+      ->setRevisionable(TRUE)
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
       ->setSettings(array(
         'default_value' => '',
         'max_length' => 255,
-        'text_processing' => 0,
       ))
       ->setDisplayOptions('view', array(
-        'label' => 'above',
         'type' => 'string',
-        'weight' => -5
+        'weight' => 3,
+        'region' => 'content',
+        'settings' => array(
+          'display_label' => FALSE,
+          'link_to_entity' => FALSE,
+        ),
       ))
-      ->SetDisplayOptions('form', array(
+      ->setDisplayOptions('form', array(
         'type' => 'string_textfield',
-        'weight' => -5,
+        'weight' => 4,
+        'region' => 'content',
+        'settings' => array(
+          'size' => 60,
+          'placeholder' => '',
+        ),
       ))
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
-      //Last Name
-      $fields['last_name'] = BaseFieldDefinition::create('string')
-        ->setLabel(t('Last Name'))
-        ->setDescription(t('Last name of the Staff Profile'))
-        ->setSettings(array(
-          'default_value' => '',
-          'max_length' => 255,
-          'text_processing' => 0,
-        ))
-        ->setDisplayOptions('view', array(
-          'label' => 'above',
-          'type' => 'string',
-          'weight' => -5
-        ))
-        ->SetDisplayOptions('form', array(
-          'type' => 'string_textfield',
-          'weight' => -5,
-        ))
-        ->setDisplayConfigurable('view', TRUE)
-        ->setDisplayConfigurable('form', TRUE);
+    $fields['field_address_2'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Address 2'))
+      ->setRevisionable(TRUE)
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
+      ->setSettings(array(
+        'default_value' => '',
+      ))
+      ->setDisplayOptions('view', array(
+        'type' => 'string',
+        'weight' => 4,
+        'region' => 'content',
+        'settings' => array(
+          'display_label' => FALSE,
+          'link_to_entity' => FALSE,
+        ),
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'string_textfield',
+        'weight' => 5,
+        'region' => 'content',
+        'settings' => array(
+          'size' => 60,
+          'placeholder' => '',
+        ),
+      ))
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['field_base_county'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Base County'))
+      ->setRevisionable(TRUE)
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
+      ->setSettings(array(
+        'default_value' => '',
+      ))
+      ->setDisplayOptions('view', array(
+        'type' => 'string',
+        'weight' => 13,
+        'region' => 'content',
+        'display_label' => 'inline',
+        'settings' => array(
+          'link_to_entity' => FALSE,
+        ),
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'string_textfield',
+        'weight' => 15,
+        'region' => 'content',
+        'settings' => array(
+          'size' => 60,
+          'placeholder' => '',
+        ),
+      ))
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['field_base_region'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Base Region'))
+      ->setRevisionable(TRUE)
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
+      ->setSettings(array(
+        'default_value' => '',
+      ))
+      ->setDisplayOptions('view', array(
+        'type' => 'string',
+        'weight' => 12,
+        'region' => 'content',
+        'display_label' => 'inline',
+        'settings' => array(
+          'link_to_entity' => FALSE,
+        ),
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'string_textfield',
+        'weight' => 14,
+        'region' => 'content',
+        'settings' => array(
+          'size' => 60,
+          'placeholder' => '',
+        ),
+      ))
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['field_city'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('City'))
+      ->setRevisionable(TRUE)
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
+      ->setSettings(array(
+        'default_value' => '',
+      ))
+      ->setDisplayOptions('view', array(
+        'type' => 'string',
+        'weight' => 5,
+        'region' => 'content',
+        'settings' => array(
+          'link_to_entity' => FALSE,
+          'display_label' => FALSE,
+        ),
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'string_textfield',
+        'weight' => 6,
+        'region' => 'content',
+        'settings' => array(
+          'size' => 60,
+          'placeholder' => '',
+        ),
+      ))
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['field_counties_served'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Counties Served'))
+      ->setRevisionable(TRUE)
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
+      ->setSettings(array(
+        'default_value' => '',
+        'settings' => array(
+          'handler' => 'default:taxonomy_term'
+          'handler_settings' => array(
+            'target_bundles' => array(
+              'counties_in_iowa' => 'counties_in_iowa',
+            ),
+            'sort' => array(
+              'field' => 'name',
+              'direction' => 'asc',
+            ),
+            'auto_create' => FALSE,
+            'auto_create_bundle' = '',
+          ),
+        ),
+      ))
+      ->setDisplayOptions('view', array(
+        'type' => 'entity_reference_entity_view',
+        'weight' => 14,
+        'region' => 'content',
+        'display_label' => 'inline',
+        'settings' => array(
+          'link' => TRUE,
+          'view_mode' => 'default',
+        ),
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'entity_reference_autocomplete_tags',
+        'weight' => 16,
+        'region' => 'content',
+        'settings' => array(
+          'match_operator' => 'CONTAINS'
+          'size' => 60,
+          'placeholder' => '',
+        ),
+      ))
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['field_department_id'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Department ID'))
+      ->setRevisionable(TRUE)
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
+      ->setSettings(array(
+        'default_value' => '',
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'string_textfield',
+        'weight' => 18,
+        'region' => 'content',
+        'settings' => array(
+          'size' => 60,
+          'placeholder' => '',
+        ),
+      ))
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['field_email'] = BaseFieldDefinition::create('email')
+      ->setLabel(t('E-Mail'))
+      ->setRevisionable(FALSE)
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
+      ->setSettings(array(
+        'default_value' => '',
+      ))
+      ->setDisplayOptions('view', array(
+        'type' => 'basic_string',
+        'weight' => 10,
+        'region' => 'content',
+        'display_label' => 'inline',
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'email_default',
+        'weight' => 11,
+        'region' => 'content',
+        'settings' => array(
+          'size' => 60,
+          'placeholder' => '',
+        ),
+      ))
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['field_fax'] = BaseFieldDefinition::create('telephone')
+      ->setLabel(t('Telephone Number'))
+      ->setRevisionable(TRUE)
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
+      ->setSettings(array(
+        'default_value' => '',
+      ))
+      ->setDisplayOptions('view', array(
+        'type' => 'string',
+        'weight' => 9,
+        'region' => 'content',
+        'display_label' => 'inline',
+        'settings' => array(
+          'link_to_entity' => FALSE,
+        ),
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'telephone_default',
+        'weight' => 10,
+        'region' => 'content',
+        'settings' => array(
+          'size' => 60,
+          'placeholder' => '',
+        ),
+      ))
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['field_from_staff_directory'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Managed by Staff Profile Sync'))
+      ->setSettings(array())
+      ->setDisplayOptions('form', array(
+        'type' => 'string',
+        'weight' => 4,
+        'region' => 'content',
+        'settings' => array(
+          'placeholder' => 'false',
+        ),
+      ))
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['field_first_name'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('First Name'))
+      ->setRevisionable(TRUE)
+      ->setRequired(TRUE)
+      ->setTranslatable(FALSE)
+      ->setSettings(array(
+        'default_value' => '',
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'string_textfield',
+        'weight' => 1,
+        'region' => 'content',
+        'settings' => array(
+          'size' => 60,
+          'placeholder' => '',
+        ),
+      ))
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['field_last_name'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Last Name'))
+      ->setRevisionable(TRUE)
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
+      ->setSettings(array(
+        'default_value' => '',
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'string_textfield',
+        'weight' => 2,
+        'region' => 'content',
+        'settings' => array(
+          'size' => 60,
+          'placeholder' => '',
+        ),
+      ))
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['field_location'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Location'))
+      ->setRevisionable(TRUE)
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
+      ->setSettings(array(
+        'default_value' => '',
+      ))
+      ->setDisplayOptions('view', array(
+        'type' => 'string',
+        'weight' => 15,
+        'region' => 'content',
+        'display_label' => 'above',
+        'settings' => array(
+          'link_to_entity' => FALSE,
+        ),
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'string_textfield',
+        'weight' => 19,
+        'region' => 'content',
+        'settings' => array(
+          'size' => 60,
+          'placeholder' => '',
+        ),
+      ))
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['field_phone'] = BaseFieldDefinition::create('telephone')
+      ->setLabel(t('Phone Number'))
+      ->setRevisionable(TRUE)
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
+      ->setSettings(array(
+        'default_value' => '',
+      ))
+      ->setDisplayOptions('view', array(
+        'type' => 'string',
+        'weight' => 8,
+        'region' => 'content',
+        'display_label' => 'inline',
+        'settings' => array(
+          'link_to_entity' => FALSE,
+        ),
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'telephone_default',
+        'weight' => 3,
+        'region' => 'content',
+        'settings' => array(
+          'size' => 60,
+          'placeholder' => '',
+        ),
+      ))
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['field_position_title'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Position Title'))
+      ->setRevisionable(TRUE)
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
+      ->setSettings(array(
+        'default_value' => '',
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'string_textfield',
+        'weight' => 3,
+        'region' => 'content',
+        'settings' => array(
+          'size' => 60,
+          'placeholder' => '',
+        ),
+      ))
+      ->setDisplayConfigurable('form', TRUE);
+
+//Should pdfs be an acceptable profile image? - from yml files
+    $fields['field_profile_image'] = BaseFieldDefinition::create('image')
+      ->setLabel(t('Profile Image'))
+      ->setRevisionable(TRUE)
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
+      ->setSettings(array(
+        'settings' => array(
+          'file_directory' => 'profile/images',
+          'file_extensions' => 'png gif jpg jpeg pdf',
+          'max_filesize' => '',
+          'max_resolution' => '',
+          'min_resolution' => '',
+          'alt_field' => TRUE,
+          'alt_field_required' => TRUE,
+          'title_field' => TRUE,
+          'title_field_required' => FALSE,
+          'default_image' => array(
+            'uuid' => '',
+            'alt' => '',
+            'title' => '',
+            'width' => null,
+            'height' => null,
+          ),
+          'handler' => 'default;file',
+        ),
+      ))
+      ->setDisplayOptions('view', array(
+        'type' => 'image',
+        'weight' => 1,
+        'region' => 'content',
+        'settings' => array(
+          'link_to_entity' => FALSE,
+          'display_label' => FALSE,
+          'image_style' => 'medium',
+          'image_link' => ''
+        ),
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'image_image',
+        'weight' => 17,
+        'region' => 'content',
+        'settings' => array(
+          'progress_indicator' => 'throbber',
+          'preview_image_style' => 'thumbnail'
+        ),
+      ))
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['field_program_area_s_'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Program Areas'))
+      ->setRevisionable(TRUE)
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
+      ->setSettings(array(
+        'default_value' => '',
+      ))
+      ->setDisplayOptions('view', array(
+        'type' => 'string',
+        'weight' => 11,
+        'region' => 'content',
+        'display_label' => 'inline',
+        'settings' => array(
+          'link_to_entity' => FALSE,
+        ),
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'string_textfield',
+        'weight' => 13,
+        'region' => 'content',
+        'settings' => array(
+          'size' => 60,
+          'placeholder' => '',
+        ),
+      ))
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['field_state'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('State'))
+      ->setRevisionable(TRUE)
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
+      ->setSettings(array(
+        'default_value' => '',
+      ))
+      ->setDisplayOptions('view', array(
+        'type' => 'string',
+        'weight' => 6,
+        'region' => 'content',
+        'settings' => array(
+          'link_to_entity' => FALSE,
+          'display_label' => FALSE,
+        ),
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'string_textfield',
+        'weight' => 7,
+        'region' => 'content',
+        'settings' => array(
+          'size' => 60,
+          'placeholder' => '',
+        ),
+      ))
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['field_zip'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('ZIP Code'))
+      ->setRevisionable(TRUE)
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
+      ->setSettings(array(
+        'default_value' => '',
+      ))
+      ->setDisplayOptions('view', array(
+        'type' => 'string',
+        'weight' => 7,
+        'region' => 'content',
+        'settings' => array(
+          'link_to_entity' => FALSE,
+          'display_label' => FALSE,
+        ),
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'string_textfield',
+        'weight' => 8,
+        'region' => 'content',
+        'settings' => array(
+          'size' => 60,
+          'placeholder' => '',
+        ),
+      ))
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['user_id'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('User Name'))
+      ->setSettings(array(
+        'target_type' => 'user',
+        'handler' => 'default',
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'entity_reference_autocomplete',
+        'settings' => array(
+          'match_operator' => 'CONTAINS',
+          'size' => 60,
+          'autocomplete_type' => 'tags',
+          'placeholder' => '',
+        ),
+      ))
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['created'] = BaseFieldDefinition::create('created')
+      ->setLabel(t('Created'));
+      
+    $fields['changed'] = BaseFieldDefinition::create('changed')
+      ->setLabel(t('Changed'));
 
 
-      $fields['body'] = BaseFieldDefinition::create('text_textarea_with_summary')
-//Address TODO possibly set the edit and create forms to have a dropdown to make selecting address easier
-      $fields['address_1'] = BaseFieldDefinition::create('string')
-        ->setLabel(t('Address Line 1'))
-        ->setDescription(t('First Address Line'))
-        ->setSettings(array(
-          'default_value' => '',
-          'max_length' => 255,
-          'text_processing' => 0,
-        ))
-        ->setDisplayOptions('view', array(
-          'label' => 'above',
-          'type' => 'string',
-          'weight' => -4,
-        ))
-        ->SetDisplayOptions('form', array(
-          'type' => 'string_textfield',
-          'weight' => -4,
-        ))
-        ->setDisplayConfigurable('view', TRUE)
-        ->setDisplayConfigurable('form', TRUE);
+    // $fields['links']
+    // $fields['path']
+    // $fields['promote']
+    // $fields['status']
+    // $fields['sticky']
+    // $fields['title']
+    // $fields['uid']
+    // $fields['url_redirects']
 
-      $fields['address_2'] = BaseFieldDefinition::create('string')
-        ->setLabel(t('Address Line 2'))
-        ->setDescription(t('Second Address Line'))
-        ->setSettings(array(
-          'default_value' => '',
-          'max_length' => 255,
-          'text_processing' => 0,
-        ))
-        ->setDisplayOptions('view', array(
-          'label' => 'above',
-          'type' => 'string',
-          'weight' => -4,
-        ))
-        ->SetDisplayOptions('form', array(
-          'type' => 'string_textfield',
-          'weight' => -4,
-        ))
-        ->setDisplayConfigurable('view', TRUE)
-        ->setDisplayConfigurable('form', TRUE);
-
-      $fields['city'] = BaseFieldDefinition::create('string')
-        ->setLabel(t('City'))
-        ->setDescription(t('Address City'))
-        ->setSettings(array(
-          'default_value' => '',
-          'max_length' => 255,
-          'text_processing' => 0,
-        ))
-        ->setDisplayOptions('view', array(
-          'label' => 'above',
-          'type' => 'string',
-          'weight' => -4,
-        ))
-        ->SetDisplayOptions('form', array(
-          'type' => 'string_textfield',
-          'weight' => -4,
-        ))
-        ->setDisplayConfigurable('view', TRUE)
-        ->setDisplayConfigurable('form', TRUE);
-
-      $fields['state'] = BaseFieldDefinition::create('string')
-        ->setLabel(t('State'))
-        ->setDescription(t('Address State'))
-        ->setSettings(array(
-          'default_value' => '',
-          'max_length' => 255,
-          'text_processing' => 0,
-        ))
-        ->setDisplayOptions('view', array(
-          'label' => 'above',
-          'type' => 'string',
-          'weight' => -4,
-        ))
-        ->SetDisplayOptions('form', array(
-          'type' => 'string_textfield',
-          'weight' => -4,
-        ))
-        ->setDisplayConfigurable('view', TRUE)
-        ->setDisplayConfigurable('form', TRUE);
-
-      //TODO may want to set zip to be an int with a length of 5
-      $fields['zip'] = BaseFieldDefinition::create('string')
-        ->setLabel(t('ZIP'))
-        ->setDescription(t('Address ZIP code'))
-        ->setSettings(array(
-          'default_value' => '',
-          'max_length' => 255,
-          'text_processing' => 0,
-        ))
-        ->setDisplayOptions('view', array(
-          'label' => 'above',
-          'type' => 'string',
-          'weight' => -4,
-        ))
-        ->SetDisplayOptions('form', array(
-          'type' => 'string_textfield',
-          'weight' => -4,
-        ))
-        ->setDisplayConfigurable('view', TRUE)
-        ->setDisplayConfigurable('form', TRUE);
-  }
 
 
 }

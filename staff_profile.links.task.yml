@@ -1,0 +1,14 @@
+staff_profile.view:
+  route_name: entity.staff_profile.canonical
+  base_route: entity.staff_profile.canonical
+  title: View
+
+staff_profile.page_edit:
+  route_name: entity.staff_profile.edit_form
+  base_route: entity.staff_profile.canonical
+  title: Edit
+
+staff_profile.delete_confirm:
+  route_name: entity.staff_profile.delete_form
+  base_route: entity.staff_profile.canonical
+  title: Delete

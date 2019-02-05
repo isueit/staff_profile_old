@@ -1,0 +1,5 @@
+entity.staff_profile.collection:
+  title: 'Staff Listing'
+  route_name: entity.staff_profile.collection
+  description: 'List of all Staff'
+  weight: 10

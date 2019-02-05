@@ -2,7 +2,7 @@
 entity.staff_profile.collection:
   path: '/people'
   defaults:
-    _entity_view: 'entity_view_display.node.staff_profile.list'
+    _entity_teaser: 'entity_view_display.node.staff_profile.list'
     _title: 'Staff'
   requirements:
     _entity_access: 'staff_profile.list'
@@ -20,7 +20,7 @@ entity.staff_profile.canonical:
 entity.staff_profile.edit_form:
   path: '/people/{field_first_name}-{field_last_name}/edit'
   defaults:
-    _entity_view: 'entity_form_display.node.staff_profile.default'
+    _entity_form: 'entity_form_display.node.staff_profile.default'
     _title: 'Edit profile'
   requirements:
     _entity_access: 'staff_profile.edit'
@@ -29,7 +29,7 @@ entity.staff_profile.edit_form:
 entity.staff_profile.add_form:
   path: '/people/add'
   defaults:
-    _entity_view: 'staff_profile.add'
+    _entity_form: 'staff_profile.add'
     _title: 'Add profile'
   requirements:
     _entity_access: 'staff_profile.add'
@@ -38,7 +38,7 @@ entity.staff_profile.add_form:
 entity.staff_profile.delete_form:
   path: '/people/{field_first_name}-{field_last_name}/delete'
   defaults:
-    _entity_view: #TODO
+    _entity_form: 'staff_profile.delete'
     _title: "Delete Profile for {field_first_name} {field_last_name}"
   requirements:
     _entity_access: "staff_profile.delete"
