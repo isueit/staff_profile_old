@@ -23,10 +23,10 @@ use Drupal\user\UserInterface;
  *        "edit" = "Drupal\Core\Entity\ContentEntityForm",
  *        "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
  *      },
- *      "access" = "Drupal\staff_profile"\StaffProfileAccessControlHandler"
+ *      "access" = "Drupal\staff_profile\StaffProfileAccessControlHandler",
  *     },
- *    base_table = "staff_profile"
- *    admin_permission = "administer staff_profile entity"
+ *    base_table = "staff_profile",
+ *    admin_permission = "administer staff_profile entity",
  *    links = {
  *      "canonical" = "/people/{field_first_name}-{field_last_name}",
  *      "add-page" = "/people/add",
@@ -34,14 +34,7 @@ use Drupal\user\UserInterface;
  *      "delete-form" = "/people/{field_first_name}-{field_last_name}/delete",
  *      "collection" = "/people",
  *    },
- *    entity_keys = {
- *      TODO
- *
- *
- *
- *
- *    }
- *  }
+ *  )
  *
 */
 class StaffProfile extends ContentEntityBase implements StaffProfileInterface {
@@ -52,10 +45,10 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface {
   *
   * Set computed fields when creating a new staff Profile
   */
-  public static function preCreate(EntityStorageInterface $storage_controller, arrat &$values) {
-    parent::preCreate($storage_controller, $values);
+  public static function preCreate(EntityStorageInterface $storage, array &$values) {
+    parent::preCreate($storage, $values);
     $values += array(
-      'user_id' => \Drupal::currentUser->()->id(), //TODO Check if the user with the netid exists as a user and give them ownership instead
+      'user_id' => \Drupal::currentUser()->id(),
     );
   }
 
@@ -142,7 +135,7 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface {
       ->setDisplayOptions('form', array(
         'type' => 'text_textarea_with_summary',
         'weight' => 12,
-        'region' => 'content'
+        'region' => 'content',
         'settings' => array(
           'rows' => 9,
           'placeholder' => '',
@@ -307,7 +300,7 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface {
       ->setSettings(array(
         'default_value' => '',
         'settings' => array(
-          'handler' => 'default:taxonomy_term'
+          'handler' => 'default:taxonomy_term',
           'handler_settings' => array(
             'target_bundles' => array(
               'counties_in_iowa' => 'counties_in_iowa',
@@ -317,7 +310,7 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface {
               'direction' => 'asc',
             ),
             'auto_create' => FALSE,
-            'auto_create_bundle' = '',
+            'auto_create_bundle' => '',
           ),
         ),
       ))
@@ -336,7 +329,7 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface {
         'weight' => 16,
         'region' => 'content',
         'settings' => array(
-          'match_operator' => 'CONTAINS'
+          'match_operator' => 'CONTAINS',
           'size' => 60,
           'placeholder' => '',
         ),
@@ -420,7 +413,6 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface {
 
     $fields['field_from_staff_directory'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Managed by Staff Profile Sync'))
-      ->setSettings(array())
       ->setDisplayOptions('form', array(
         'type' => 'string',
         'weight' => 4,
@@ -702,7 +694,7 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface {
 
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created'));
-      
+
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'));
 
@@ -715,7 +707,6 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface {
     // $fields['title']
     // $fields['uid']
     // $fields['url_redirects']
-
-
-
+    return $fields;
+  }
 }

@@ -1,11 +1,11 @@
 view staff_profile entity:
-  title: 'View Staff Profile Entity'
+  title: 'view staff profile entity'
 add staff_profile entity:
-  title: 'Add Staff Profile Entity'
+  title: 'add staff profile entity'
 edit staff_profile entity:
-  title: 'Edit Staff Profile Entity'
+  title: 'edit staff profile entity'
 delete staff_profile entity:
-  title: 'Delete Staff Profile Entity'
+  title: 'delete staff profile entity'
 administer staff_profile entity:
-  title: 'Administer Staff Profile Entity'
+  title: 'administer staff profile entity'
   restrict access: true

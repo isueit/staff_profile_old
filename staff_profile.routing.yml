@@ -20,7 +20,7 @@ entity.staff_profile.canonical:
 entity.staff_profile.edit_form:
   path: '/people/{field_first_name}-{field_last_name}/edit'
   defaults:
-    _entity_form: 'entity_form_display.node.staff_profile.default'
+    _entity_form: 'staff_profile.edit'
     _title: 'Edit profile'
   requirements:
     _entity_access: 'staff_profile.edit'
@@ -32,7 +32,7 @@ entity.staff_profile.add_form:
     _entity_form: 'staff_profile.add'
     _title: 'Add profile'
   requirements:
-    _entity_access: 'staff_profile.add'
+    _entity_create_access: 'staff_profile.add'
 
 #Form to remove a profile
 entity.staff_profile.delete_form:
