@@ -1,44 +1,49 @@
+#UPDATED NAMING CONVENTION
 #Display list of staff_profiles
-entity.staff_profile.collection:
+entity.staff_profile_profile.collection:
   path: '/people'
   defaults:
-    _entity_teaser: 'entity_view_display.node.staff_profile.list'
+    _entity_list: 'staff_profile_profile'
     _title: 'Staff'
   requirements:
-    _entity_access: 'staff_profile.list'
-
+    _permission: 'administer staff profile entity'
 #Display individual profile
-entity.staff_profile.canonical:
-  path: '/people/{field_first_name}-{field_last_name}'
+entity.staff_profile_profile.canonical:
+  path: '/people/{staff_profile_profile}'
   defaults:
-    _entity_view: 'entity_view_display.node.staff_profile.default'
-    _title: '{field_first_name} {field_last_name}'
+    _entity_view: 'staff_profile_profile'
+    _title: 'Staff Member'
   requirements:
-    _entity_access: 'staff_profile.view'
-
+    _entity_access: 'staff_profile_profile.view'
 #Form to edit individual profile
-entity.staff_profile.edit_form:
-  path: '/people/{field_first_name}-{field_last_name}/edit'
+entity.staff_profile_profile.edit_form:
+  path: '/people/{staff_profile_profile}/edit'
   defaults:
-    _entity_form: 'staff_profile.edit'
-    _title: 'Edit profile'
+    _entity_form: 'staff_profile_profile.edit'
+    _title: 'Edit Staff profile'
   requirements:
-    _entity_access: 'staff_profile.edit'
-
+    _entity_access: 'staff_profile_profile.edit'
 #Form to add profile
-entity.staff_profile.add_form:
+entity.staff_profile_profile.profile_add:
   path: '/people/add'
   defaults:
-    _entity_form: 'staff_profile.add'
-    _title: 'Add profile'
+    _entity_form: 'staff_profile_profile.add'
+    _title: 'Add Profile'
   requirements:
-    _entity_create_access: 'staff_profile.add'
-
+    _entity_create_access: 'staff_profile_profile'
 #Form to remove a profile
 entity.staff_profile.delete_form:
-  path: '/people/{field_first_name}-{field_last_name}/delete'
+  path: '/people/{staff_profile_profile}/delete'
   defaults:
-    _entity_form: 'staff_profile.delete'
-    _title: "Delete Profile for {field_first_name} {field_last_name}"
+    _entity_form: 'staff_profile_profile.delete'
+    _title: "Delete Profile for {staff_profile_profile}"
   requirements:
-    _entity_access: "staff_profile.delete"
+    _entity_access: "staff_profile_profile.delete"
+#Settings Form
+staff_profile_profile.profile_settings:
+  path: 'admin/structure/staff_profile_settings'
+  defaults:
+    _form: '\Drupal\staff_profile\Form\StaffProfileSettingsForm'
+    _title: 'Staff Profile Settings'
+  requirements:
+    _permission: 'administer staff profile entity'

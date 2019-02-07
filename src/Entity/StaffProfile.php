@@ -1,4 +1,5 @@
 <?php
+#TODO update naming convention
 namespace Drupal\staff_profile\Entity;
 
 use Drupal\Core\Entity\ContentEntityBase;
@@ -10,12 +11,14 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\staff_profile\NodeInterface;
 use Drupal\user\UserInterface;
+use Drupal\staff_profile\StaffProfileInterface;
 
 /**
  * Defines staff_profile entity class
  *
+ *  @ingroup staff_profile
  *  @ContentEntityType(
- *    id = "staff_profile_content",
+ *    id = "staff_profile_entity",
  *    label = @Translation("Staff Profile"),
  *    bundle_label = @Translation("Staff Profile Entity Type"),
  *    handlers = {
@@ -27,7 +30,7 @@ use Drupal\user\UserInterface;
  *      "access" = "Drupal\staff_profile\StaffProfileAccessControlHandler",
  *     },
  *    base_table = "staff_profile_entity",
- *    admin_permission = "administer staff_profile entity",
+ *    admin_permission = "administer staff profile entity",
  *    links = {
  *      "canonical" = "/people/{field_first_name}-{field_last_name}",
  *      "add-page" = "/people/add",
@@ -35,23 +38,37 @@ use Drupal\user\UserInterface;
  *      "delete-form" = "/people/{field_first_name}-{field_last_name}/delete",
  *      "collection" = "/people",
  *    },
+ *    revision_table = "staff_profile_revision",
+ *    entity_keys = {
+ *      "id" = "id",
+ *      "uuid" = "uuid",
+ *      "revision" = "revision_id",
+ *      "uid" = "user_id",
+ *      "status" = "status",
+ *      "langcode" = "langcode",
+ *      "email" = "email",
+ *    },
+ *   revision_metadata_keys = {
+ *     "revision_user" = "revision_user",
+ *     "revision_created" = "revision_created",
+ *     "revision_log_message" = "revision_log",
+ *   },
  *  )
  *
 */
-class StaffProfile extends ContentEntityBase implements StaffProfileInterface {
+class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
   use EntityChangedTrait;
 
   /**
   * {@inheritdoc}
-  *
-  * Set computed fields when creating a new staff Profile
+  * Set computed fields when creating a new Staff Profile
   */
   public static function preCreate(EntityStorageInterface $storage, array &$values) {
-    if (parent::preCreate($storage, $values)) {
-      $values += array(
-        'user_id' => \Drupal::currentUser()->id(),
-      );
-    }
+    parent::preCreate($storage, $values);
+
+    $values += array(
+      'user_id' => \Drupal::currentUser()->id(),
+    );
   }
 
   /**
@@ -98,7 +115,7 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface {
   * Creates Fields and properties
   * Defines gui behavior
   */
-  public static function BaseFieldDefinitions(EntityTypeInterface $entity_type) {
+  public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields['id'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('ID'))
       ->setReadOnly(TRUE);
@@ -701,13 +718,17 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface {
       ->setLabel(t('Changed'));
 
 
+    $fields['user_id'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('User Name'))
+      ->setSettings(array(
+          'target_type' => 'user',
+      ));
     // $fields['links']
     // $fields['path']
     // $fields['promote']
     // $fields['status']
     // $fields['sticky']
     // $fields['title']
-    // $fields['uid']
     // $fields['url_redirects']
     return $fields;
   }
