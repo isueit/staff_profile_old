@@ -39,4 +39,3 @@ class StaffProfileForm extends ContentEntityForm {
     return $status;
   }
 }
- ?>

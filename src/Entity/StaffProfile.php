@@ -6,6 +6,7 @@ use Drupal\Core\Entity\EntityChangedTrait;
 use Druapl\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\staff_profile\NodeInterface;
 use Drupal\user\UserInterface;
@@ -14,7 +15,7 @@ use Drupal\user\UserInterface;
  * Defines staff_profile entity class
  *
  *  @ContentEntityType(
- *    id = "node.staff_profile",
+ *    id = "staff_profile_content",
  *    label = @Translation("Staff Profile"),
  *    bundle_label = @Translation("Staff Profile Entity Type"),
  *    handlers = {
@@ -25,7 +26,7 @@ use Drupal\user\UserInterface;
  *      },
  *      "access" = "Drupal\staff_profile\StaffProfileAccessControlHandler",
  *     },
- *    base_table = "staff_profile",
+ *    base_table = "staff_profile_entity",
  *    admin_permission = "administer staff_profile entity",
  *    links = {
  *      "canonical" = "/people/{field_first_name}-{field_last_name}",
@@ -46,10 +47,11 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface {
   * Set computed fields when creating a new staff Profile
   */
   public static function preCreate(EntityStorageInterface $storage, array &$values) {
-    parent::preCreate($storage, $values);
-    $values += array(
-      'user_id' => \Drupal::currentUser()->id(),
-    );
+    if (parent::preCreate($storage, $values)) {
+      $values += array(
+        'user_id' => \Drupal::currentUser()->id(),
+      );
+    }
   }
 
   /**

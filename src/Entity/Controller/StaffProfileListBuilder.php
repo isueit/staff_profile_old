@@ -47,4 +47,3 @@ class StaffProfileListBuilder extends EntityListBuilder {
     return $row + parent::buildRow($entity);
   }
 }
-?>

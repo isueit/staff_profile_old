@@ -6,7 +6,7 @@ use Drupal\user\EntityOwnerInterface;
 use Drupal\Core\EntityChangedInterface;
 
 /**
- * Provides an interface defining a Contact entity.
+ * Provides an interface defining a StaffProfile entity.
  * @ingroup staff_profile
  *
  */
