@@ -1,7 +1,7 @@
 #UPDATED NAMING CONVENTION
 #Display list of staff_profiles
 entity.staff_profile_profile.collection:
-  path: '/people'
+  path: '/people/list'
   defaults:
     _entity_list: 'staff_profile_profile'
     _title: 'Staff'

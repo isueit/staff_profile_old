@@ -12,5 +12,4 @@ use Drupal\Core\Entity\EntityChangedInterface;
  */
 
 interface StaffProfileInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {
-
 }

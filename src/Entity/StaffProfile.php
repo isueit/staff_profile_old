@@ -1,5 +1,5 @@
 <?php
-#TODO update naming convention
+//TODO Link to stack exchange question regarding error https://drupal.stackexchange.com/questions/276437/enabling-custom-content-entity-module-throws-error
 namespace Drupal\staff_profile\Entity;
 
 use Drupal\Core\Entity\ContentEntityBase;
@@ -7,56 +7,50 @@ use Drupal\Core\Entity\EntityChangedTrait;
 use Druapl\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\staff_profile\NodeInterface;
 use Drupal\user\UserInterface;
 use Drupal\staff_profile\StaffProfileInterface;
+use Drupal\Core\Entity\EntityPublishedInterface;
+use Drupal\Core\Entity\EntityPublishedTrait;
 
 /**
  * Defines staff_profile entity class
  *
  *  @ingroup staff_profile
  *  @ContentEntityType(
- *    id = "staff_profile_entity",
+ *    id = "staff_profile_profile",
  *    label = @Translation("Staff Profile"),
- *    bundle_label = @Translation("Staff Profile Entity Type"),
  *    handlers = {
- *      "form" = {
- *        "add" = "Drupal\Core\Entity\ContentEntityForm",
- *        "edit" = "Drupal\Core\Entity\ContentEntityForm",
- *        "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
- *      },
- *      "access" = "Drupal\staff_profile\StaffProfileAccessControlHandler",
+ *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
+ *     "list_builder" = "Drupal\content_entity_example\Entity\Controller\StaffProfileListBuilder",
+ *     "views_data" = "Drupal\views\EntityViewsData",
+ *     "form" = {
+ *       "add" = "Drupal\content_entity_example\Form\StaffProfileForm",
+ *       "edit" = "Drupal\content_entity_example\Form\StaffProfileForm",
+ *       "delete" = "Drupal\content_entity_example\Form\StaffProfileDeleteForm",
  *     },
+ *     "access" = "Drupal\content_entity_example\StaffProfileAccessControlHandler",
+ *   },
  *    base_table = "staff_profile_entity",
  *    admin_permission = "administer staff profile entity",
+ *    fieldable = TRUE,
  *    links = {
- *      "canonical" = "/people/{field_first_name}-{field_last_name}",
+ *      "canonical" = "/people/{staff_profile_profile}",
  *      "add-page" = "/people/add",
- *      "edit-form" = "/people/{field_first_name}-{field_last_name}/edit",
- *      "delete-form" = "/people/{field_first_name}-{field_last_name}/delete",
- *      "collection" = "/people",
+ *      "edit-form" = "/people/{staff_profile_profile}/edit",
+ *      "delete-form" = "/people/{staff_profile_profile}/delete",
+ *      "collection" = "/people/list",
  *    },
- *    revision_table = "staff_profile_revision",
  *    entity_keys = {
  *      "id" = "id",
  *      "uuid" = "uuid",
- *      "revision" = "revision_id",
- *      "uid" = "user_id",
- *      "status" = "status",
- *      "langcode" = "langcode",
- *      "email" = "email",
+ *      "label" = "netid",
+ *      "published" = "status",
  *    },
- *   revision_metadata_keys = {
- *     "revision_user" = "revision_user",
- *     "revision_created" = "revision_created",
- *     "revision_log_message" = "revision_log",
- *   },
+ *    field_ui_base_route = "staff_profile.staff_profile_settings",
  *  )
  *
 */
-class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
+class StaffProfile extends ContentEntityBase implements StaffProfileInterface, EntityPublishedInterface {
   use EntityChangedTrait;
 
   /**
@@ -65,7 +59,6 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
   */
   public static function preCreate(EntityStorageInterface $storage, array &$values) {
     parent::preCreate($storage, $values);
-
     $values += array(
       'user_id' => \Drupal::currentUser()->id(),
     );
@@ -108,7 +101,6 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
     return $this;
   }
 
-
   /**
   * {@inheritdoc}
   *
@@ -124,8 +116,20 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
       ->setLabel(t('UUID'))
       ->setReadOnly(TRUE);
 
-    $fields['langcode'] = BaseFieldDefinition::create('language')
-      ->setLabel(t('Language code'));
+    $fields['netid'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('User NetID'))
+      ->setRevisionable(FALSE)
+      ->setTranslatable(FALSE)
+      //TODO remove debugging
+      ->setSettings(array(
+        'default_value' => '',
+        'max_length' => 225,
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'string',
+        'weight' => -1,
+      ))
+      ->setDisplayConfigurable('form', TRUE);
 
     $fields['body'] = BaseFieldDefinition::create('text_with_summary')
       ->setLabel(t('Biography/Area(s) of Expertise'))
@@ -202,6 +206,7 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
       ->setTranslatable(FALSE)
       ->setSettings(array(
         'default_value' => '',
+        'max_length' => 255,
       ))
       ->setDisplayOptions('view', array(
         'type' => 'string',
@@ -231,6 +236,7 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
       ->setTranslatable(FALSE)
       ->setSettings(array(
         'default_value' => '',
+        'max_length' => 255,
       ))
       ->setDisplayOptions('view', array(
         'type' => 'string',
@@ -260,6 +266,7 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
       ->setTranslatable(FALSE)
       ->setSettings(array(
         'default_value' => '',
+        'max_length' => 255,
       ))
       ->setDisplayOptions('view', array(
         'type' => 'string',
@@ -289,6 +296,7 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
       ->setTranslatable(FALSE)
       ->setSettings(array(
         'default_value' => '',
+        'max_length' => 255,
       ))
       ->setDisplayOptions('view', array(
         'type' => 'string',
@@ -363,6 +371,7 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
       ->setTranslatable(FALSE)
       ->setSettings(array(
         'default_value' => '',
+        'max_length' => 255,
       ))
       ->setDisplayOptions('form', array(
         'type' => 'string_textfield',
@@ -382,6 +391,7 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
       ->setTranslatable(FALSE)
       ->setSettings(array(
         'default_value' => '',
+        'max_length' => 255,
       ))
       ->setDisplayOptions('view', array(
         'type' => 'basic_string',
@@ -408,6 +418,7 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
       ->setTranslatable(FALSE)
       ->setSettings(array(
         'default_value' => '',
+        'max_length' => 255,
       ))
       ->setDisplayOptions('view', array(
         'type' => 'string',
@@ -449,6 +460,7 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
       ->setTranslatable(FALSE)
       ->setSettings(array(
         'default_value' => '',
+        'max_length' => 255,
       ))
       ->setDisplayOptions('form', array(
         'type' => 'string_textfield',
@@ -468,6 +480,7 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
       ->setTranslatable(FALSE)
       ->setSettings(array(
         'default_value' => '',
+        'max_length' => 255,
       ))
       ->setDisplayOptions('form', array(
         'type' => 'string_textfield',
@@ -487,6 +500,7 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
       ->setTranslatable(FALSE)
       ->setSettings(array(
         'default_value' => '',
+        'max_length' => 255,
       ))
       ->setDisplayOptions('view', array(
         'type' => 'string',
@@ -514,9 +528,6 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
       ->setRevisionable(TRUE)
       ->setRequired(FALSE)
       ->setTranslatable(FALSE)
-      ->setSettings(array(
-        'default_value' => '',
-      ))
       ->setDisplayOptions('view', array(
         'type' => 'string',
         'weight' => 8,
@@ -545,6 +556,7 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
       ->setTranslatable(FALSE)
       ->setSettings(array(
         'default_value' => '',
+        'max_length' => 255,
       ))
       ->setDisplayOptions('form', array(
         'type' => 'string_textfield',
@@ -614,6 +626,7 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
       ->setTranslatable(FALSE)
       ->setSettings(array(
         'default_value' => '',
+        'max_length' => 255,
       ))
       ->setDisplayOptions('view', array(
         'type' => 'string',
@@ -643,6 +656,7 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
       ->setTranslatable(FALSE)
       ->setSettings(array(
         'default_value' => '',
+        'max_length' => 255,
       ))
       ->setDisplayOptions('view', array(
         'type' => 'string',
@@ -672,6 +686,7 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
       ->setTranslatable(FALSE)
       ->setSettings(array(
         'default_value' => '',
+        'max_length' => 255,
       ))
       ->setDisplayOptions('view', array(
         'type' => 'string',
@@ -700,6 +715,11 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
         'target_type' => 'user',
         'handler' => 'default',
       ))
+      ->setDisplayOptions('view', array(
+        'label' => 'hidden',
+        'type' => 'entity_reference_label',
+        'weight' => -3,
+      ))
       ->setDisplayOptions('form', array(
         'type' => 'entity_reference_autocomplete',
         'settings' => array(
@@ -709,7 +729,8 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
           'placeholder' => '',
         ),
       ))
-      ->setDisplayConfigurable('form', TRUE);
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
 
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created'));
@@ -717,16 +738,14 @@ class StaffProfile extends ContentEntityBase implements ContentEntityInterface {
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'));
 
+    $fields['langcode'] = BaseFieldDefinition::create('language')
+      ->setLabel(t('Language code'));
 
-    $fields['user_id'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('User Name'))
-      ->setSettings(array(
-          'target_type' => 'user',
-      ));
+
+    //$fields['status'] -implemented using published = status
     // $fields['links']
     // $fields['path']
     // $fields['promote']
-    // $fields['status']
     // $fields['sticky']
     // $fields['title']
     // $fields['url_redirects']
