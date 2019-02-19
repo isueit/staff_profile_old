@@ -1,6 +1,5 @@
-#UPDATED NAMING CONVENTION
 staff_profile.add_form:
-  route_name: staff_profile_profile.add_form
+  route_name: entity.staff_profile_profile.add_form
   title: 'Add New Staff Member'
   appears_on:
     - entity.staff_profile_profile.collection

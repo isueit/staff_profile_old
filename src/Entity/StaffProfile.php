@@ -239,7 +239,7 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface, E
       ))
       ->setDisplayOptions('form', array(
         'type' => 'string_textfield',
-        'weight' => 5,
+        'weight' => 4,
         'region' => 'content',
         'settings' => array(
           'size' => 60,
@@ -346,6 +346,7 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface, E
       ->setTranslatable(FALSE)
       ->setSettings(array(
         'default_value' => '',
+        'target_type' => 'taxonomy_term',
         'settings' => array(
           'handler' => 'default:taxonomy_term',
           'handler_settings' => array(
@@ -432,7 +433,7 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface, E
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['field_fax'] = BaseFieldDefinition::create('telephone')
-      ->setLabel(t('Telephone Number'))
+      ->setLabel(t('Fax Number'))
       ->setRevisionable(TRUE)
       ->setRequired(FALSE)
       ->setTranslatable(FALSE)
@@ -465,7 +466,7 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface, E
       ->setLabel(t('Managed by Staff Profile Sync'))
       ->setDisplayOptions('form', array(
         'type' => 'string',
-        'weight' => 4,
+        'weight' => 5,
         'region' => 'content',
         'settings' => array(
           'placeholder' => 'false',
@@ -763,7 +764,11 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface, E
 
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Published status'));
+      ->setLabel(t('Published status'))
+      ->setSettings(array(
+        'default_value' => TRUE,
+      ));
+
     // $fields['links']
     // $fields['path']
     // $fields['promote']
