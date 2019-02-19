@@ -30,7 +30,7 @@ class StaffProfileForm extends ContentEntityForm {
     // if ($form_state['field_email'] != '') {
     //   $form_state['netid'] = $form_state['field_first_name'] + $form_state['field_last_name'];
     // } else {
-    //   $form_state['netid'] = $form_state['field_email']
+    //   $form_state['netid'] = $form_state['field_email'];
     // }
     $status = parent::save($form, $form_state);
 

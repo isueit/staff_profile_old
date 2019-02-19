@@ -33,7 +33,7 @@ class StaffProfileListBuilder extends EntityListBuilder {
    */
   public function buildHeader() {
     $header['netid'] = $this->t('NetID');
-    $header['name']
+    $header['name'] = $this->t('Name');
     $header['body'] = $this->t('Body');
     return $header + parent::buildHeader();
   }
@@ -44,9 +44,9 @@ class StaffProfileListBuilder extends EntityListBuilder {
   public function buildRow(EntityInterface $entity) {
     /* @var $entity \Drupal\staff_profile\Entity\StaffProfile */
     $row['netid'] = $entity->link();
-    $row['name'] = $entity->'field_first_name'->value;
-    $row['name'] += " " + $entity->'field_last_name'->value;
-    $row['body'] = $entity->'body'->value;
+    $row['name'] = $entity->field_first_name->value;
+    $row['name'] += " " + $entity->field_last_name->value;
+    $row['body'] = $entity->body->value;
     return $row + parent::buildRow($entity);
   }
 }

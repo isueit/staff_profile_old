@@ -7,5 +7,5 @@ entity.staff_profile_profile.collection:
 staff_profile_profile.admin.structure.settings:
   title: Staff Profile Settings
   description: 'Configure Staff Profile entity'
-  route_name: staff_profile_profile.staff_profile_settings
+  route_name: staff_profile.staff_profile_settings
   parent: system.admin_structure

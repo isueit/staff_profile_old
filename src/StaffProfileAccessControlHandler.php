@@ -19,7 +19,6 @@ class StaffProfileAccessControlHandler extends EntityAccessControlHandler {
    * Link activities to permissions
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
-    protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
     switch ($operation) {
       case 'view':
         return AccessResult::allowedIfHasPermission($account, 'view staff profile entity');

@@ -1,10 +1,9 @@
 <?php
-//TODO Link to stack exchange question regarding error https://drupal.stackexchange.com/questions/276437/enabling-custom-content-entity-module-throws-error
 namespace Drupal\staff_profile\Entity;
 
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
-use Druapl\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\user\UserInterface;
@@ -21,14 +20,14 @@ use Drupal\Core\Entity\EntityPublishedTrait;
  *    label = @Translation("Staff Profile"),
  *    handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
- *     "list_builder" = "Drupal\content_entity_example\Entity\Controller\StaffProfileListBuilder",
+ *     "list_builder" = "Drupal\staff_profile\Entity\Controller\StaffProfileListBuilder",
  *     "views_data" = "Drupal\views\EntityViewsData",
  *     "form" = {
- *       "add" = "Drupal\content_entity_example\Form\StaffProfileForm",
- *       "edit" = "Drupal\content_entity_example\Form\StaffProfileForm",
- *       "delete" = "Drupal\content_entity_example\Form\StaffProfileDeleteForm",
+ *       "add" = "Drupal\staff_profile\Form\StaffProfileForm",
+ *       "edit" = "Drupal\staff_profile\Form\StaffProfileForm",
+ *       "delete" = "Drupal\staff_profile\Form\StaffProfileDeleteForm",
  *     },
- *     "access" = "Drupal\content_entity_example\StaffProfileAccessControlHandler",
+ *     "access" = "Drupal\staff_profile\StaffProfileAccessControlHandler",
  *   },
  *    base_table = "staff_profile_entity",
  *    admin_permission = "administer staff profile entity",
@@ -100,7 +99,28 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface, E
     $this->set('user_id', $account->id());
     return $this;
   }
-
+  /**
+  * {@inheritdoc}
+  */
+  public function isPublished() {
+    return $this->getEntityKey('status');
+  }
+  /**
+  * {@inheritdoc}
+  */
+  public function setPublished($published = NULL) {
+    $this
+      ->set('status', TRUE);
+    return $this;
+  }
+  /**
+  * {@inheritdoc}
+  */
+  public function setUnpublished() {
+    $this
+      ->set('status', FALSE);
+    return $this;
+  }
   /**
   * {@inheritdoc}
   *
@@ -742,7 +762,8 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface, E
       ->setLabel(t('Language code'));
 
 
-    //$fields['status'] -implemented using published = status
+    $fields['status'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Published status'));
     // $fields['links']
     // $fields['path']
     // $fields['promote']

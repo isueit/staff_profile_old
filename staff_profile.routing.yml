@@ -24,7 +24,7 @@ entity.staff_profile_profile.edit_form:
   requirements:
     _entity_access: 'staff_profile_profile.edit'
 #Form to add profile
-entity.staff_profile_profile.profile_add:
+entity.staff_profile_profile.add_form:
   path: '/people/add'
   defaults:
     _entity_form: 'staff_profile_profile.add'
@@ -40,7 +40,7 @@ entity.staff_profile.delete_form:
   requirements:
     _entity_access: "staff_profile_profile.delete"
 #Settings Form
-staff_profile_profile.profile_settings:
+staff_profile.staff_profile_settings:
   path: 'admin/structure/staff_profile_settings'
   defaults:
     _form: '\Drupal\staff_profile\Form\StaffProfileSettingsForm'
