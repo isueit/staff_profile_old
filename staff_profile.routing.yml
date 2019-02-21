@@ -1,4 +1,4 @@
-#UPDATED NAMING CONVENTION
+
 #Display list of staff_profiles
 entity.staff_profile_profile.collection:
   path: '/people/list'
@@ -32,7 +32,7 @@ entity.staff_profile_profile.add_form:
   requirements:
     _entity_create_access: 'staff_profile_profile'
 #Form to remove a profile
-entity.staff_profile.delete_form:
+entity.staff_profile_profile.delete_form:
   path: '/people/{staff_profile_profile}/delete'
   defaults:
     _entity_form: 'staff_profile_profile.delete'
@@ -47,3 +47,12 @@ staff_profile.staff_profile_settings:
     _title: 'Staff Profile Settings'
   requirements:
     _permission: 'administer staff profile entity'
+
+#Public view of profiles
+staff_profile.staff_profile_display:
+  path: '/people'
+  defaults:
+    _controller: '\Drupal\staff_profile\Entity\Controller\StaffProfileDisplayBuilder::displayPeople'
+    _title: 'Staff Members'
+  requirements:
+    _permission: 'access content'

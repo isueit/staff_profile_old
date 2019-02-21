@@ -1,4 +1,4 @@
-#UPDATED NAMING CONVENTION
+
 staff_profile.settings_tab:
   route_name: staff_profile_profile.staff_profile_settings
   title: Settings

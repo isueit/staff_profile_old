@@ -1,5 +1,5 @@
 <?php
-#TODO update naming convention
+
 namespace Drupal\staff_profile\Entity\Controller;
 
 use Drupal\Core\Entity\EntityInterface;
@@ -44,9 +44,8 @@ class StaffProfileListBuilder extends EntityListBuilder {
   public function buildRow(EntityInterface $entity) {
     /* @var $entity \Drupal\staff_profile\Entity\StaffProfile */
     $row['netid'] = $entity->link();
-    $row['name'] = $entity->field_first_name->value;
-    $row['name'] += " " + $entity->field_last_name->value;
-    $row['body'] = $entity->body->value;
+    $row['name'] = $entity->field_first_name->value . " " . $entity->field_last_name->value;
+    $row['body'] = strip_tags($entity->body->value);
     return $row + parent::buildRow($entity);
   }
 }

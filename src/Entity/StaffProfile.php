@@ -1,7 +1,7 @@
 <?php
 namespace Drupal\staff_profile\Entity;
 
-use Drupal\Core\Entity\ContentEntityBase;
+use Drupal\Core\Entity\EditorialContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -19,6 +19,7 @@ use Drupal\Core\Entity\EntityPublishedTrait;
  *    id = "staff_profile_profile",
  *    label = @Translation("Staff Profile"),
  *    handlers = {
+ *     "table_display_builder" = "Drupal\staff_profile\Entity\Controller\StaffProfileDisplayBuilder",
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "list_builder" = "Drupal\staff_profile\Entity\Controller\StaffProfileListBuilder",
  *     "views_data" = "Drupal\views\EntityViewsData",
@@ -30,9 +31,12 @@ use Drupal\Core\Entity\EntityPublishedTrait;
  *     "access" = "Drupal\staff_profile\StaffProfileAccessControlHandler",
  *   },
  *    base_table = "staff_profile_entity",
+ *    revision_table = "staff_profile_entity_revision",
+ *    revision_data_table = "staff_profile_field_revision",
  *    admin_permission = "administer staff profile entity",
  *    fieldable = TRUE,
  *    links = {
+ *      "display" = "/people",
  *      "canonical" = "/people/{staff_profile_profile}",
  *      "add-page" = "/people/add",
  *      "edit-form" = "/people/{staff_profile_profile}/edit",
@@ -44,12 +48,19 @@ use Drupal\Core\Entity\EntityPublishedTrait;
  *      "uuid" = "uuid",
  *      "label" = "netid",
  *      "published" = "status",
+ *      "revision" = "revision_id",
+ *      "status" = "status",
+ *    },
+ *    revision_metadata_keys = {
+ *      "revision_user" = "revision_user",
+ *      "revision_created" = "revision_created",
+ *      "revision_log_message",
  *    },
  *    field_ui_base_route = "staff_profile.staff_profile_settings",
  *  )
  *
 */
-class StaffProfile extends ContentEntityBase implements StaffProfileInterface, EntityPublishedInterface {
+class StaffProfile extends EditorialContentEntityBase implements StaffProfileInterface, EntityPublishedInterface {
   use EntityChangedTrait;
 
   /**
@@ -128,6 +139,8 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface, E
   * Defines gui behavior
   */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
+    $fields = parent::baseFieldDefinitions($entity_type);
+
     $fields['id'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('ID'))
       ->setReadOnly(TRUE);
@@ -407,7 +420,7 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface, E
 
     $fields['field_email'] = BaseFieldDefinition::create('email')
       ->setLabel(t('E-Mail'))
-      ->setRevisionable(FALSE)
+      ->setRevisionable(TRUE)
       ->setRequired(FALSE)
       ->setTranslatable(FALSE)
       ->setSettings(array(
@@ -757,7 +770,9 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface, E
       ->setLabel(t('Created'));
 
     $fields['changed'] = BaseFieldDefinition::create('changed')
-      ->setLabel(t('Changed'));
+      ->setLabel(t('Changed'))
+      ->setTranslatable(TRUE)
+      ->setRevisionable(TRUE);
 
     $fields['langcode'] = BaseFieldDefinition::create('language')
       ->setLabel(t('Language code'));
@@ -765,9 +780,14 @@ class StaffProfile extends ContentEntityBase implements StaffProfileInterface, E
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Published status'))
-      ->setSettings(array(
-        'default_value' => TRUE,
-      ));
+      ->setRevisionable(TRUE)
+      ->setTranslatable(TRUE)
+      ->setDefaultValue(TRUE)
+      ->setDisplayOptions('form', array(
+        'type' => 'string',
+        'display_label' => 'hidden',
+      ))
+      ->setDisplayConfigurable('form', TRUE);
 
     // $fields['links']
     // $fields['path']

@@ -1,4 +1,4 @@
-#UPDATED NAMING CONVENTION
+
 entity.staff_profile_profile.collection:
   title: 'Staff Listing'
   route_name: entity.staff_profile_profile.collection
