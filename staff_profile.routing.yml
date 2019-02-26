@@ -47,12 +47,3 @@ staff_profile.staff_profile_settings:
     _title: 'Staff Profile Settings'
   requirements:
     _permission: 'administer staff profile entity'
-
-#Public view of profiles
-staff_profile.staff_profile_display:
-  path: '/people'
-  defaults:
-    _controller: '\Drupal\staff_profile\Entity\Controller\StaffProfileDisplayBuilder::displayPeople'
-    _title: 'Staff Members'
-  requirements:
-    _permission: 'access content'

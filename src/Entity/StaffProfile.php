@@ -36,7 +36,6 @@ use Drupal\Core\Entity\EntityPublishedTrait;
  *    admin_permission = "administer staff profile entity",
  *    fieldable = TRUE,
  *    links = {
- *      "display" = "/people",
  *      "canonical" = "/people/{staff_profile_profile}",
  *      "add-page" = "/people/add",
  *      "edit-form" = "/people/{staff_profile_profile}/edit",
