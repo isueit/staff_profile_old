@@ -36,7 +36,7 @@ entity.staff_profile_profile.delete_form:
   path: '/people/{staff_profile_profile}/delete'
   defaults:
     _entity_form: 'staff_profile_profile.delete'
-    _title: "Delete Profile for {staff_profile_profile}"
+    _title: "Delete Profile"
   requirements:
     _entity_access: "staff_profile_profile.delete"
 #Settings Form

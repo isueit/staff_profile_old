@@ -447,7 +447,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      path: staff-profiles
+      path: people
       menu:
         type: normal
         title: 'Staff Profiles'

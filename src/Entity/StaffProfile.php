@@ -787,13 +787,13 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         'display_label' => 'hidden',
       ))
       ->setDisplayConfigurable('form', TRUE);
-
-    // $fields['links']
-    // $fields['path']
-    // $fields['promote']
-    // $fields['sticky']
-    // $fields['title']
-    // $fields['url_redirects']
+    $fields['weight'] = BaseFieldDefinition::create('number')
+      ->setLabel(t('Weight of profile'))
+      ->setRevisionable(TRUE)
+      ->setTranslatable(TRUE)
+      ->setDisplayOptions('form', array(
+        //TODO add weight for public view
+      ))
     return $fields;
   }
 }

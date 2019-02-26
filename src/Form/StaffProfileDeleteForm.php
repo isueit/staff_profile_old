@@ -24,6 +24,6 @@ class StaffProfileDeleteForm extends ContentEntityConfirmFormBase {
    *  A url object
    */
   public function getCancelUrl() {
-    return new Url('entity.staff_profile_profile.collection');
+    //return new Url('entity.staff_profile_profile.collection');
   }
 }
