@@ -787,13 +787,25 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         'display_label' => 'hidden',
       ))
       ->setDisplayConfigurable('form', TRUE);
-    $fields['weight'] = BaseFieldDefinition::create('number')
+    $fields['weight'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('Weight of profile'))
       ->setRevisionable(TRUE)
       ->setTranslatable(TRUE)
-      ->setDisplayOptions('form', array(
-        //TODO add weight for public view
+      ->setSettings(array(
+        'default_value' => '',
+        'max_length' => 255,
       ))
+      ->setDisplayOptions('form', array(
+        '#type' => 'weight',
+        'weight' => 13,
+        'region' => 'content',
+        'label' => 'inline',
+        'settings' => array(
+          'size' => 60,
+          'placeholder' => '',
+        ),
+      ))
+    ->setDisplayConfigurable('form', TRUE);
     return $fields;
   }
 }

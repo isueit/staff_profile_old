@@ -16,7 +16,7 @@ class StaffProfileDeleteForm extends ContentEntityConfirmFormBase {
    *  The form question
    */
   public function getQuestion() {
-    //The default asks "Are you sure that you want to delete entity <entity name>?"
+    return $this->t("Are you sure that you want to delete the Staff Profile for %profile?", array( '%profile' => $this->entity->label()));
   }
 
   /**
@@ -24,6 +24,11 @@ class StaffProfileDeleteForm extends ContentEntityConfirmFormBase {
    *  A url object
    */
   public function getCancelUrl() {
-    //return new Url('entity.staff_profile_profile.collection');
+    return new Url('entity.staff_profile_profile.collection');
+  }
+
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    $this->entity->delete();
+    $form_state->setRedirectUrl($this->getCancelUrl());
   }
 }
