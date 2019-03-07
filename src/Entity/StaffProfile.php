@@ -183,9 +183,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         'type' => 'text_default',
         'weight' => 2,
         'region' => 'content',
-        'settings' => array(
-          'display_label' => FALSE,
-        ),
+        'label' => 'hidden',
       ))
       ->setDisplayOptions('form', array(
         'type' => 'text_textarea_with_summary',
@@ -214,8 +212,8 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         'type' => 'string',
         'weight' => 3,
         'region' => 'content',
+        'label' => 'hidden',
         'settings' => array(
-          'display_label' => FALSE,
           'link_to_entity' => FALSE,
         ),
       ))
@@ -244,8 +242,8 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         'type' => 'string',
         'weight' => 4,
         'region' => 'content',
+        'label' => 'hidden',
         'settings' => array(
-          'display_label' => FALSE,
           'link_to_entity' => FALSE,
         ),
       ))
@@ -334,9 +332,9 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         'type' => 'string',
         'weight' => 5,
         'region' => 'content',
+        'label' => 'hidden',
         'settings' => array(
           'link_to_entity' => FALSE,
-          'display_label' => FALSE,
         ),
       ))
       ->setDisplayOptions('form', array(
@@ -633,9 +631,9 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         'type' => 'image',
         'weight' => 1,
         'region' => 'content',
+        'label' => 'hidden',
         'settings' => array(
           'link_to_entity' => FALSE,
-          'display_label' => FALSE,
           'image_style' => 'medium',
           'image_link' => ''
         ),
@@ -695,9 +693,9 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         'type' => 'string',
         'weight' => 6,
         'region' => 'content',
+        'label' => 'hidden',
         'settings' => array(
           'link_to_entity' => FALSE,
-          'display_label' => FALSE,
         ),
       ))
       ->setDisplayOptions('form', array(
@@ -725,9 +723,9 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         'type' => 'string',
         'weight' => 7,
         'region' => 'content',
+        'label' => 'hidden',
         'settings' => array(
           'link_to_entity' => FALSE,
-          'display_label' => FALSE,
         ),
       ))
       ->setDisplayOptions('form', array(
@@ -784,7 +782,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setDefaultValue(TRUE)
       ->setDisplayOptions('form', array(
         'type' => 'string',
-        'display_label' => 'hidden',
+        'label' => 'hidden',
       ))
       ->setDisplayConfigurable('form', TRUE);
     $fields['weight'] = BaseFieldDefinition::create('integer')
