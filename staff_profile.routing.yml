@@ -20,7 +20,7 @@ entity.staff_profile_profile.edit_form:
   path: '/people/{staff_profile_profile}/edit'
   defaults:
     _entity_form: 'staff_profile_profile.edit'
-    _title: 'Edit Staff profile'
+    _title: 'Edit Staff Profile Entity'
   requirements:
     _entity_access: 'staff_profile_profile.edit'
 #Form to add profile
@@ -47,3 +47,6 @@ staff_profile.staff_profile_settings:
     _title: 'Staff Profile Settings'
   requirements:
     _permission: 'administer staff profile entity'
+
+staff_profile.staff_profile_list:
+  path: 'people/list'
