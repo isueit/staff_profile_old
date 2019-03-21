@@ -152,7 +152,6 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setLabel(t('User NetID'))
       ->setRevisionable(FALSE)
       ->setTranslatable(FALSE)
-      //TODO remove debugging
       ->setSettings(array(
         'default_value' => '',
         'max_length' => 225,
@@ -476,7 +475,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setLabel(t('Managed by Staff Profile Sync'))
       ->setDisplayOptions('form', array(
         'type' => 'string',
-        'weight' => 5,
+        'weight' => 22,
         'region' => 'content',
         'settings' => array(
           'placeholder' => 'false',
@@ -600,7 +599,6 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ))
       ->setDisplayConfigurable('form', TRUE);
 
-//Should pdfs be an acceptable profile image? - from yml files
     $fields['field_profile_image'] = BaseFieldDefinition::create('image')
       ->setLabel(t('Profile Image'))
       ->setRevisionable(TRUE)
@@ -609,7 +607,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setSettings(array(
         'settings' => array(
           'file_directory' => 'profile/images',
-          'file_extensions' => 'png gif jpg jpeg pdf',
+          'file_extensions' => 'png gif jpg jpeg',
           'max_filesize' => '',
           'max_resolution' => '',
           'min_resolution' => '',
@@ -774,7 +772,6 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
     $fields['langcode'] = BaseFieldDefinition::create('language')
       ->setLabel(t('Language code'));
 
-
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Published status'))
       ->setRevisionable(TRUE)
@@ -783,10 +780,12 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setDisplayOptions('form', array(
         'type' => 'string',
         'label' => 'hidden',
+        'weight' => 21,
       ))
       ->setDisplayConfigurable('form', TRUE);
+
     $fields['weight'] = BaseFieldDefinition::create('integer')
-      ->setLabel(t('Weight of profile'))
+      ->setLabel(t('Public List weight'))
       ->setRevisionable(TRUE)
       ->setTranslatable(TRUE)
       ->setSettings(array(
@@ -795,7 +794,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ))
       ->setDisplayOptions('form', array(
         '#type' => 'weight',
-        'weight' => 13,
+        'weight' => 20,
         'region' => 'content',
         'label' => 'inline',
         'settings' => array(
