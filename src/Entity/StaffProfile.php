@@ -761,17 +761,6 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['created'] = BaseFieldDefinition::create('created')
-      ->setLabel(t('Created'));
-
-    $fields['changed'] = BaseFieldDefinition::create('changed')
-      ->setLabel(t('Changed'))
-      ->setTranslatable(TRUE)
-      ->setRevisionable(TRUE);
-
-    $fields['langcode'] = BaseFieldDefinition::create('language')
-      ->setLabel(t('Language code'));
-
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Published status'))
       ->setRevisionable(TRUE)
@@ -803,6 +792,18 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         ),
       ))
     ->setDisplayConfigurable('form', TRUE);
+
+    $fields['created'] = BaseFieldDefinition::create('created')
+      ->setLabel(t('Created'));
+
+    $fields['changed'] = BaseFieldDefinition::create('changed')
+      ->setLabel(t('Changed'))
+      ->setTranslatable(TRUE)
+      ->setRevisionable(TRUE);
+
+    $fields['langcode'] = BaseFieldDefinition::create('language')
+      ->setLabel(t('Language code'));
+      
     return $fields;
   }
 }

@@ -27,13 +27,8 @@ class StaffProfileForm extends ContentEntityForm {
    */
   public function save(array $form, FormStateInterface $form_state) {
     parent::submitForm($form, $form_state);
-    // if ($form_state->getValue('field_email') == '') {
-    //     $form_state =+ ['netid'][$form_state->getValue('field_first_name') . $form_state->getValue('field_last_name')];
-    // } else {
-    //     $form_state =+ ['netid'][$form_state->getValue('field_email')];
-    // }
-    $status = parent::save($form, $form_state);
 
+    $status = parent::save($form, $form_state);
     $entity = $this->entity;
     $entity->setNewRevision();
 
