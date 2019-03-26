@@ -1,7 +1,7 @@
-name: 'Staff Profile Entity'
+name: 'Staff Profile Content Type'
 type: module
 core: 8.x
-description: 'Creates the entity type staff_profile_profile'
+description: 'Creates the content type staff_profile'
 version: '8.x-1.0-dev'
 package: 'ISUEO'
 dependencies:

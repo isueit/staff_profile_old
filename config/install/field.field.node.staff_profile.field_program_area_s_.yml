@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_program_area_s_
+    - node.type.staff_profile
+id: node.staff_profile.field_program_area_s_
+field_name: field_program_area_s_
+entity_type: node
+bundle: staff_profile
+label: 'Program Area(s)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

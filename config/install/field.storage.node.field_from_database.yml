@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_from_database
+field_name: field_from_database
+entity_type: node
+type: string
+module: core
+settings:
+  max_length: 255
+  is_ascii: false
+  case_sensitive: false
+locked: false
+cardinality: 1
+translatable: false
+indexes: { }
+persist_with_no_fields: false
+custom_storage: false
