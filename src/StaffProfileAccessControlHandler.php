@@ -24,7 +24,13 @@ class StaffProfileAccessControlHandler extends EntityAccessControlHandler {
         return AccessResult::allowedIfHasPermission($account, 'access content');
 
       case 'edit':
-        return AccessResult::allowedIfHasPermission($account, 'edit staff profile entity');
+        //Check if user has edit staff profile permissions or owns the entity
+        $return = AccessResult::allowedIfHasPermission($account, 'edit staff profile entity');
+        if (!$return->isForbidden()) {
+          $entity_owner = $entity->get('user_id')->getValue()[0]['target_id'];
+          $return = $return->orIf(AccessResult::allowedIf($account->id() == $entity_owner));
+        }
+        return $return;
 
       case 'delete':
         return AccessResult::allowedIfHasPermission($account, 'delete staff profile entity');
