@@ -2,5 +2,24 @@
 
 /**
  * @file
- * Staff Profile view for public staff list, this is left empty
+ * Staff Profile use checkboxes
  */
+ function staff_profile_form_alter(&$form, &$form_state, $form_id) {
+   //Switch options to checkboxes or radios
+   if ($form_id == "staff_profile_form") {
+     $elementNames = [];
+     foreach ($form as $key => $value) {
+       if (substr($key,0,6) == "field_" && array_key_exists('#type',$value['widget']) && $value['widget']['#type'] == 'select') {
+         array_push($elementNames, $key);
+       }
+     }
+     foreach ($elementNames as $element) {
+       if ($form[$element]['widget']['#multiple']) {
+         $form[$element]['widget']['#type'] = 'checkboxes';
+       } else {
+         $form[$element]['widget']['#type'] = 'radios';
+       }
+
+     }
+   }
+ }

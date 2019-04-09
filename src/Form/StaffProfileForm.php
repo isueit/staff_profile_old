@@ -10,6 +10,9 @@ use Drupal\Core\Form\FormStateInterface;
  * @ingroup staff_profile
  */
 class StaffProfileForm extends ContentEntityForm {
+  public function getFormId() {
+    return 'staff_profile_form';
+  }
 
   /**
    * {@inheritdoc}
@@ -18,7 +21,7 @@ class StaffProfileForm extends ContentEntityForm {
     /* @var $entity \Drupal\staff_profile\Entity\StaffProfile */
     $form = parent::buildForm($form, $form_state);
     $entity = $this->entity;
-
+    $form['field_counties_served']['#type'] = 'checkboxes';
     return $form;
   }
 
@@ -41,4 +44,6 @@ class StaffProfileForm extends ContentEntityForm {
     $form_state->setRedirectUrl($this->entity->toUrl('collection'));
     return $status;
   }
+
+
 }

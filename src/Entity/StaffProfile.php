@@ -258,32 +258,43 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
-    $fields['field_base_county'] = BaseFieldDefinition::create('string')
+    $fields['field_base_county'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Base County'))
       ->setRevisionable(TRUE)
       ->setRequired(FALSE)
       ->setTranslatable(FALSE)
       ->setSettings(array(
         'default_value' => '',
-        'max_length' => 255,
+        'target_type' => 'taxonomy_term',
+        'settings' => array(
+          'handler' => 'default:taxonomy_term',
+          'handler_settings' => array(
+            'target_bundles' => array(
+              'counties_in_iowa' => 'counties_in_iowa',
+            ),
+            'sort' => array(
+              'field' => 'name',
+              'direction' => 'asc',
+            ),
+            'auto_create' => FALSE,
+            'auto_create_bundle' => '',
+          ),
+        ),
       ))
       ->setDisplayOptions('view', array(
-        'type' => 'string',
-        'weight' => 13,
+        'type' => 'entity_reference_entity_view',
+        'weight' => 14,
         'region' => 'content',
         'display_label' => 'inline',
         'settings' => array(
-          'link_to_entity' => FALSE,
+          'link' => TRUE,
+          'view_mode' => 'default',
         ),
       ))
       ->setDisplayOptions('form', array(
-        'type' => 'string_textfield',
-        'weight' => 15,
+        'type' => 'options_select',
+        'weight' => 16,
         'region' => 'content',
-        'settings' => array(
-          'size' => 60,
-          'placeholder' => '',
-        ),
       ))
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
@@ -353,6 +364,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setRevisionable(TRUE)
       ->setRequired(FALSE)
       ->setTranslatable(FALSE)
+      ->setCardinality(-1)
       ->setSettings(array(
         'default_value' => '',
         'target_type' => 'taxonomy_term',
@@ -382,14 +394,9 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         ),
       ))
       ->setDisplayOptions('form', array(
-        'type' => 'entity_reference_autocomplete_tags',
+        'type' => 'options_select',
         'weight' => 16,
         'region' => 'content',
-        'settings' => array(
-          'match_operator' => 'CONTAINS',
-          'size' => 60,
-          'placeholder' => '',
-        ),
       ))
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
@@ -778,9 +785,9 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setRevisionable(TRUE)
       ->setTranslatable(TRUE)
       ->setSettings(array(
-        'default_value' => '',
         'max_length' => 255,
       ))
+      ->setDefaultValue(0)
       ->setDisplayOptions('form', array(
         '#type' => 'weight',
         'weight' => 20,
@@ -803,7 +810,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
 
     $fields['langcode'] = BaseFieldDefinition::create('language')
       ->setLabel(t('Language code'));
-      
+
     return $fields;
   }
 }
