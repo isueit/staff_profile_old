@@ -1,7 +1,7 @@
 
 #Display list of staff_profiles
 entity.staff_profile_profile.collection:
-  path: '/people/list'
+  path: '/people/admin'
   defaults:
     _entity_list: 'staff_profile_profile'
     _title: 'Staff'
@@ -49,4 +49,4 @@ staff_profile.staff_profile_settings:
     _permission: 'administer staff profile entity'
 
 staff_profile.staff_profile_list:
-  path: 'people/list'
+  path: 'people/admin'

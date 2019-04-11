@@ -18,6 +18,7 @@
          $form[$element]['widget']['#type'] = 'checkboxes';
        } else {
          $form[$element]['widget']['#type'] = 'radios';
+         //TODO set current value to selected radio
        }
 
      }

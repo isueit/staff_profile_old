@@ -40,7 +40,7 @@ use Drupal\Core\Entity\EntityPublishedTrait;
  *      "add-page" = "/people/add",
  *      "edit-form" = "/people/{staff_profile_profile}/edit",
  *      "delete-form" = "/people/{staff_profile_profile}/delete",
- *      "collection" = "/people/list",
+ *      "collection" = "/people/admin",
  *    },
  *    entity_keys = {
  *      "id" = "id",
