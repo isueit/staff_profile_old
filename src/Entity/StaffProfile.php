@@ -160,7 +160,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         'type' => 'string',
         'weight' => -1,
       ))
-      ->setDisplayConfigurable('form', TRUE);
+      ->setDisplayConfigurable('form', FALSE);
 
     $fields['body'] = BaseFieldDefinition::create('text_with_summary')
       ->setLabel(t('Biography/Area(s) of Expertise'))
@@ -292,7 +292,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         ),
       ))
       ->setDisplayOptions('form', array(
-        'type' => 'options_select',
+        'type' => 'options_buttons',
         'weight' => 16,
         'region' => 'content',
       ))
@@ -394,7 +394,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         ),
       ))
       ->setDisplayOptions('form', array(
-        'type' => 'options_select',
+        'type' => 'options_buttons',
         'weight' => 16,
         'region' => 'content',
       ))
