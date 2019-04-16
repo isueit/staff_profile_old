@@ -14,9 +14,9 @@ The staff profile entity consists of:
 * Title and Department
 
 ## Views
-[Public list](config/install/views.view.staff_profiles.yml) allows anonymous users to view staff profiles.
+[Public list](config/install/views.view.staff_profiles.yml) allows all users to view staff profiles.
 
-[Admin list](src/Entity/Controller/StaffProfileListBuilder.php) allows administrators to manage staff profiles.
+[Admin list](config/install/views.view.staff_profiles_admin.yml) allows administrators to manage staff profiles.
 
 Canonical view shows individual profiles, accessible by entity id or pathauto route and is defined in the [entity definition.](src/Entity/StaffProfile.php)
 
@@ -24,10 +24,13 @@ Canonical view shows individual profiles, accessible by entity id or pathauto ro
 Pathauto route is created with entity using the format "first_name-last_name" under the path example.com/sitename/people/first_name-last_name
 
 ## Forms
-Add, Edit and Delete forms to manage profiles as admin user
+Add - Create new profile
+Edit - Change existing profile
+Delete - Delete existing profile
 
 ## Prerequisites
 Staff Profile requires the following modules:
 * drupal:views
 * telephone
 * pathauto
+* Views Bulk Operations
