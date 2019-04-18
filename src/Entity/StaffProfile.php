@@ -109,12 +109,14 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
     $this->set('user_id', $account->id());
     return $this;
   }
+
   /**
   * {@inheritdoc}
   */
   public function isPublished() {
     return $this->getEntityKey('status');
   }
+
   /**
   * {@inheritdoc}
   */
@@ -123,6 +125,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->set('status', TRUE);
     return $this;
   }
+
   /**
   * {@inheritdoc}
   */
@@ -131,6 +134,20 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->set('status', FALSE);
     return $this;
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function postSave(EntityStorageInterface $storage, $update = TRUE) {
+    parent::postSave($storage, $update);
+
+    if ($update) {
+      if (\Drupal::moduleHandler()->moduleExists('search')) {
+        search_mark_for_reindex('staff_profile_profile', $this->id());
+      }
+    }
+  }
+
   /**
   * {@inheritdoc}
   *
