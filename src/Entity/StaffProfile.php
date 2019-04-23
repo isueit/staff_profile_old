@@ -143,7 +143,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
 
     if ($update) {
       if (\Drupal::moduleHandler()->moduleExists('search')) {
-        search_mark_for_reindex('staff_profile_profile', $this->id());
+        search_mark_for_reindex('staff_profile_profile_search', $this->id());
       }
     }
   }

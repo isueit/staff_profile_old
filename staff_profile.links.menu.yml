@@ -6,11 +6,11 @@ entity.staff_profile_profile.collection:
   weight: 10
 
 #Uncomment if config is needed
-#staff_profile_profile.admin.structure.settings:
-  #title: Staff Profile Settings
-  #description: 'Configure Staff Profile entity'
-  #route_name: staff_profile.staff_profile_settings
-  #parent: system.admin_structure
+# staff_profile_profile.admin.config.search:
+#   title: Staff Profile Search
+#   description: 'Configure Staff Profile search'
+#   route_name: staff_profile.staff_profile_settings
+#   parent: system.admin_config_search
 
 staff_profile_profile.admin.config.content.list:
   title: Staff Profile Entities

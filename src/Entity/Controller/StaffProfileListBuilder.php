@@ -16,6 +16,8 @@ class StaffProfileListBuilder extends EntityListBuilder {
    * Overide existing render() to create view
    */
   public function render() {
+    $build += parent::render();
+    return $build;
   }
   /**
    * {@inheritdoc}
@@ -23,10 +25,14 @@ class StaffProfileListBuilder extends EntityListBuilder {
    * Creates a column for each field
    */
   public function buildHeader() {
+    $header['name'] = $this->t('Name');
+    return $header + parent::buildHeader();
   }
   /**
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
+    $row['name'] = $entity->field_first_name->value . $entity->field_last_name->value;
+    return $row + parent::buildRow($entity);
   }
 }

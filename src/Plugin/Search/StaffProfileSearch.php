@@ -33,7 +33,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *  title = @Translation("Staff Profile Search")
  * )
  */
-class StaffProfileSearch extends ConfigurableSearchPluginBase implements AccessibleInterface, SearchIndexingInterface {
+class StaffProfileSearch extends ConfigurableSearchPluginBase implements AccessibleInterface/*, SearchIndexingInterface*/ {
   /**
    * A database connection object.
    * @var \Drupal\Core\Database\Connection
@@ -122,7 +122,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
     /**
      * Constructs \Drupal\staff_profile\Plugin\Search\StaffProfileSearch.
      */
-    public function __construct(array $configuration, $plugin_id, $plugin_definition, Connection $database, EntityManagerInterface $entity_manager, ModuleHandlerInterface $module_hangler, Config $search_settings, LanguageManagerInterface $language_manager, RendererInterface $renderer, AccountInterface $account = NULL) {
+    public function __construct(array $configuration, $plugin_id, $plugin_definition, Connection $database, EntityManagerInterface $entity_manager, ModuleHandlerInterface $module_handler, Config $search_settings, LanguageManagerInterface $language_manager, RendererInterface $renderer, AccountInterface $account = NULL) {
       $this->database = $database;
       $this->entityManager = $entity_manager;
       $this->moduleHandler = $module_handler;
@@ -163,7 +163,6 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
     public function execute() {
       if ($this->isSearchExecutable()) {
         $results = $this->findResults();
-
         if ($results) {
           return $this->prepareResults($results);
         }
@@ -176,23 +175,20 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
      */
     protected function findResults() {
       $keys = $this->keywords;
-
       $query = $this->database
         ->select('search_index', 'i', array('target' => 'replica'))
         ->extend('Drupal\search\SearchQuery')
         ->extend('Drupal\Core\Database\Query\PagerSelectExtender');
 
-      $query->join('staff_profile', 's', 's.id = i.sid');
-      $query->join('users_field_data', 'ufd', 'ufd.uid = s.user_id');
-      $query->condition('ufd.status', 1);
+      $query->join('staff_profile_entity', 's', 's.id = i.sid');
+      $query->condition('s.status', 1);
 
       $query->searchExpression($keys, $this->getPluginId());
 
       $parameters = $this->getParameters();
       if (!empty($parameters['f']) && is_array($parameters['f'])) {
         $filters = array();
-        $pattern = '/^(' . implode('|', array_keys($this->advanced)) . '):([^]*)/i';
-
+        $pattern = '/^(' . implode('|', array_keys($this->advanced)) . '):([^ ]*)/i';
         foreach ($parameters['f'] as $item) {
           if (preg_match($pattern, $item, $m)) {
             $filters[$m[1]][$m[2]] = $m[2];
@@ -202,7 +198,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         foreach ($filters as $option => $matched) {
           $info = $this->advanced[$option];
           $operator = empty($info['operator']) ? 'OR' : $info['operator'];
-          $where = new Contition($operator);
+          $where = new Condition($operator);
           foreach ($matched as $value) {
             $where->condition($info['column'], $value);
           }
@@ -213,21 +209,22 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         }
       }
       $this->addStaffProfileRankings($query);
-
       $find = $query
         ->fields('i', array('langcode'))
         ->groupBy('i.langcode')
         ->limit(10)
         ->execute();
 
+      debug($find);
       $status = $query->getStatus();
+      debug($status);
 
       if ($status & SearchQuery::EXPRESSIONS_IGNORED) {
         drupal_set_message($this->t('Your search used too many AND/OR expressions. Only the first @count terms were included in the search.', array('@count' => $this->searchSettings->get('and_or_limit'))), 'warning');
       }
 
       if ($status & SearchQuery::LOWER_CASE_OR) {
-        drupal_set_message($this->t('Search for eaither of the two terms with uppercase <strong>OR</strong>. For example, <strong>llamas OR alpacas</strong>.'), 'warning');
+        drupal_set_message($this->t('Search for either of the two terms with uppercase <strong>OR</strong>. For example, <strong>llamas OR alpacas</strong>.'), 'warning');
       }
 
       if ($status & SearchQuery::NO_POSITIVE_KEYWORDS) {
@@ -273,7 +270,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
           ),
           'type' => 'Staff Profile',
           'title' => $entity->label(),
-          'staff_profile' => $entity,
+          'staff_profile_profile' => $entity,
           'extra' => $extra,
           'score' => $item->calculated_score,
           'snippet' => search_excerpt($keys, $rendered, $item_>langcode),
@@ -326,7 +323,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
     public function updateIndex() {
       $limit = (int) $this->searchSettings->get('index.cron_limit');
 
-      $result = $this->database-queryRange("SELECT s.id, MAX(sd.reindex) FROM {staff_profile} s LEFT JOIN {search_dataset} sd ON sd.sid = s.id AND sd.type = :type WHERE sd.sid IS NULL OR sd.reindex <> 0 GROUP BY s.id ORDER BY MAX(sd.reindex) is null DESC, MAX(sd.reindex) ASC, s.id ASC", 0, $limit, array(':type' => $this->getPluginId()), array('target' => 'replica'));
+      $result = $this->database-queryRange("SELECT s.id, MAX(sd.reindex) FROM {staff_profile_entity} s LEFT JOIN {search_dataset} sd ON sd.sid = s.id AND sd.type = :type WHERE sd.sid IS NULL OR sd.reindex <> 0 GROUP BY s.id ORDER BY MAX(sd.reindex) is null DESC, MAX(sd.reindex) ASC, s.id ASC", 0, $limit, array(':type' => $this->getPluginId()), array('target' => 'replica'));
 
       $rids = $result->fetchCol();
       if (!$rids) {
@@ -389,8 +386,8 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
      * {@inheritdoc}
      */
     public function indexStatus() {
-      $total = $this->database->query('SELECT COUNT(*) FROM {staff_profile}')->fetchField();
-      $remaining = $this->database->query("SELECT // COUNT(DISTINCT s.id) FROM {staff_profile} s LEFT JOIN {search_dataset} sd ON sd.sid = s.id AND sd.type = :type WHERE sd.sid IS NULL OR sd.reindex <> 0", array(':type' => $this->getPluginId()))->fetchField();
+      $total = $this->database->query('SELECT COUNT(*) FROM {staff_profile_entity}')->fetchField();
+      $remaining = $this->database->query("SELECT // COUNT(DISTINCT s.id) FROM {staff_profile_entity} s LEFT JOIN {search_dataset} sd ON sd.sid = s.id AND sd.type = :type WHERE sd.sid IS NULL OR sd.reindex <> 0", array(':type' => $this->getPluginId()))->fetchField();
 
       return array('remaining' => $remaining, '$total' => $total);
     }
@@ -582,8 +579,8 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
      */
     protected function getRankings() {
       if (!$this->rankings) {
-        $this->rankings = $this->moduleHandler->invokeAll('ranking');
-        //TODO fix call on NULL
+        $this->rankings = $this->moduleHandler
+          ->invokeAll('ranking');
       }
       return $this->rankings;
     }
@@ -647,5 +644,15 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         }
 
       }
+    }
+
+
+    public function staff_profile_ranking() {
+      $ranking = array(
+        'relevance' => array(
+          'title' => t('Keyword Relevance'),
+          'score' => 'i.relevance',
+        ),
+      );
     }
 }
