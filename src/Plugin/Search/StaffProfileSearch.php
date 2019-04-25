@@ -19,7 +19,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessibleInterface;
 use Drupal\Core\Database\Query\Condition;
 use Drupal\Core\Render\RendererInterface;
-use Drupal\content_entity_example\ContactInterface;
+use Drupal\staff_profile\StaffProfileInterface;
 use Drupal\search\Plugin\ConfigurableSearchPluginBase;
 use Drupal\search\Plugin\SearchIndexingInterface;
 use Drupal\search\SearchQuery;
@@ -33,7 +33,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *  title = @Translation("Staff Profile Search")
  * )
  */
-class StaffProfileSearch extends ConfigurableSearchPluginBase implements AccessibleInterface/*, SearchIndexingInterface*/ {
+class StaffProfileSearch extends ConfigurableSearchPluginBase implements AccessibleInterface, SearchIndexingInterface {
   /**
    * A database connection object.
    * @var \Drupal\Core\Database\Connection
@@ -183,6 +183,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
       $query->join('staff_profile_entity', 's', 's.id = i.sid');
       $query->condition('s.status', 1);
 
+      debug($query);
       $query->searchExpression($keys, $this->getPluginId());
 
       $parameters = $this->getParameters();
@@ -214,10 +215,8 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         ->groupBy('i.langcode')
         ->limit(10)
         ->execute();
-
       debug($find);
       $status = $query->getStatus();
-      debug($status);
 
       if ($status & SearchQuery::EXPRESSIONS_IGNORED) {
         drupal_set_message($this->t('Your search used too many AND/OR expressions. Only the first @count terms were included in the search.', array('@count' => $this->searchSettings->get('and_or_limit'))), 'warning');
@@ -238,7 +237,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
      */
     protected function prepareResults($found) {
       $results = array();
-
+      debug($found);
       $entity_storage = $this->entityManager->getStorage('staff_profile_profile');
       $entity_render = $this->entityManager->getViewBuilder('staff_profile_profile');
       $keys = $this->keywords;
@@ -246,14 +245,14 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
       foreach ($found as $item) {
         $entity = $entity_storage->load($item->sid)->getTranslation($item->langcode);
         $build = $entity_render->view($entity, 'search_result', $item->langcode);
-        //unset($build['#theme']);
+        unset($build['#theme']);
 
         //Invoke removeFromSnippet
         //$build['#pre_render'][] = array($this, 'removeFromSnippet');
 
         $rendered = $this->renderer->renderPlain($build);
 
-        $this->addCachableDependency(CacheableMetadata::createFromRenderArray($build));
+        $this->addCacheableDependency(CacheableMetadata::createFromRenderArray($build));
         $rendered .= ' ' . $this->moduleHandler->invokeAll('staff_profile_update_index', [$entity]);
 
         $extra = $this->moduleHandler->invokeAll('staff_profile_search_result', [$entity]);
@@ -277,8 +276,8 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
           'langcode' => $entity->language()->getId(),
         );
 
-        $this->addCachableDependency($entity);
-        $this->addCachableDependency($entity->getOwner());
+        $this->addCacheableDependency($entity);
+        $this->addCacheableDependency($entity->getOwner());
 
         $results[] = $result;
       }
@@ -323,9 +322,10 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
     public function updateIndex() {
       $limit = (int) $this->searchSettings->get('index.cron_limit');
 
-      $result = $this->database-queryRange("SELECT s.id, MAX(sd.reindex) FROM {staff_profile_entity} s LEFT JOIN {search_dataset} sd ON sd.sid = s.id AND sd.type = :type WHERE sd.sid IS NULL OR sd.reindex <> 0 GROUP BY s.id ORDER BY MAX(sd.reindex) is null DESC, MAX(sd.reindex) ASC, s.id ASC", 0, $limit, array(':type' => $this->getPluginId()), array('target' => 'replica'));
+      $result = $this->database->queryRange("SELECT s.id, MAX(sd.reindex) FROM {staff_profile_entity} s LEFT JOIN {search_dataset} sd ON sd.sid = s.id AND sd.type = :type WHERE sd.sid IS NULL OR sd.reindex <> 0 GROUP BY s.id ORDER BY MAX(sd.reindex) is null DESC, MAX(sd.reindex) ASC, s.id ASC", 0, $limit, array(':type' => $this->getPluginId()), array('target' => 'replica'));
 
       $rids = $result->fetchCol();
+      \Drupal::logger('staff_profile')->info('Indexing' . count($rids) . 'Staff Profiles');
       if (!$rids) {
         return;
       }
@@ -340,7 +340,9 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
     /**
      * Index a single staff profile
      */
-    protected function indexStaffProfile($entity) {
+    protected function indexStaffProfile(StaffProfileInterface $entity) {
+      debug('indexing');
+      debug($entity);
       $languages = $entity->getTranslationLanguages();
 
       $entity_render = $this->entityManager->getViewBuilder('staff_profile_profile');
@@ -387,7 +389,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
      */
     public function indexStatus() {
       $total = $this->database->query('SELECT COUNT(*) FROM {staff_profile_entity}')->fetchField();
-      $remaining = $this->database->query("SELECT // COUNT(DISTINCT s.id) FROM {staff_profile_entity} s LEFT JOIN {search_dataset} sd ON sd.sid = s.id AND sd.type = :type WHERE sd.sid IS NULL OR sd.reindex <> 0", array(':type' => $this->getPluginId()))->fetchField();
+      $remaining = $this->database->query("SELECT COUNT(DISTINCT s.id) FROM {staff_profile_entity} s LEFT JOIN {search_dataset} sd ON sd.sid = s.id AND sd.type = :type WHERE sd.sid IS NULL OR sd.reindex <> 0", array(':type' => $this->getPluginId()))->fetchField();
 
       return array('remaining' => $remaining, '$total' => $total);
     }
@@ -646,13 +648,4 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
       }
     }
 
-
-    public function staff_profile_ranking() {
-      $ranking = array(
-        'relevance' => array(
-          'title' => t('Keyword Relevance'),
-          'score' => 'i.relevance',
-        ),
-      );
-    }
 }

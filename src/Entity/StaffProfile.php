@@ -140,7 +140,6 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
    */
   public function postSave(EntityStorageInterface $storage, $update = TRUE) {
     parent::postSave($storage, $update);
-
     if ($update) {
       if (\Drupal::moduleHandler()->moduleExists('search')) {
         search_mark_for_reindex('staff_profile_profile_search', $this->id());
