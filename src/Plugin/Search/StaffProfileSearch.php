@@ -71,7 +71,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
    protected $account;
 
   /**
-   * The Renderer service to format the username and entity.
+   * The Renderer service to format the entity.
    * @var \Drupal\Core\Render\RendererInterface
    */
    protected $renderer;
@@ -91,9 +91,9 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
        'column' => 's.field_last_name',
      ),
 
-     'field_first_name' => array(
-       'column' => 's.field_first_name',
-     ),
+     // 'field_first_name' => array(
+     //   'column' => 's.field_first_name',
+     // ),
    );
 
    /**
@@ -237,7 +237,6 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
      */
     protected function prepareResults($found) {
       $results = array();
-      debug($found);
       $entity_storage = $this->entityManager->getStorage('staff_profile_profile');
       $entity_render = $this->entityManager->getViewBuilder('staff_profile_profile');
       $keys = $this->keywords;
@@ -272,7 +271,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
           'staff_profile_profile' => $entity,
           'extra' => $extra,
           'score' => $item->calculated_score,
-          'snippet' => search_excerpt($keys, $rendered, $item_>langcode),
+          'snippet' => search_excerpt($keys, $rendered, $item->langcode),
           'langcode' => $entity->language()->getId(),
         );
 
@@ -289,7 +288,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
      */
     public function removeFromSnippet($build) {
       //unset($build['created']);
-      //unset($build['uid']);
+      //unset($build['user_id']);
     }
 
     /**
@@ -322,10 +321,10 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
     public function updateIndex() {
       $limit = (int) $this->searchSettings->get('index.cron_limit');
 
-      $result = $this->database->queryRange("SELECT s.id, MAX(sd.reindex) FROM {staff_profile_entity} s LEFT JOIN {search_dataset} sd ON sd.sid = s.id AND sd.type = :type WHERE sd.sid IS NULL OR sd.reindex <> 0 GROUP BY s.id ORDER BY MAX(sd.reindex) is null DESC, MAX(sd.reindex) ASC, s.id ASC", 0, $limit, array(':type' => $this->getPluginId()), array('target' => 'replica'));
+      $result = $this->database->queryRange("SELECT s.id, MAX(sd.reindex) FROM {staff_profile_entity} s LEFT JOIN {search_dataset} sd ON sd.sid = s.id AND sd.type = :type WHERE (sd.sid IS NULL OR sd.reindex <> 0) AND s.status = 1 GROUP BY s.id ORDER BY MAX(sd.reindex) is null DESC, MAX(sd.reindex) ASC, s.id ASC", 0, $limit, array(':type' => $this->getPluginId()), array('target' => 'replica'));
 
       $rids = $result->fetchCol();
-      \Drupal::logger('staff_profile')->info('Indexing' . count($rids) . 'Staff Profiles');
+      \Drupal::logger('staff_profile')->info('Indexing ' . count($rids) . ' Staff Profiles');
       if (!$rids) {
         return;
       }
@@ -341,8 +340,6 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
      * Index a single staff profile
      */
     protected function indexStaffProfile(StaffProfileInterface $entity) {
-      debug('indexing');
-      debug($entity);
       $languages = $entity->getTranslationLanguages();
 
       $entity_render = $this->entityManager->getViewBuilder('staff_profile_profile');
@@ -350,7 +347,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
       foreach ($languages as $language) {
         $entity = $entity->getTranslation($language->getId());
         $build = $entity_render->view($entity, 'search_index', $language->getId());
-        //unset($build['#theme']);
+        unset($build['#theme']);
 
         $build['search_title'] = [
           '#prefix' => '<h1>',
@@ -358,8 +355,25 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
           '#suffix' => '</h1>',
           '#weight' => -1000,
         ];
-        $text = $this->renderer->renderPlain($build);
+        debug($entity->field_first_name->value);
+        debug($entity->field_last_name->value);
+        $build['f_name'] = [
+          '#prefix' => ' <div class="field field--name-field-first-name field--type-string field--label-above"><div class="field__item">',
+          '#plain-text' => $entity->field_first_name->value,
+          '#suffix' => '</div></div>',
+          '#weight' => -999,
+        ];
+        $build['l_name'] = [
+          '#prefix' => ' <div class="field field--name-field-last-name field--type-string field--label-above"><div class="field__item">',
+          '#plain-text' => $entity->field_last_name->value,
+          '#suffix' => '</div></div>',
+          '#weight' => -998,
+        ];
 
+        $text = $this->renderer->renderPlain($build);
+        debug($text);
+        //Remove labels
+        $text = preg_replace('#<div class="field__label">(.*?)</div>#', '', $text);
         $extra = $this->moduleHandler->invokeAll('staff_profile_update_index', [$entity]);
 
         foreach ($extra as $t) {

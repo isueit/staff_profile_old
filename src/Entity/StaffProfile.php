@@ -19,7 +19,6 @@ use Drupal\Core\Entity\EntityPublishedTrait;
  *    id = "staff_profile_profile",
  *    label = @Translation("Staff Profile"),
  *    handlers = {
- *     "table_display_builder" = "Drupal\staff_profile\Entity\Controller\StaffProfileDisplayBuilder",
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "list_builder" = "Drupal\staff_profile\Entity\Controller\StaffProfileListBuilder",
  *     "views_data" = "Drupal\views\EntityViewsData",
@@ -544,6 +543,11 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
           'placeholder' => '',
         ),
       ))
+      ->setDisplayOptions('view', array(
+        'type' => 'invisible',
+        'label' => 'hidden',
+      ))
+      ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['field_location'] = BaseFieldDefinition::create('string')
@@ -767,11 +771,6 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         'target_type' => 'user',
         'handler' => 'default',
       ))
-      ->setDisplayOptions('view', array(
-        'label' => 'hidden',
-        'type' => 'entity_reference_label',
-        'weight' => -3,
-      ))
       ->setDisplayOptions('form', array(
         'type' => 'entity_reference_autocomplete',
         'settings' => array(
@@ -781,8 +780,13 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
           'placeholder' => '',
         ),
       ))
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayOptions('view', array(
+        'label' => 'hidden',
+        'type' => 'entity_reference_label',
+        'weight' => -3,
+      ))
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Published status'))
