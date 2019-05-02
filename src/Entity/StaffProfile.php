@@ -44,7 +44,7 @@ use Drupal\Core\Entity\EntityPublishedTrait;
  *    entity_keys = {
  *      "id" = "id",
  *      "uuid" = "uuid",
- *      "label" = "netid",
+ *      "label" = "name",
  *      "published" = "status",
  *      "revision" = "revision_id",
  *      "status" = "status",
@@ -137,6 +137,14 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
   /**
    * {@inheritdoc}
    */
+  public function preSave(EntityStorageInterface $storage) {
+    parent::preSave($storage);
+    $this->name->value = $this->field_first_name->value . ' ' . $this->field_last_name->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function postSave(EntityStorageInterface $storage, $update = TRUE) {
     parent::postSave($storage, $update);
     if ($update) {
@@ -163,8 +171,8 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setLabel(t('UUID'))
       ->setReadOnly(TRUE);
 
-    $fields['netid'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('User NetID'))
+    $fields['name'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Name'))
       ->setRevisionable(FALSE)
       ->setTranslatable(FALSE)
       ->setSettings(array(
@@ -543,11 +551,11 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
           'placeholder' => '',
         ),
       ))
-      ->setDisplayOptions('view', array(
-        'type' => 'invisible',
-        'label' => 'hidden',
-      ))
-      ->setDisplayConfigurable('view', TRUE)
+      // ->setDisplayOptions('view', array(
+      //   'type' => 'invisible',
+      //   'label' => 'hidden',
+      // ))
+      // ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['field_location'] = BaseFieldDefinition::create('string')
@@ -783,7 +791,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setDisplayOptions('view', array(
         'label' => 'hidden',
         'type' => 'entity_reference_label',
-        'weight' => -3,
+        'weight' => 23,
       ))
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);

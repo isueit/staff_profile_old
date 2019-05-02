@@ -24,6 +24,7 @@ use Drupal\search\Plugin\ConfigurableSearchPluginBase;
 use Drupal\search\Plugin\SearchIndexingInterface;
 use Drupal\search\SearchQuery;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Url;
 
 /**
  * Handles searching from staff_profile_profile entities
@@ -247,7 +248,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         unset($build['#theme']);
 
         //Invoke removeFromSnippet
-        //$build['#pre_render'][] = array($this, 'removeFromSnippet');
+        $build['#pre_render'][] = array($this, 'removeFromSnippet');
 
         $rendered = $this->renderer->renderPlain($build);
 
@@ -267,7 +268,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
             )
           ),
           'type' => 'Staff Profile',
-          'title' => $entity->label(),
+          'title' => $entity->label(), //$entity->field_first_name->value . ' ' . $entity->field_last_name->value,
           'staff_profile_profile' => $entity,
           'extra' => $extra,
           'score' => $item->calculated_score,
@@ -287,8 +288,9 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
      * Remove result data
      */
     public function removeFromSnippet($build) {
-      //unset($build['created']);
-      //unset($build['user_id']);
+      unset($build['body']);
+      debug(array_keys($build));
+      unset($build['user_id']);
     }
 
     /**
@@ -349,27 +351,16 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         $build = $entity_render->view($entity, 'search_index', $language->getId());
         unset($build['#theme']);
 
+
+
         $build['search_title'] = [
           '#prefix' => '<h1>',
-          '#plain-text' => $entity->label(),
+          '#plain-text' => $entity->field_first_name->value . ' ' . $entity->field_last_name->value,
           '#suffix' => '</h1>',
           '#weight' => -1000,
         ];
-        debug($entity->field_first_name->value);
-        debug($entity->field_last_name->value);
-        $build['f_name'] = [
-          '#prefix' => ' <div class="field field--name-field-first-name field--type-string field--label-above"><div class="field__item">',
-          '#plain-text' => $entity->field_first_name->value,
-          '#suffix' => '</div></div>',
-          '#weight' => -999,
-        ];
-        $build['l_name'] = [
-          '#prefix' => ' <div class="field field--name-field-last-name field--type-string field--label-above"><div class="field__item">',
-          '#plain-text' => $entity->field_last_name->value,
-          '#suffix' => '</div></div>',
-          '#weight' => -998,
-        ];
 
+        debug(serialize($build['#staff_profile_profile']));
         $text = $this->renderer->renderPlain($build);
         debug($text);
         //Remove labels
@@ -379,6 +370,8 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         foreach ($extra as $t) {
           $text .= $t;
         }
+        //Add name
+        $text .= ' ' . $entity->field_first_name->value . ' ' . $entity->field_last_name->value;
 
         search_index($this->getPluginId(), $entity->id(), $language->getId(), $text);
       }
