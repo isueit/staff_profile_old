@@ -7,12 +7,12 @@ entity.staff_profile_profile.collection:
     _title: 'Staff'
   requirements:
     _permission: 'administer staff profile entity'
-#Display individual profile TODO
+#Display individual profile
 entity.staff_profile_profile.canonical:
   path: '/people/{staff_profile_profile}'
   defaults:
     _entity_view: 'staff_profile_profile'
-    _title: '{staff_profile_profile:label}'
+    _title: 'Staff Profile'
   requirements:
     _entity_access: 'staff_profile_profile.view'
 #Form to edit individual profile

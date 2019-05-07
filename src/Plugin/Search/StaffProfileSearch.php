@@ -184,7 +184,6 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
       $query->join('staff_profile_entity', 's', 's.id = i.sid');
       $query->condition('s.status', 1);
 
-      debug($query);
       $query->searchExpression($keys, $this->getPluginId());
 
       $parameters = $this->getParameters();
@@ -216,7 +215,6 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         ->groupBy('i.langcode')
         ->limit(10)
         ->execute();
-      debug($find);
       $status = $query->getStatus();
 
       if ($status & SearchQuery::EXPRESSIONS_IGNORED) {
@@ -259,7 +257,29 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
 
         $language = $this->languageManager->getLanguage($item->langcode);
 
+        $profile_image = \Drupal\file\Entity\File::load($entity->field_profile_image->getValue()[0]['target_id']);
+        //debug($profile_image->get());
+        // $img_vars = array(
+        //   'style_name' => 'thumbnail',
+        //   'uri' => $profile_image->getFileUri(),
+        // );
+        // $image = \Drupal::service('image.factory')->get($profile_image->getFileUri());
+        // if($image->isValid()) {
+        //   $img_vars['width'] = $image->getWidth();
+        //   $img_vars['height'] = $image->getHeight();
+        // } else {
+        //   $img_vars['width'] = $img_vars['height'] = NULL;
+        // }
+        // $img_render = [
+        //   '#theme' => 'image_style',
+        //   '#width' =>$img_vars['width'],
+        //   '#height' => $img_vars['height'],
+        //   '#style_name' => $img_vars['style_name'],
+        //   '#uri' => $img_vars['uri'],
+        // ];
+
         $result = array(
+          //'picture' => $img_render,
           'link' => $entity->url(
             'canonical',
             array(
@@ -268,7 +288,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
             )
           ),
           'type' => 'Staff Profile',
-          'title' => $entity->label(), //$entity->field_first_name->value . ' ' . $entity->field_last_name->value,
+          'title' => $entity->label(), //$entity->field_first_name->value . ' ' . $entity->field_last_name->value
           'staff_profile_profile' => $entity,
           'extra' => $extra,
           'score' => $item->calculated_score,
@@ -276,6 +296,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
           'langcode' => $entity->language()->getId(),
         );
 
+        $this->addCacheableDependency($img_render, $profile_image);
         $this->addCacheableDependency($entity);
         $this->addCacheableDependency($entity->getOwner());
 

@@ -23,3 +23,11 @@ use Drupal\Core\Access\AccessResult;
    }
    return AccessResult::neutral();
  }
+
+ /**
+  * Implements hook_Entity_Type_view_alter()
+  * Uses label (name) as title, page meta title remains the same
+  */
+function staff_profile_staff_profile_profile_view_alter(array &$build, Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display) {
+  $build['#title'] = $entity->label();
+}
