@@ -248,6 +248,31 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         //Invoke removeFromSnippet
         $build['#pre_render'][] = array($this, 'removeFromSnippet');
 
+        $profile_image = \Drupal\file\Entity\File::load($entity->field_profile_image->getValue()[0]['target_id']);
+        if ($profile_image != NULL) {
+          $img_vars = array(
+            'style_name' => 'thumbnail',
+            'uri' => $profile_image->getFileUri(),
+          );
+          $image = \Drupal::service('image.factory')->get($profile_image->getFileUri());
+          if($image->isValid()) {
+            $img_vars['width'] = $image->getWidth();
+            $img_vars['height'] = $image->getHeight();
+          } else {
+            $img_vars['width'] = $img_vars['height'] = NULL;
+          }
+          $img_render = [
+            '#theme' => 'image_style',
+            '#width' =>$img_vars['width'],
+            '#height' => $img_vars['height'],
+            '#style_name' => $img_vars['style_name'],
+            '#uri' => $img_vars['uri'],
+          ];
+          $this->addCacheableDependency($img_render, $profile_image);
+        }
+        $build['image'] = $img_render;
+
+        debug(array_keys($build));
         $rendered = $this->renderer->renderPlain($build);
 
         $this->addCacheableDependency(CacheableMetadata::createFromRenderArray($build));
@@ -257,29 +282,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
 
         $language = $this->languageManager->getLanguage($item->langcode);
 
-        $profile_image = \Drupal\file\Entity\File::load($entity->field_profile_image->getValue()[0]['target_id']);
-        //debug($profile_image->get());
-        // $img_vars = array(
-        //   'style_name' => 'thumbnail',
-        //   'uri' => $profile_image->getFileUri(),
-        // );
-        // $image = \Drupal::service('image.factory')->get($profile_image->getFileUri());
-        // if($image->isValid()) {
-        //   $img_vars['width'] = $image->getWidth();
-        //   $img_vars['height'] = $image->getHeight();
-        // } else {
-        //   $img_vars['width'] = $img_vars['height'] = NULL;
-        // }
-        // $img_render = [
-        //   '#theme' => 'image_style',
-        //   '#width' =>$img_vars['width'],
-        //   '#height' => $img_vars['height'],
-        //   '#style_name' => $img_vars['style_name'],
-        //   '#uri' => $img_vars['uri'],
-        // ];
-
         $result = array(
-          //'picture' => $img_render,
           'link' => $entity->url(
             'canonical',
             array(
@@ -295,8 +298,10 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
           'snippet' => search_excerpt($keys, $rendered, $item->langcode),
           'langcode' => $entity->language()->getId(),
         );
-
-        $this->addCacheableDependency($img_render, $profile_image);
+        // if ($img_vars) {
+        //   $result['image'] = $img_render;
+        // }
+        //debug($result['snippet']['#plain_text']);
         $this->addCacheableDependency($entity);
         $this->addCacheableDependency($entity->getOwner());
 
@@ -310,7 +315,6 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
      */
     public function removeFromSnippet($build) {
       unset($build['body']);
-      debug(array_keys($build));
       unset($build['user_id']);
     }
 
@@ -381,9 +385,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
           '#weight' => -1000,
         ];
 
-        debug(serialize($build['#staff_profile_profile']));
         $text = $this->renderer->renderPlain($build);
-        debug($text);
         //Remove labels
         $text = preg_replace('#<div class="field__label">(.*?)</div>#', '', $text);
         $extra = $this->moduleHandler->invokeAll('staff_profile_update_index', [$entity]);
