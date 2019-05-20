@@ -1,0 +1,5 @@
+<?php
+function staff_profile_install() {
+  // Chron entity update needs to be run before search index
+  module_set_weight("staff_profile", -1);
+}

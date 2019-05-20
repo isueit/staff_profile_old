@@ -25,6 +25,7 @@ use Drupal\search\Plugin\SearchIndexingInterface;
 use Drupal\search\SearchQuery;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Url;
+use Drupal\taxonomy\Entity\Term;
 
 /**
  * Handles searching from staff_profile_profile entities
@@ -92,9 +93,17 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
        'column' => 's.field_last_name',
      ),
 
-     // 'field_first_name' => array(
-     //   'column' => 's.field_first_name',
-     // ),
+     'field_first_name' => array(
+       'column' => 's.field_first_name',
+     ),
+
+     'field_base_county' => array(
+       'column' => 's.field_base_county',
+     ),
+
+     'field_counties_served' => array(
+       'column' => 's.field_counties_served',
+     ),
    );
 
    /**
@@ -192,6 +201,10 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         $pattern = '/^(' . implode('|', array_keys($this->advanced)) . '):([^ ]*)/i';
         foreach ($parameters['f'] as $item) {
           if (preg_match($pattern, $item, $m)) {
+            if ($m[1] == "field_base_county") {
+              $m[2] = Term::load($m[2])->getName();
+            }
+            debug($m[2]);
             $filters[$m[1]][$m[2]] = $m[2];
           }
         }
@@ -246,33 +259,36 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         unset($build['#theme']);
 
         //Invoke removeFromSnippet
-        $build['#pre_render'][] = array($this, 'removeFromSnippet');
+        //$build['#pre_render'][] = array($this, 'removeFromSnippet');
 
-        $profile_image = \Drupal\file\Entity\File::load($entity->field_profile_image->getValue()[0]['target_id']);
-        if ($profile_image != NULL) {
-          $img_vars = array(
-            'style_name' => 'thumbnail',
-            'uri' => $profile_image->getFileUri(),
-          );
-          $image = \Drupal::service('image.factory')->get($profile_image->getFileUri());
-          if($image->isValid()) {
-            $img_vars['width'] = $image->getWidth();
-            $img_vars['height'] = $image->getHeight();
-          } else {
-            $img_vars['width'] = $img_vars['height'] = NULL;
-          }
-          $img_render = [
-            '#theme' => 'image_style',
-            '#width' =>$img_vars['width'],
-            '#height' => $img_vars['height'],
-            '#style_name' => $img_vars['style_name'],
-            '#uri' => $img_vars['uri'],
-          ];
-          $this->addCacheableDependency($img_render, $profile_image);
-        }
-        $build['image'] = $img_render;
 
-        debug(array_keys($build));
+        // Adding image requires changes to item-list--search-results.html.twig in the theme
+        //
+        // $profile_image = \Drupal\file\Entity\File::load($entity->field_profile_image->getValue()[0]['target_id']);
+        // $img_render = array();
+        // if ($profile_image != NULL) {
+        //   $img_vars = array(
+        //     'style_name' => 'thumbnail',
+        //     'uri' => $profile_image->getFileUri(),
+        //   );
+        //   $image = \Drupal::service('image.factory')->get($profile_image->getFileUri());
+        //   if($image->isValid()) {
+        //     $img_vars['width'] = $image->getWidth();
+        //     $img_vars['height'] = $image->getHeight();
+        //   } else {
+        //     $img_vars['width'] = $img_vars['height'] = NULL;
+        //   }
+        //   $img_render = [
+        //     '#theme' => 'image_style',
+        //     '#width' =>$img_vars['width'],
+        //     '#height' => $img_vars['height'],
+        //     '#style_name' => $img_vars['style_name'],
+        //     '#uri' => $img_vars['uri'],
+        //   ];
+        //   $this->addCacheableDependency($img_render, $profile_image);
+        // }
+        // $build['image'] = $img_render;
+
         $rendered = $this->renderer->renderPlain($build);
 
         $this->addCacheableDependency(CacheableMetadata::createFromRenderArray($build));
@@ -281,6 +297,8 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         $extra = $this->moduleHandler->invokeAll('staff_profile_search_result', [$entity]);
 
         $language = $this->languageManager->getLanguage($item->langcode);
+        //Remove owner account text and "Array" if it is present
+        $rendered = preg_replace('#<div><a href="(.*?)</a></div>.+?Array?#is', '', $rendered);
 
         $result = array(
           'link' => $entity->url(
@@ -298,10 +316,10 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
           'snippet' => search_excerpt($keys, $rendered, $item->langcode),
           'langcode' => $entity->language()->getId(),
         );
+
         // if ($img_vars) {
         //   $result['image'] = $img_render;
         // }
-        //debug($result['snippet']['#plain_text']);
         $this->addCacheableDependency($entity);
         $this->addCacheableDependency($entity->getOwner());
 
@@ -491,6 +509,13 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         '#weight' => -10,
       );
 
+      $form['advanced']['misc-fieldset']['field_last_name'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Last Name'),
+        '#description' => t('Search last names for exact matches.'),
+        '#default_value' => isset($defaults['field_last_name']) ? $defaults['field_last_name'] : array(),
+      );
+
       $form['advanced']['misc-fieldset']['field_first_name'] = array(
         '#type' => 'textfield',
         '#title' => t('First Name'),
@@ -498,11 +523,18 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         '#default_value' => isset($defaults['field_first_name']) ? $defaults['field_first_name'] : array(),
       );
 
-      $form['advanced']['misc-fieldset']['field_last_name'] = array(
+      $form['advanced']['misc-fieldset']['field_base_county'] = array(
         '#type' => 'textfield',
-        '#title' => t('Last Name'),
+        '#title' => t('Base County'),
+        '#description' => t('Search first names for exact matches.'),
+        '#default_value' => isset($defaults['field_base_county']) ? $defaults['field_base_county'] : array(),
+      );
+
+      $form['advanced']['misc-fieldset']['field_counties_served'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Counties Served'),
         '#description' => t('Search last names for exact matches.'),
-        '#default_value' => isset($defaults['field_last_name']) ? $defaults['field_last_name'] : array(),
+        '#default_value' => isset($defaults['field_counties_served']) ? $defaults['field_counties_served'] : array(),
       );
 
       $form['advanced']['submit'] = array(
@@ -530,6 +562,16 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
 
       if ($form_state->hasValue('field_last_name') && !empty($value = trim($form_state->getValue('field_last_name')))) {
         $filters[] = 'field_last_name:' . $value;
+        $advanced = TRUE;
+      }
+
+      if ($form_state->hasValue('field_base_county') && !empty($value = trim($form_state->getValue('field_base_county')))) {
+        $filters[] = 'field_base_county:' . $value;
+        $advanced = TRUE;
+      }
+
+      if ($form_state->hasValue('field_counties_served') && !empty($value = trim($form_state->getValue('field_counties_served')))) {
+        $filters[] = 'field_counties_served:' . $value;
         $advanced = TRUE;
       }
 
@@ -677,5 +719,23 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
 
       }
     }
+
+
+    /**
+     * Get taxonomy term by Name or id
+     */
+    protected function getTidByName($name = NULL, $vid = NULL) {
+      $properties = [];
+      if (!empty($name)) {
+        $properties['name'] = $name;
+      }
+      if (!empty($vid)) {
+        $properties['vid'] = $vid;
+      }
+      $terms = \Drupal::entityManager()->getStorage('taxonomy_term')->loadByProperties($properties);
+      $term = reset($terms);
+      return !empty($term) ? $term->id() : 0;
+    }
+
 
 }
