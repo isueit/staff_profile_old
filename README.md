@@ -28,6 +28,12 @@ Add - Create new profile
 Edit - Change existing profile
 Delete - Delete existing profile
 
+## Search
+Enable the search under config>search and metadata>search pages
+Mark staff profiles for indexing (config>search and metadata>search pages and click reindex site)
+Run cron to index profiles
+Search using search/<search page name>
+
 ## Prerequisites
 Staff Profile requires the following modules:
 * drupal:views

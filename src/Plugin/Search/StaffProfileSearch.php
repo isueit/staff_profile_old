@@ -198,7 +198,12 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
       $query->join('staff_profile_entity', 's', 's.id = i.sid');
       $query->condition('s.status', 1);
       //TODO allow users to advanced search without anything in keywords, see issue: https://www.drupal.org/project/drupal/issues/1126688
-      $query->searchExpression($keys, $this->getPluginId());
+      //Passing wildcard fails the character count check
+      if ($keys != "") {
+        $query->searchExpression($keys, $this->getPluginId());
+      } else {
+        $query->searchExpression("*", $this->getPluginId());
+      }
 
       $parameters = $this->getParameters();
       if (!empty($parameters['f']) && is_array($parameters['f'])) {
@@ -208,9 +213,11 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
           if (preg_match($pattern, $item, $m)) {
             if ($m[1] == 'field_counties_served') {
               $m[2] = explode(',',$m[2]);
-            }
-            foreach($m[2] as $val) {
-              $filters[$m[1]][$val] = $val;
+              foreach($m[2] as $val) {
+                $filters[$m[1]][$val] = $val;
+              }
+            } else {
+              $filters[$m[1]][$m[2]] = $m[2];
             }
           }
         }
@@ -234,10 +241,11 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
       }
 
       $this->addStaffProfileRankings($query);
+      debug($query);
       $find = $query
         ->fields('i', array('langcode'))
         ->groupBy('i.langcode')
-        ->limit(10)
+        ->limit(25)
         ->execute();
       $status = $query->getStatus();
 
