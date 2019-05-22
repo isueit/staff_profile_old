@@ -102,8 +102,13 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
      ),
 
      'field_counties_served' => array(
-       'column' => 's.field_counties_served',
+       'column' => 'sfcs.field_counties_served_target_id',
      ),
+
+     'field_program_area_s_' => array(
+       'column' => 's.field_program_area_s_',
+     ),
+
    );
 
    /**
@@ -192,7 +197,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
 
       $query->join('staff_profile_entity', 's', 's.id = i.sid');
       $query->condition('s.status', 1);
-
+      //TODO allow users to advanced search without anything in keywords, see issue: https://www.drupal.org/project/drupal/issues/1126688
       $query->searchExpression($keys, $this->getPluginId());
 
       $parameters = $this->getParameters();
@@ -201,15 +206,19 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         $pattern = '/^(' . implode('|', array_keys($this->advanced)) . '):([^ ]*)/i';
         foreach ($parameters['f'] as $item) {
           if (preg_match($pattern, $item, $m)) {
-            if ($m[1] == "field_base_county") {
-              $m[2] = Term::load($m[2])->getName();
+            if ($m[1] == 'field_counties_served') {
+              $m[2] = explode(',',$m[2]);
             }
-            debug($m[2]);
-            $filters[$m[1]][$m[2]] = $m[2];
+            foreach($m[2] as $val) {
+              $filters[$m[1]][$val] = $val;
+            }
           }
         }
 
         foreach ($filters as $option => $matched) {
+          if(is_array($matched)) {
+            $matched = array_keys($matched);
+          }
           $info = $this->advanced[$option];
           $operator = empty($info['operator']) ? 'OR' : $info['operator'];
           $where = new Condition($operator);
@@ -217,11 +226,13 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
             $where->condition($info['column'], $value);
           }
           $query->condition($where);
+          $query->leftJoin('staff_profile_profile__field_counties_served', 'sfcs', 's.id = sfcs.entity_id');
           if (!empty($info['join'])) {
             $query->join($info['join']['table'], $info['join']['alias'], $info['join']['condition']);
           }
         }
       }
+
       $this->addStaffProfileRankings($query);
       $find = $query
         ->fields('i', array('langcode'))
@@ -471,6 +482,78 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         '#access' => $this->account && $this->account->hasPermission('use advanced search'),
         '#open' => $used_advanced,
       );
+
+      $form['advanced']['misc-fieldset'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('By Staff Information'),
+      );
+
+      $form['advanced']['misc-fieldset']['note'] = array(
+        '#markup' => t('You must still enter keyword(s) above when using these fields.'),
+        '#weight' => -10,
+      );
+
+      $form['advanced']['misc-fieldset']['field_last_name'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Last Name'),
+        '#description' => t('Search last names for exact matches.'),
+        '#default_value' => isset($defaults['field_last_name']) ? $defaults['field_last_name'] : array(),
+      );
+
+      $form['advanced']['misc-fieldset']['field_first_name'] = array(
+        '#type' => 'textfield',
+        '#title' => t('First Name'),
+        '#description' => t('Search first names for exact matches.'),
+        '#default_value' => isset($defaults['field_first_name']) ? $defaults['field_first_name'] : array(),
+      );
+
+      // Switched to dropdown, we know all options
+      // $form['advanced']['misc-fieldset']['field_base_county'] = array(
+      //   '#type' => 'textfield',
+      //   '#title' => t('Base County'),
+      //   '#description' => t('Search base county for exact matches.'),
+      //   '#default_value' => isset($defaults['field_base_county']) ? $defaults['field_base_county'] : array(),
+      // );
+      $tag_terms = \Drupal::entityManager()->getStorage('taxonomy_term')->loadTree('counties-in-iowa');
+      $tags = array();
+      $tags[''] = "-None-";
+      foreach ($tag_terms as $tag_term) {
+        $tags[$tag_term->tid] = $tag_term->name;
+      }
+
+      $form['advanced']['misc-fieldset']['field_base_county'] = array(
+        '#type' => 'select',
+        '#options' => $tags,
+        '#title' => t('Base County'),
+        '#default_value' => '',
+        '#description' => t('Search by base county office.'),
+        '#default_value' => isset($defaults['field_base_county']) ? $defaults['field_base_county'] : array(),
+      );
+      unset($tags['']);
+      // Switched to multi-select, we know all options
+      // $form['advanced']['misc-fieldset']['field_counties_served'] = array(
+      //   '#type' => 'textfield',
+      //   '#title' => t('Counties Served'),
+      //   '#description' => t('Search counties served for exact matches.'),
+      //   '#default_value' => isset($defaults['field_counties_served']) ? $defaults['field_counties_served'] : array(),
+      // );
+      $form['advanced']['misc-fieldset']['field_counties_served'] = array(
+        '#type' => 'select',
+        '#options' => $tags,
+        '#title' => t('Counties Served'),
+        '#default_value' => '',
+        '#description' => t('Search by counties served. Control or Command click to select multiple'),
+        '#multiple' => TRUE,
+        '#default_value' => isset($defaults['field_counties_served']) ? $defaults['field_counties_served'] : array(),
+      );
+
+      $form['advanced']['misc-fieldset']['field_program_area_s_'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Program Areas'),
+        '#description' => t('Search program areas for exact matches.'),
+        '#default_value' => isset($defaults['field_program_area_s_']) ? $defaults['field_program_area_s_'] : array(),
+      );
+
       $form['advanced']['keywords-fieldset'] = array(
         '#type' => 'fieldset',
         '#title' => t('Keywords'),
@@ -498,43 +581,6 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         '#size' => 30,
         '#maxlength' => 255,
         '#default_value' => isset($defaults['negative']) ? $defaults['negative'] : '',
-      );
-
-      $form['advanced']['misc-fieldset'] = array(
-        '#type' => 'fieldset',
-      );
-
-      $form['advanced']['misc-fieldset']['note'] = array(
-        '#markup' => t('You must still enter keyword(s) above when using these fields.'),
-        '#weight' => -10,
-      );
-
-      $form['advanced']['misc-fieldset']['field_last_name'] = array(
-        '#type' => 'textfield',
-        '#title' => t('Last Name'),
-        '#description' => t('Search last names for exact matches.'),
-        '#default_value' => isset($defaults['field_last_name']) ? $defaults['field_last_name'] : array(),
-      );
-
-      $form['advanced']['misc-fieldset']['field_first_name'] = array(
-        '#type' => 'textfield',
-        '#title' => t('First Name'),
-        '#description' => t('Search first names for exact matches.'),
-        '#default_value' => isset($defaults['field_first_name']) ? $defaults['field_first_name'] : array(),
-      );
-
-      $form['advanced']['misc-fieldset']['field_base_county'] = array(
-        '#type' => 'textfield',
-        '#title' => t('Base County'),
-        '#description' => t('Search first names for exact matches.'),
-        '#default_value' => isset($defaults['field_base_county']) ? $defaults['field_base_county'] : array(),
-      );
-
-      $form['advanced']['misc-fieldset']['field_counties_served'] = array(
-        '#type' => 'textfield',
-        '#title' => t('Counties Served'),
-        '#description' => t('Search last names for exact matches.'),
-        '#default_value' => isset($defaults['field_counties_served']) ? $defaults['field_counties_served'] : array(),
       );
 
       $form['advanced']['submit'] = array(
@@ -570,8 +616,13 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         $advanced = TRUE;
       }
 
-      if ($form_state->hasValue('field_counties_served') && !empty($value = trim($form_state->getValue('field_counties_served')))) {
+      if ($form_state->hasValue('field_counties_served') && !empty($value = trim(implode(',',$form_state->getValue('field_counties_served'))))) {
         $filters[] = 'field_counties_served:' . $value;
+        $advanced = TRUE;
+      }
+
+      if ($form_state->hasValue('field_program_area_s_') && !empty($value = trim($form_state->getValue('field_program_area_s_')))) {
+        $filters[] = 'field_program_area_s_:' . $value;
         $advanced = TRUE;
       }
 
@@ -617,9 +668,14 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
       foreach ($f as $advanced) {
         list($key, $value) = explode(':', $advanced, 2);
         if (!isset($defaults[$key])) {
+          if($key == 'field_counties_served') {
+            $defaults[$key] = explode(',',$value);
+          } else {
+            $defaults[$key] = $value;
+          }
+        } else {
           $defaults[$key] = array();
         }
-        $defaults[$key][] = $value;
       }
 
       //Split keywords
@@ -719,23 +775,5 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
 
       }
     }
-
-
-    /**
-     * Get taxonomy term by Name or id
-     */
-    protected function getTidByName($name = NULL, $vid = NULL) {
-      $properties = [];
-      if (!empty($name)) {
-        $properties['name'] = $name;
-      }
-      if (!empty($vid)) {
-        $properties['vid'] = $vid;
-      }
-      $terms = \Drupal::entityManager()->getStorage('taxonomy_term')->loadByProperties($properties);
-      $term = reset($terms);
-      return !empty($term) ? $term->id() : 0;
-    }
-
 
 }
