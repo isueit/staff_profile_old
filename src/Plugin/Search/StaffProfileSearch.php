@@ -197,12 +197,8 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
 
       $query->join('staff_profile_entity', 's', 's.id = i.sid');
       $query->condition('s.status', 1);
-      //TODO allow users to advanced search without anything in keywords, see issue: https://www.drupal.org/project/drupal/issues/1126688
-      //Passing wildcard fails the character count check
       if ($keys != "") {
         $query->searchExpression($keys, $this->getPluginId());
-      } else {
-        $query->searchExpression("*", $this->getPluginId());
       }
 
       $parameters = $this->getParameters();
@@ -239,15 +235,41 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
           }
         }
       }
+      if ($keys == "") {
+        //Add advanced keywords to search
+        foreach ($filters as $name => $keyword) {
+          if ($name == "field_base_county" || $name == "field_counties_served") {
+            if (is_array($keyword)) {
+              foreach ($keyword as $key => $tid) {
+                $backupkeys .= (count($backupkeys) > 0 ? " OR " : "") . '"' . Term::load($tid)->getName(). '"';
+              }
+            } else {
+              $backupkeys .= (count($backupkeys) > 0 ? " OR " : "") . '"' . Term::load($keyword)->getName() . '"';
+            }
+          } else {
+            if (is_array($keyword)) {
+              foreach ($keyword as $key => $word) {
+                $backupkeys .= (count($backupkeys) > 0 ? " OR " : "") . $word;
+              }
+            } else {
+              $backupkeys .= (count($backupkeys) > 0 ? " OR " : "") . $keyword;
+            }
+
+          }
+        }
+        $query->searchExpression($backupkeys, $this->getPluginId());
+      }
 
       $this->addStaffProfileRankings($query);
-      debug($query);
+
+      //TODO add partial match support
       $find = $query
         ->fields('i', array('langcode'))
         ->groupBy('i.langcode')
         ->limit(25)
         ->execute();
       $status = $query->getStatus();
+      debug($query);
 
       if ($status & SearchQuery::EXPRESSIONS_IGNORED) {
         drupal_set_message($this->t('Your search used too many AND/OR expressions. Only the first @count terms were included in the search.', array('@count' => $this->searchSettings->get('and_or_limit'))), 'warning');
@@ -496,11 +518,6 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         '#title' => t('By Staff Information'),
       );
 
-      $form['advanced']['misc-fieldset']['note'] = array(
-        '#markup' => t('You must still enter keyword(s) above when using these fields.'),
-        '#weight' => -10,
-      );
-
       $form['advanced']['misc-fieldset']['field_last_name'] = array(
         '#type' => 'textfield',
         '#title' => t('Last Name'),
@@ -550,7 +567,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         '#options' => $tags,
         '#title' => t('Counties Served'),
         '#default_value' => '',
-        '#description' => t('Search by counties served. Control or Command click to select multiple'),
+        '#description' => t('Search by counties served. Control or Command click to select multiple.'),
         '#multiple' => TRUE,
         '#default_value' => isset($defaults['field_counties_served']) ? $defaults['field_counties_served'] : array(),
       );
