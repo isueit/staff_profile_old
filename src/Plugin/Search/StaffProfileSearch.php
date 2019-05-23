@@ -228,6 +228,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
           foreach ($matched as $value) {
             $where->condition($info['column'], $value);
           }
+          debug($where);
           $query->condition($where);
           $query->leftJoin('staff_profile_profile__field_counties_served', 'sfcs', 's.id = sfcs.entity_id');
           if (!empty($info['join'])) {
@@ -237,24 +238,32 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
       }
       if ($keys == "") {
         //Add advanced keywords to search
+        $backupkeys = "";
         foreach ($filters as $name => $keyword) {
-          if ($name == "field_base_county" || $name == "field_counties_served") {
-            if (is_array($keyword)) {
-              foreach ($keyword as $key => $tid) {
-                $backupkeys .= (count($backupkeys) > 0 ? " OR " : "") . '"' . Term::load($tid)->getName(). '"';
-              }
-            } else {
-              $backupkeys .= (count($backupkeys) > 0 ? " OR " : "") . '"' . Term::load($keyword)->getName() . '"';
-            }
-          } else {
+          if ($name != "field_base_county" && $name != "field_counties_served") {
             if (is_array($keyword)) {
               foreach ($keyword as $key => $word) {
-                $backupkeys .= (count($backupkeys) > 0 ? " OR " : "") . $word;
+                $backupkeys .= (strlen($backupkeys) > 0 ? " OR " : "") . $word;
               }
             } else {
-              $backupkeys .= (count($backupkeys) > 0 ? " OR " : "") . $keyword;
+              $backupkeys .= (strlen($backupkeys) > 0 ? " OR " : "") . $keyword;
             }
-
+          }
+        }
+        //Only add counties if we do not have enought characters
+        if (strlen($backupkeys) <= 3) {
+          $names = ['field_base_county', 'field_counties_served'];
+          foreach ($names as $name) {
+            if (strlen($backupkeys) <= 3) {
+              $keyword = $filters[$name];
+              if (is_array($keyword)) {
+                foreach ($keyword as $key => $tid) {
+                  $backupkeys .= (strlen($backupkeys) > 0 ? " OR " : "") . '"' . Term::load($tid)->getName(). '"';
+                }
+              } else {
+                $backupkeys .= (strlen($backupkeys) > 0 ? " OR " : "") . '"' . Term::load($keyword)->getName() . '"';
+              }
+            }
           }
         }
         $query->searchExpression($backupkeys, $this->getPluginId());
@@ -269,7 +278,8 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         ->limit(25)
         ->execute();
       $status = $query->getStatus();
-      debug($query);
+      debug($query->conditions());
+      debug($find);
 
       if ($status & SearchQuery::EXPRESSIONS_IGNORED) {
         drupal_set_message($this->t('Your search used too many AND/OR expressions. Only the first @count terms were included in the search.', array('@count' => $this->searchSettings->get('and_or_limit'))), 'warning');
@@ -479,8 +489,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
     public function indexStatus() {
       $total = $this->database->query('SELECT COUNT(*) FROM {staff_profile_entity}')->fetchField();
       $remaining = $this->database->query("SELECT COUNT(DISTINCT s.id) FROM {staff_profile_entity} s LEFT JOIN {search_dataset} sd ON sd.sid = s.id AND sd.type = :type WHERE sd.sid IS NULL OR sd.reindex <> 0", array(':type' => $this->getPluginId()))->fetchField();
-
-      return array('remaining' => $remaining, '$total' => $total);
+      return array('remaining' => $remaining, 'total' => $total);
     }
 
 
