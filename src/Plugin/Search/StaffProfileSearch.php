@@ -197,9 +197,10 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
 
       $query->join('staff_profile_entity', 's', 's.id = i.sid');
       $query->condition('s.status', 1);
-      if ($keys != "") {
+      if ($keys) {
         $query->searchExpression($keys, $this->getPluginId());
       }
+      //Wildcards in LIKE condition https://drupal.stackexchange.com/questions/281575/core-search-names-with-wildcards
 
       $parameters = $this->getParameters();
       if (!empty($parameters['f']) && is_array($parameters['f'])) {
@@ -228,8 +229,8 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
           foreach ($matched as $value) {
             $where->condition($info['column'], $value);
           }
-          debug($where);
           $query->condition($where);
+          debug($query);
           $query->leftJoin('staff_profile_profile__field_counties_served', 'sfcs', 's.id = sfcs.entity_id');
           if (!empty($info['join'])) {
             $query->join($info['join']['table'], $info['join']['alias'], $info['join']['condition']);
@@ -278,7 +279,21 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         ->limit(25)
         ->execute();
       $status = $query->getStatus();
-      debug($query->conditions());
+      //If we find nothing add wildcards
+      if (!$find && $keys && preg_match("/\%/", $keys) == FALSE) {
+        $keys = explode(" ", $keys);
+        foreach ($keys as $name => $key) {
+          $keys[$name] = "%" . $key . "%";
+          debug($keys[$name]);
+        }
+        $keys = implode(" ", $keys);
+        debug($keys);
+        $query->searchExpression($keys, $this->getPluginId());
+        $find = $query->execute();
+        $status = $query->getStatus();
+      }
+
+      debug($query);
       debug($find);
 
       if ($status & SearchQuery::EXPRESSIONS_IGNORED) {
@@ -522,6 +537,11 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         '#open' => $used_advanced,
       );
 
+      /**
+       * TODO
+       * Consider moving this outside of dropdown so users are aware of it
+       * May remove dropdown completely if phrase, negative, etc are not needed
+       */
       $form['advanced']['misc-fieldset'] = array(
         '#type' => 'fieldset',
         '#title' => t('By Staff Information'),
@@ -541,7 +561,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         '#default_value' => isset($defaults['field_first_name']) ? $defaults['field_first_name'] : array(),
       );
 
-      // Switched to dropdown, we know all options
+      // Switched to dropdown, we know all options TODO check in to remove
       // $form['advanced']['misc-fieldset']['field_base_county'] = array(
       //   '#type' => 'textfield',
       //   '#title' => t('Base County'),
@@ -564,7 +584,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         '#default_value' => isset($defaults['field_base_county']) ? $defaults['field_base_county'] : array(),
       );
       unset($tags['']);
-      // Switched to multi-select, we know all options
+      // Switched to multi-select, we know all options TODO check in before removing
       // $form['advanced']['misc-fieldset']['field_counties_served'] = array(
       //   '#type' => 'textfield',
       //   '#title' => t('Counties Served'),

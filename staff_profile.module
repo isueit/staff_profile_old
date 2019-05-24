@@ -31,3 +31,20 @@ use Drupal\Core\Access\AccessResult;
 function staff_profile_staff_profile_profile_view_alter(array &$build, Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display) {
   $build['#title'] = $entity->label();
 }
+
+/**
+ * Add wildcards to text in search
+ */
+function staff_profile_search_preprocess($text, $langcoge = NULL) {
+  debug("called");
+  $text = explode(" ", $text);
+  foreach ($text as $name => $key) {
+    if (preg_match("/\%/", $key) == FALSE) {
+      $keys[$name] = "%" . $key . "%";
+    }
+    debug("found percent");
+  }
+  $text = implode(" ", $keys);
+  debug($text);
+  return $text;
+}
