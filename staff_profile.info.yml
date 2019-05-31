@@ -9,3 +9,5 @@ dependencies:
   - telephone
   - pathauto
   - views_bulk_operations
+  - taxonomy
+  - image
