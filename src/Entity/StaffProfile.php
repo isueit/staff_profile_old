@@ -179,10 +179,6 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         'default_value' => '',
         'max_length' => 225,
       ))
-      ->setDisplayOptions('form', array(
-        'type' => 'string',
-        'weight' => -1,
-      ))
       ->setDisplayConfigurable('form', FALSE);
 
     $fields['body'] = BaseFieldDefinition::create('text_with_summary')
