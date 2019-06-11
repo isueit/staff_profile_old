@@ -861,7 +861,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: '{{ field_profile_image__target_id }} {{ field_position_title }}, {{ field_program_area_s_ }}, {{ field_email }}'
+            text: '{{ field_profile_image__target_id }} <br> {{ field_position_title }} <br> {{ field_program_area_s_ }} <br> {{ field_email }}'
             make_link: false
             path: ''
             absolute: false
@@ -893,7 +893,7 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: true
+          element_default_classes: false
           empty: ''
           hide_empty: false
           empty_zero: false
