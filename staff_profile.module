@@ -42,9 +42,31 @@ function staff_profile_search_preprocess($text, $langcoge = NULL) {
     if (preg_match("/\%/", $key) == FALSE) {
       $keys[$name] = "%" . $key . "%";
     }
-    debug("found percent");
   }
   $text = implode(" ", $keys);
-  debug($text);
   return $text;
+}
+
+
+//Trigger on creation of new user to give them ownership TODO Move to staff_profile
+function staff_profile_user_insert(Drupal\Core\Entity\EntityInterface $user) {
+  $net_id = $user->getUsername();
+  $local_profile = \Drupal::entityTypeManager()->getStorage('staff_profile_profile')->loadByProperties(['netid' => $net_id]);
+  if ($local_profile[0]) {
+    $local_profile[0]->setOwnerId($user->id())
+      ->setOwner($user)
+      ->setOwnerId($user->id())
+      ->user_id = $user->id()
+    ->save();
+  } else {
+    $newEntity = \Drupal\staff_profile\Entity\StaffProfile::create([
+      'netid' => $net_id,
+      'field_email' => $user->getEmail(),
+      'user_id' => $user->id(),
+    ]);
+    $newEntity->setUnpublished()
+    ->setOwnerId($user->id())
+    ->setOwner($user)
+    ->save();
+  }
 }

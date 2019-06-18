@@ -285,20 +285,19 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setSettings(array(
         'default_value' => '',
         'target_type' => 'taxonomy_term',
-        'settings' => array(
-          'handler' => 'default:taxonomy_term',
-          'handler_settings' => array(
-            'target_bundles' => array(
-              'counties_in_iowa' => 'counties_in_iowa',
-            ),
-            'sort' => array(
-              'field' => 'name',
-              'direction' => 'asc',
-            ),
-            'auto_create' => FALSE,
-            'auto_create_bundle' => '',
+        'handler' => 'default:taxonomy_term',
+        'handler_settings' => array(
+          'target_bundles' => array(
+            'counties-in-iowa' => 'counties-in-iowa',
           ),
+          'sort' => array(
+            'field' => 'name',
+            'direction' => 'desc',
+          ),
+          'auto_create' => FALSE,
+          'auto_create_bundle' => '',
         ),
+
       ))
       ->setDisplayOptions('view', array(
         'type' => 'entity_reference_entity_view',
@@ -318,8 +317,8 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
-    $fields['field_base_region'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Base Region'))
+    $fields['field_extension_region'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Extension Region'))
       ->setRevisionable(TRUE)
       ->setRequired(FALSE)
       ->setTranslatable(FALSE)
@@ -387,20 +386,18 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setSettings(array(
         'default_value' => '',
         'target_type' => 'taxonomy_term',
-        'settings' => array(
-          'handler' => 'default:taxonomy_term',
-          'handler_settings' => array(
-            'target_bundles' => array(
-              'counties_in_iowa' => 'counties_in_iowa',
-            ),
-            'sort' => array(
-              'field' => 'name',
-              'direction' => 'asc',
-            ),
-            'auto_create' => FALSE,
-            'auto_create_bundle' => '',
+        'handler' => 'default:taxonomy_term',
+        'handler_settings' => array(
+          'target_bundles' => array(
+            'counties-in-iowa' => 'counties-in-iowa',
           ),
-        ),
+          'sort' => array(
+            'field' => 'name',
+            'direction' => 'asc',
+          ),
+          'auto_create' => FALSE,
+          'auto_create_bundle' => '',
+          ),
       ))
       ->setDisplayOptions('view', array(
         'type' => 'entity_reference_entity_view',
@@ -467,8 +464,8 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
-    $fields['field_fax'] = BaseFieldDefinition::create('telephone')
-      ->setLabel(t('Fax Number'))
+    $fields['field_phone_2'] = BaseFieldDefinition::create('telephone')
+      ->setLabel(t('Secondary Phone Number'))
       ->setRevisionable(TRUE)
       ->setRequired(FALSE)
       ->setTranslatable(FALSE)
@@ -493,6 +490,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
           'size' => 60,
           'placeholder' => '',
         ),
+
       ))
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
