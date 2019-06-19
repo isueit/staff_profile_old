@@ -11,3 +11,4 @@ dependencies:
   - views_bulk_operations
   - taxonomy
   - image
+  - json_feed #TODO Look at other json feed modules
