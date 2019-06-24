@@ -55,6 +55,8 @@ class StaffProfileAccessControlHandler extends EntityAccessControlHandler {
        $field = $field_definition->getName();
         if (in_array($field, $protected_fields) && !$account->hasPermission('administer staff profile entity')) {
           return AccessResult::forbidden();
+          #TODO allow to see text formatted
+          #TODO allow profiles not from staff db to be edited to keep info up to date
         }
          break;
        case 'view':

@@ -519,7 +519,7 @@ display:
           empty_zero: false
           hide_alter_empty: true
           text: view
-          output_url_as_text: false
+          output_url_as_text: true
           absolute: false
           entity_type: staff_profile_profile
           plugin_id: entity_link
@@ -852,6 +852,55 @@ display:
           entity_type: staff_profile_profile
           entity_field: field_program_area_s_
           plugin_id: field
+        nothing:
+          id: nothing
+          table: views
+          field: nothing
+          relationship: none
+          group_type: group
+          admin_label: 'Display Text'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: true
+            text: '<div class="views-field views-field-field-name-title"><span ="field-content"><a href="{{ view_staff_profile_profile }}">{{ field_first_name }} {{ field_last_name }}, {{ field_position_title }}</a></div><div class="views-field views-field-field-email"></span><span class="field-content">{{ field_email}}</span></div>'
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: false
+          plugin_id: custom
       filters:
         status:
           value: '1'
@@ -955,7 +1004,7 @@ display:
           url_field: view_staff_profile_profile
           external_url_field: ''
           title_field: name
-          content_html_field: ''
+          content_html_field: nothing
           content_text_field: field_program_area_s_
           summary_field: ''
           image_field: field_profile_image__target_id
