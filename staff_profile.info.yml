@@ -11,4 +11,5 @@ dependencies:
   - views_bulk_operations
   - taxonomy
   - image
-  - json_feed #TODO Look at other json feed modules
+  - json_feed
+  - taxonomy_import #TODO add auto install of counties-in-iowa

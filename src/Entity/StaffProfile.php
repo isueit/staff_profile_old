@@ -677,7 +677,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
-    $fields['field_program_area_s_'] = BaseFieldDefinition::create('string')
+    $fields['field_program_area_s_'] = BaseFieldDefinition::create('list_string')
       ->setLabel(t('Program Areas'))
       ->setRevisionable(TRUE)
       ->setRequired(FALSE)
@@ -685,6 +685,16 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setSettings(array(
         'default_value' => '',
         'max_length' => 255,
+        'allowed_values' => array(
+          "4-H Youth" => "4-H Youth",
+          "Administration" => "Administration",
+          "Agriculture" => "Agriculture",
+          "Business & Industry" => "Business & Industry",
+          "Communications & External Relations" => "Communications & External Relations",
+          "Communities" => "Communities",
+          "Continuing Education & Professional Development" => "Continuing Education & Professional Development",
+          "Human Sciences" => "Human Sciences",
+        ),
       ))
       ->setDisplayOptions('view', array(
         'type' => 'string',
@@ -696,7 +706,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         ),
       ))
       ->setDisplayOptions('form', array(
-        'type' => 'string_textfield',
+        'type' => 'options_select',
         'weight' => 13,
         'region' => 'content',
         'settings' => array(
