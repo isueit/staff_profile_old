@@ -329,7 +329,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
 
 
         // Adding image requires changes to item-list--search-results.html.twig in the theme
-        //
+        // template_preprocess_search_result()
         // $profile_image = \Drupal\file\Entity\File::load($entity->field_profile_image->getValue()[0]['target_id']);
         // $img_render = array();
         // if ($profile_image != NULL) {
@@ -529,19 +529,14 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
 
       $form['basic']['keys']['#default_value'] = $defaults['keys'];
 
-      $form['advanced'] = array(
-        '#type' => 'details',
-        '#title' => t('Advanced search'),
-        '#attributes' => array('class' => array('search-advanced')),
-        '#access' => $this->account && $this->account->hasPermission('use advanced search'),
-        '#open' => $used_advanced,
-      );
+      // $form['advanced'] = array(
+      //   '#type' => 'details',
+      //   '#title' => t('Advanced search'),
+      //   '#attributes' => array('class' => array('search-advanced')),
+      //   '#access' => $this->account && $this->account->hasPermission('use advanced search'),
+      //   '#open' => $used_advanced,
+      // );
 
-      /**
-       * TODO
-       * Consider moving this outside of dropdown so users are aware of it
-       * May remove dropdown completely if phrase, negative, etc are not needed
-       */
       $form['advanced']['misc-fieldset'] = array(
         '#type' => 'fieldset',
         '#title' => t('By Staff Information'),
@@ -561,16 +556,9 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         '#default_value' => isset($defaults['field_first_name']) ? $defaults['field_first_name'] : array(),
       );
 
-      // Switched to dropdown, we know all options TODO check in to remove
-      // $form['advanced']['misc-fieldset']['field_base_county'] = array(
-      //   '#type' => 'textfield',
-      //   '#title' => t('Base County'),
-      //   '#description' => t('Search base county for exact matches.'),
-      //   '#default_value' => isset($defaults['field_base_county']) ? $defaults['field_base_county'] : array(),
-      // );
       $tag_terms = \Drupal::entityManager()->getStorage('taxonomy_term')->loadTree('counties-in-iowa');
       $tags = array();
-      $tags[''] = "-None-";
+      $tags[''] = "- None -";
       foreach ($tag_terms as $tag_term) {
         $tags[$tag_term->tid] = $tag_term->name;
       }
@@ -584,13 +572,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         '#default_value' => isset($defaults['field_base_county']) ? $defaults['field_base_county'] : array(),
       );
       unset($tags['']);
-      // Switched to multi-select, we know all options TODO check in before removing
-      // $form['advanced']['misc-fieldset']['field_counties_served'] = array(
-      //   '#type' => 'textfield',
-      //   '#title' => t('Counties Served'),
-      //   '#description' => t('Search counties served for exact matches.'),
-      //   '#default_value' => isset($defaults['field_counties_served']) ? $defaults['field_counties_served'] : array(),
-      // );
+
       $form['advanced']['misc-fieldset']['field_counties_served'] = array(
         '#type' => 'select',
         '#options' => $tags,
@@ -602,48 +584,66 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
       );
 
       $form['advanced']['misc-fieldset']['field_program_area_s_'] = array(
-        '#type' => 'textfield',
+        '#type' => 'select',
         '#title' => t('Program Areas'),
         '#description' => t('Search program areas for exact matches.'),
         '#default_value' => isset($defaults['field_program_area_s_']) ? $defaults['field_program_area_s_'] : array(),
+        '#options' => array(
+          "" => "- None -",
+          "4-H Youth" => "4-H Youth",
+          "Administration" => "Administration",
+          "Agriculture" => "Agriculture",
+          "Business & Industry" => "Business & Industry",
+          "Communications & External Relations" => "Communications & External Relations",
+          "Communities" => "Communities",
+          "Continuing Education & Professional Development" => "Continuing Education & Professional Development",
+          "Human Sciences" => "Human Sciences",
+        ),
       );
-
-      $form['advanced']['keywords-fieldset'] = array(
-        '#type' => 'fieldset',
-        '#title' => t('Keywords'),
-      );
-
-      $form['advanced']['keywords-fieldset']['keywords']['or'] = array(
-        '#type' => 'textfield',
-        '#title' => t('Containing any of the words'),
-        '#size' => 30,
-        '#maxlength' => 255,
-        '#default_value' => isset($defaults['or']) ? $defaults['or'] : '',
-      );
-
-      $form['advanced']['keywords-fieldset']['keywords']['phrase'] = array(
-        '#type' => 'textfield',
-        '#title' => t('Containing the phrase'),
-        '#size' => 30,
-        '#maxlength' => 255,
-        '#default_value' => isset($defaults['phrase']) ? $defaults['phrase'] : '',
-      );
-
-      $form['advanced']['keywords-fieldset']['keywords']['negative'] = array(
-        '#type' => 'textfield',
-        '#title' => t('Containing none of the words'),
-        '#size' => 30,
-        '#maxlength' => 255,
-        '#default_value' => isset($defaults['negative']) ? $defaults['negative'] : '',
-      );
-
-      $form['advanced']['submit'] = array(
+      $form['advanced']['misc-fieldset']['submit'] = array(
         '#type' => 'submit',
-        '#value' => t('Advanced search'),
+        '#value' => t('Search'),
         '#prefix' => '<div class="action">',
         '#suffix' => '</div>',
         '#weight' => 100,
       );
+
+      // $form['advanced']['keywords-fieldset'] = array(
+      //   '#type' => 'fieldset',
+      //   '#title' => t('Keywords'),
+      // );
+      //
+      // $form['advanced']['keywords-fieldset']['keywords']['or'] = array(
+      //   '#type' => 'textfield',
+      //   '#title' => t('Containing any of the words'),
+      //   '#size' => 30,
+      //   '#maxlength' => 255,
+      //   '#default_value' => isset($defaults['or']) ? $defaults['or'] : '',
+      // );
+      //
+      // $form['advanced']['keywords-fieldset']['keywords']['phrase'] = array(
+      //   '#type' => 'textfield',
+      //   '#title' => t('Containing the phrase'),
+      //   '#size' => 30,
+      //   '#maxlength' => 255,
+      //   '#default_value' => isset($defaults['phrase']) ? $defaults['phrase'] : '',
+      // );
+      //
+      // $form['advanced']['keywords-fieldset']['keywords']['negative'] = array(
+      //   '#type' => 'textfield',
+      //   '#title' => t('Containing none of the words'),
+      //   '#size' => 30,
+      //   '#maxlength' => 255,
+      //   '#default_value' => isset($defaults['negative']) ? $defaults['negative'] : '',
+      // );
+      //
+      // $form['advanced']['keywords-fieldset']['submit'] = array(
+      //   '#type' => 'submit',
+      //   '#value' => t('Search'),
+      //   '#prefix' => '<div class="action">',
+      //   '#suffix' => '</div>',
+      //   '#weight' => 100,
+      // );
     }
 
     /**
