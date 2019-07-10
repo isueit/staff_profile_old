@@ -13,3 +13,5 @@ dependencies:
   - image
   - json_feed
   - taxonomy_import
+  - media
+  - media_entity_smugmug

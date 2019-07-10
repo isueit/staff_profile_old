@@ -677,6 +677,25 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
+      $fields['field_profile_smugmug'] = BaseFieldDefinition::create('string_long')
+        ->setLabel(t('Smugmug Image'))
+        ->setRevisionable(TRUE)
+        ->setRequired(FALSE)
+        ->setTranslatable(FALSE)
+        ->setDisplayOptions('view', array(
+          'type' => 'image',
+          'weight' => 1,
+          'region' => 'content',
+          'label' => 'Smugmug Image',
+        ))
+        ->setDisplayOptions('form', array(
+          'type' => 'smugmug_embed',
+          'weight' => 17,
+          'region' => 'link',
+        ))
+        ->setDisplayConfigurable('view', TRUE)
+        ->setDisplayConfigurable('form', TRUE);
+
     $fields['field_program_area_s_'] = BaseFieldDefinition::create('list_string')
       ->setLabel(t('Program Areas'))
       ->setRevisionable(TRUE)
