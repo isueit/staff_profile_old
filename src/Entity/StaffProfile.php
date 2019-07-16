@@ -684,13 +684,13 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         ->setTranslatable(FALSE)
         ->setSettings(array(
           "target_type" => "media",
-          "bundle" => "smugmug"
+          "bundle" => "remote_smugmug_image"
         ))
         ->setDisplayOptions('view', array(
-          'type' => 'smugmug_embed',
+          'type' => 'remote_smugmug_image',
           'weight' => 1,
           'region' => 'content',
-          'label' => 'Smugmug Image',
+          'label' => 'hidden',
         ))
         ->setDisplayOptions('form', array(
           'type' => 'entity_autocomplete',
@@ -699,6 +699,29 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         ))
         ->setDisplayConfigurable('view', TRUE)
         ->setDisplayConfigurable('form', TRUE);
+
+    $fields['field_profile_smugmug_text'] = BaseFieldDefinition::create('string_long')
+      ->setLabel(t('Smugmug Embed Image'))
+      ->setRevisionable(TRUE)
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
+      ->setSettings(array(
+        'default_value' => "",
+        'max_length' => 255
+      ))
+      ->setDisplayOptions('view', array(
+        'type' => 'markdown',
+        'weight' => 1,
+        'region' => 'content',
+        'label' => 'hidden',
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'string_textfield',
+        'weight' => 17,
+        'region' => 'content',
+      ))
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
 
     $fields['field_program_area_s_'] = BaseFieldDefinition::create('list_string')
       ->setLabel(t('Program Areas'))
