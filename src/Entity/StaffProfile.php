@@ -710,7 +710,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         'max_length' => 255
       ))
       ->setDisplayOptions('view', array(
-        'type' => 'markdown',
+        'type' => 'html',
         'weight' => 1,
         'region' => 'content',
         'label' => 'hidden',

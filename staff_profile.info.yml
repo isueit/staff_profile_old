@@ -14,4 +14,4 @@ dependencies:
   - json_feed
   - taxonomy_import
   - media
-  - media_entity_smugmug
+  - media_entity_smugmug_remote
