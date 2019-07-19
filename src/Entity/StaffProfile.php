@@ -677,30 +677,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
-      $fields['field_profile_smugmug'] = BaseFieldDefinition::create('entity_reference')
-        ->setLabel(t('Smugmug Image'))
-        ->setRevisionable(TRUE)
-        ->setRequired(FALSE)
-        ->setTranslatable(FALSE)
-        ->setSettings(array(
-          "target_type" => "media",
-          "bundle" => "remote_smugmug_image"
-        ))
-        ->setDisplayOptions('view', array(
-          'type' => 'remote_smugmug_image',
-          'weight' => 1,
-          'region' => 'content',
-          'label' => 'hidden',
-        ))
-        ->setDisplayOptions('form', array(
-          'type' => 'entity_autocomplete',
-          'weight' => 17,
-          'region' => 'content',
-        ))
-        ->setDisplayConfigurable('view', TRUE)
-        ->setDisplayConfigurable('form', TRUE);
-
-    $fields['field_profile_smugmug_text'] = BaseFieldDefinition::create('string_long')
+    $fields['field_profile_smugmug_image'] = BaseFieldDefinition::create('string_long')
       ->setLabel(t('Smugmug Embed Image'))
       ->setRevisionable(TRUE)
       ->setRequired(FALSE)
@@ -710,7 +687,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         'max_length' => 255
       ))
       ->setDisplayOptions('view', array(
-        'type' => 'html',
+        'type' => 'remote_smugmug_image',
         'weight' => 1,
         'region' => 'content',
         'label' => 'hidden',
