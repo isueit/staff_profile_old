@@ -962,7 +962,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: '{% if field_profile_smugmug_image is not empty and field_profile_smugmug_image is not null %}@{{ field_profile_smugmug_image }}{% else %}{{ field_profile_image__target_id }}{% endif %}'
+            text: "{% if field_profile_smugmug_image is not empty and field_profile_smugmug_image is not null %}@{{ field_profile_smugmug_image }}{% else %}\r\n\r\n{{field_profile_image__target_id|split('/', 3)[2]}}{% endif %}"
             make_link: false
             path: ''
             absolute: false
