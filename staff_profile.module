@@ -76,7 +76,24 @@ function staff_profile_user_insert(Drupal\Core\Entity\EntityInterface $user) {
  */
 function staff_profile_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
   if ($hook == 'search_result') {
-    //$suggestions[] = "search_result__staff_profile_profile_search"; #Current
+    debug($hook);
+    $suggestions[] = "search_result__staff_profile_profile_search";
+    debug($suggestions);
+  } elseif ($hook == 'item_list') {
+    debug($hook);
+    $suggestions[0] = "item_list__search_results__staff_profile_profile_search";
     debug($suggestions);
   }
+}
+
+/**
+ * Implements hook_theme()
+ */
+function staff_profile_theme($existing, $type, $theme, $path) {
+  return [
+    'search_result__staff_profile_profile_search' => [
+      'variables' => ['result' => NULL, 'plugin_id' => NULL],
+      'file' => 'templates/search_result__staff_profile_profile_search.html.twig',
+    ],
+  ];
 }
