@@ -322,7 +322,9 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
       foreach ($found as $item) {
         $entity = $entity_storage->load($item->sid)->getTranslation($item->langcode);
         $build = $entity_render->view($entity, 'search_result', $item->langcode);
+
         unset($build['#theme']);
+        $build['#theme'] = "search_result__staff_profile_profile_search";
 
         //Invoke removeFromSnippet
         //$build['#pre_render'][] = array($this, 'removeFromSnippet');

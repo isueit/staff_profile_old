@@ -54,6 +54,16 @@
  * @ingroup themeable
  */
 #}
-<pre>
-  {{ dump(info_split) }}
-</pre>
+{{ title_prefix }}
+<h3{{ title_attributes }}>
+  <a href="{{ url }}">{{ title }}</a>
+</h3>
+{{ title_suffix }}
+<p>TEST</p>
+{% if snippet %}
+  <p{{ content_attributes }}>{{ snippet }}</p>
+{% endif %}
+{% if info %}
+  <p>{{ info }}</p>
+{% endif %}
+{{ plugin_id }}

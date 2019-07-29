@@ -90,10 +90,13 @@ function staff_profile_theme_suggestions_alter(array &$suggestions, array $varia
  * Implements hook_theme()
  */
 function staff_profile_theme($existing, $type, $theme, $path) {
+  debug($existing);
+  debug($type);
+  debug($theme);
+  debug($path);
   return [
     'search_result__staff_profile_profile_search' => [
-      'variables' => ['result' => NULL, 'plugin_id' => NULL],
-      'file' => 'templates/search_result__staff_profile_profile_search.html.twig',
+      'variables' => ['url' => NULL, 'title' => NULL, 'snippet' => NULL, 'info' => NULL, 'plugin_id' => NULL, 'title_prefix' => NULL, 'title_suffix' => NULL, 'info_split' => NULL],
     ],
   ];
 }
