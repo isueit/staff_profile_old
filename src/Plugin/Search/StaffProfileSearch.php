@@ -324,7 +324,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         $build = $entity_render->view($entity, 'search_result', $item->langcode);
 
         unset($build['#theme']);
-        $build['#theme'] = "search_result__staff_profile_profile_search";
+        //$build['#theme'] = "search_result__staff_profile_profile_search";
 
         //Invoke removeFromSnippet
         //$build['#pre_render'][] = array($this, 'removeFromSnippet');
@@ -367,7 +367,9 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         $language = $this->languageManager->getLanguage($item->langcode);
         //Remove owner account text and "Array" if it is present
         $rendered = preg_replace('#<div><a href="(.*?)</a></div>.+?Array?#is', '', $rendered);
-
+        // debug(serialize($rendered));
+        // $rendered = preg_replace('#\<div\>#', '', $rendered);
+        // $rendered = preg_replace('#\<\/div\>#', '', $rendered);
         $result = array(
           'link' => $entity->url(
             'canonical',
@@ -381,7 +383,8 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
           'staff_profile_profile' => $entity,
           'extra' => $extra,
           'score' => $item->calculated_score,
-          'snippet' => search_excerpt($keys, $rendered, $item->langcode),
+          //'snippet' => search_excerpt($keys, $rendered, $item->langcode),
+          'snippet' => $rendered,
           'langcode' => $entity->language()->getId(),
         );
 

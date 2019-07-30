@@ -74,26 +74,22 @@ function staff_profile_user_insert(Drupal\Core\Entity\EntityInterface $user) {
 /**
  * Implements hook_theme_suggestions_alter()
  */
-function staff_profile_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
-  if ($hook == 'search_result') {
-    debug($hook);
-    $suggestions[] = "search_result__staff_profile_profile_search";
-    debug($suggestions);
-  } elseif ($hook == 'item_list') {
-    debug($hook);
-    $suggestions[0] = "item_list__search_results__staff_profile_profile_search";
-    debug($suggestions);
-  }
-}
+// function staff_profile_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
+//   if ($hook == 'search_result') {
+//     debug($hook);
+//     //$suggestions[] = "search_result__staff_profile_profile_search";
+//     debug($suggestions);
+//   } elseif ($hook == 'item_list') {
+//     debug($hook);
+//     //$suggestions[0] = "item_list__search_results__staff_profile_profile_search";
+//     debug($suggestions);
+//   }
+// }
 
 /**
  * Implements hook_theme()
  */
 function staff_profile_theme($existing, $type, $theme, $path) {
-  debug($existing);
-  debug($type);
-  debug($theme);
-  debug($path);
   return [
     'search_result__staff_profile_profile_search' => [
       'variables' => ['url' => NULL, 'title' => NULL, 'snippet' => NULL, 'info' => NULL, 'plugin_id' => NULL, 'title_prefix' => NULL, 'title_suffix' => NULL, 'info_split' => NULL],
