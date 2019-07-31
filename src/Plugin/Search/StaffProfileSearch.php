@@ -383,8 +383,8 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
           'staff_profile_profile' => $entity,
           'extra' => $extra,
           'score' => $item->calculated_score,
-          //'snippet' => search_excerpt($keys, $rendered, $item->langcode),
-          'snippet' => $rendered,
+          'snippet' => search_excerpt($keys, $rendered, $item->langcode),
+          //'snippet' => $rendered,
           'langcode' => $entity->language()->getId(),
         );
 

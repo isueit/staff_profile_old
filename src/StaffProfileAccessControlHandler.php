@@ -49,7 +49,7 @@ class StaffProfileAccessControlHandler extends EntityAccessControlHandler {
     * {@inheritdoc}
     */
   protected function checkFieldAccess($operation, $field_definition, $account, $items = NULL) {
-    $protected_fields = ['field_program_area_s_', 'field_last_name', 'field_email', 'field_address_1', 'field_address_2', 'field_city', 'field_state', 'field_zip', 'field_phone', 'field_extension_region', 'field_location', 'field_department_id', 'field_base_county', 'field_counties_served', 'field_profile_image', 'field_profile_smugmug', 'field_profile_smugmug_text'];
+    $protected_fields = ['field_program_area_s_', 'field_last_name', 'field_email', 'field_address_1', 'field_address_2', 'field_city', 'field_state', 'field_zip', 'field_phone', 'field_extension_region', 'field_location', 'field_department_id', 'field_base_county', 'field_counties_served', 'field_profile_image', 'field_profile_smugmug_image'];
      switch ($operation) {
        case 'edit':
        $field = $field_definition->getName();
@@ -60,6 +60,11 @@ class StaffProfileAccessControlHandler extends EntityAccessControlHandler {
         }
          break;
        case 'view':
+        // Hide local image if profile has smugmug image
+        $field = $field_definition->getName();
+        if ($field == "field_profile_image") {
+          
+        }
         return AccessResult::allowedIfHasPermission($account, 'access content');
         break;
      }
