@@ -36,7 +36,6 @@ function staff_profile_staff_profile_profile_view_alter(array &$build, Drupal\Co
  * Add wildcards to text in search
  */
 function staff_profile_search_preprocess($text, $langcoge = NULL) {
-  debug("called");
   $text = explode(" ", $text);
   foreach ($text as $name => $key) {
     if (preg_match("/\%/", $key) == FALSE) {
@@ -75,8 +74,7 @@ function staff_profile_user_insert(Drupal\Core\Entity\EntityInterface $user) {
  * Implements hook_preprocess_hook()
  */
 function theme_preprocess_staff_profile_profile(&$variables) {
-  //Remove image field if smugmug has url
-  debug("Preprocess staff profile");
+  debug(serialize($variables));
 }
 
 
@@ -92,6 +90,9 @@ function theme_preprocess_staff_profile_profile(&$variables) {
 //     debug($hook);
 //     //$suggestions[0] = "item_list__search_results__staff_profile_profile_search";
 //     debug($suggestions);
+//   } elseif ($hook == 'field') {
+//     debug($hook);
+//     debug(serialize($variables));
 //   }
 // }
 
@@ -99,9 +100,31 @@ function theme_preprocess_staff_profile_profile(&$variables) {
  * Implements hook_theme()
  */
 function staff_profile_theme($existing, $type, $theme, $path) {
-  return [
-    'search_result__staff_profile_profile_search' => [
-      'variables' => ['url' => NULL, 'title' => NULL, 'snippet' => NULL, 'info' => NULL, 'plugin_id' => NULL, 'title_prefix' => NULL, 'title_suffix' => NULL, 'info_split' => NULL],
-    ],
-  ];
+  debug($type);
+  return array(
+    'search_result__staff_profile_profile_search' => array(
+      'variables' => array(
+        'url' => NULL,
+        'title' => NULL,
+        'snippet' => NULL,
+        'info' => NULL,
+        'plugin_id' => NULL,
+        'title_prefix' => NULL,
+        'title_suffix' => NULL,
+        'info_split' => NULL
+      )
+    ),
+    'search_result' => array(
+      'variables' => array(
+        'url' => NULL,
+        'title' => NULL,
+        'snippet' => NULL,
+        'info' => NULL,
+        'plugin_id' => NULL,
+        'title_prefix' => NULL,
+        'title_suffix' => NULL,
+        'info_split' => NULL
+      )
+    ),
+  );
 }
