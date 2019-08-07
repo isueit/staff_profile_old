@@ -27,9 +27,13 @@ use Drupal\Core\Access\AccessResult;
  /**
   * Implements hook_Entity_Type_view_alter()
   * Uses label (name) as title, page meta title remains the same
+  * Removes local image from display if entity has smugmug image
   */
 function staff_profile_staff_profile_profile_view_alter(array &$build, Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display) {
   $build['#title'] = $entity->label();
+  if (isset($build['field_profile_smugmug_image']['#entity_type'])) {
+    unset($build['field_profile_image']);
+  }
 }
 
 /**
@@ -81,50 +85,40 @@ function theme_preprocess_staff_profile_profile(&$variables) {
 /**
  * Implements hook_theme_suggestions_alter()
  */
-// function staff_profile_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
-//   if ($hook == 'search_result') {
-//     debug($hook);
-//     //$suggestions[] = "search_result__staff_profile_profile_search";
-//     debug($suggestions);
-//   } elseif ($hook == 'item_list') {
-//     debug($hook);
-//     //$suggestions[0] = "item_list__search_results__staff_profile_profile_search";
-//     debug($suggestions);
-//   } elseif ($hook == 'field') {
-//     debug($hook);
-//     debug(serialize($variables));
-//   }
+// function staff_profile_theme_suggestions_search_results_alter(array &$suggestions, array $variables) {
+//   $suggestions[0] = "search_result__staff_profile_profile_search";
 // }
 
 /**
  * Implements hook_theme()
  */
 function staff_profile_theme($existing, $type, $theme, $path) {
-  debug($type);
-  return array(
-    'search_result__staff_profile_profile_search' => array(
-      'variables' => array(
-        'url' => NULL,
-        'title' => NULL,
-        'snippet' => NULL,
-        'info' => NULL,
-        'plugin_id' => NULL,
-        'title_prefix' => NULL,
-        'title_suffix' => NULL,
-        'info_split' => NULL
-      )
-    ),
-    'search_result' => array(
-      'variables' => array(
-        'url' => NULL,
-        'title' => NULL,
-        'snippet' => NULL,
-        'info' => NULL,
-        'plugin_id' => NULL,
-        'title_prefix' => NULL,
-        'title_suffix' => NULL,
-        'info_split' => NULL
-      )
-    ),
-  );
+  return $theme['search_result__staff_profile__search_result'] = ['template' => 'staff_result__staff_profile_profile_search'];
+  // debug($type);
+  // return array(
+  //   'search_result__staff_profile_profile_search' => array(
+  //     'variables' => array(
+  //       'url' => NULL,
+  //       'title' => NULL,
+  //       'snippet' => NULL,
+  //       'info' => NULL,
+  //       'plugin_id' => NULL,
+  //       'title_prefix' => NULL,
+  //       'title_suffix' => NULL,
+  //       'info_split' => NULL
+  //     )
+  //   )//,
+  //   // 'search_result' => array(
+  //   //   'variables' => array(
+  //   //     'url' => NULL,
+  //   //     'title' => NULL,
+  //   //     'snippet' => NULL,
+  //   //     'info' => NULL,
+  //   //     'plugin_id' => NULL,
+  //   //     'title_prefix' => NULL,
+  //   //     'title_suffix' => NULL,
+  //   //     'info_split' => NULL
+  //   //   )
+  //   // ),
+  // );
 }
