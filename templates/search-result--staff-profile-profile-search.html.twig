@@ -16,40 +16,11 @@
  *   displayed in front of the main title tag that appears in the template.
  * - title_suffix: Additional output populated by modules, intended to be
  *   displayed after the main title tag that appears in the template.
- * - info_split: Contains same data as info, but split into separate parts.
- *   - info_split.type: Node type (or item type string supplied by module).
- *   - info_split.user: Author of the node linked to users profile. Depends
- *     on permission.
- *   - info_split.date: Last update of the node. Short formatted.
- *   - info_split.comment: Number of comments output as "% comments", %
- *     being the count. (Depends on comment.module).
- * @todo The info variable needs to be made drillable and each of these sub
- *   items should instead be within info and renamed info.foo, info.bar, etc.
+ * - result.staff_profile_profile.<field_name>.value: The value of any field
+ *   from the corresponding entity for a given result card
  *
- * Other variables:
- * - title_attributes: HTML attributes for the title.
- * - content_attributes: HTML attributes for the content.
  *
- * Since info_split is keyed, a direct print of the item is possible.
- * This array does not apply to user searches so it is recommended to check
- * for its existence before printing. The default keys of 'type', 'user' and
- * 'date' always exist for node searches. Modules may provide other data.
- * @code
- *   {% if (info_split.comment) %}
- *     <span class="info-comment">
- *       {{ info_split.comment }}
- *     </span>
- *   {% endif %}
- * @endcode
- *
- * To check for all available data within info_split, use the code below.
- * @code
- *   <pre>
- *     {{ dump(info_split) }}
- *   </pre>
- * @endcode
- *
- * @see template_preprocess_search_result()
+ * @see template_preprocess_search_result__staff_profile_profile_search()
  *
  * @ingroup staff_profile
  */
@@ -59,13 +30,4 @@
   <a href="{{ url }}">{{ title }}</a>
 </h3>
 {{ title_suffix }}
-<p>TEST</p>
-{% if snippet %}
-  <p{{ content_attributes }}>{{ snippet }}</p>
-{% endif %}
-{% if info %}
-  <p>{{ info }}</p>
-{% endif %}
-{{ plugin_id }}
-{{ staff_profile_profile.field_first_name }}
-<pre>{{ dump() }}</pre>
+<a href="mailto:{{ result.staff_profile_profile.field_email.value }}">{{ result.staff_profile_profile.field_email.value }}</a>
