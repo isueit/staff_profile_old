@@ -318,52 +318,19 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         $build = $entity_render->view($entity, 'search_result', $item->langcode);
 
         unset($build['#theme']);
-        //$build['#theme'] = "search_result__staff_profile_profile_search";
 
         //Invoke removeFromSnippet
         //$build['#pre_render'][] = array($this, 'removeFromSnippet');
 
-
-        // Adding image requires changes to item-list--search-results.html.twig in the theme
-        // template_preprocess_search_result()
-        // $profile_image = \Drupal\file\Entity\File::load($entity->field_profile_image->getValue()[0]['target_id']);
-        // $img_render = array();
-        // if ($profile_image != NULL) {
-        //   $img_vars = array(
-        //     'style_name' => 'thumbnail',
-        //     'uri' => $profile_image->getFileUri(),
-        //   );
-        //   $image = \Drupal::service('image.factory')->get($profile_image->getFileUri());
-        //   if($image->isValid()) {
-        //     $img_vars['width'] = $image->getWidth();
-        //     $img_vars['height'] = $image->getHeight();
-        //   } else {
-        //     $img_vars['width'] = $img_vars['height'] = NULL;
-        //   }
-        //   $img_render = [
-        //     '#theme' => 'image_style',
-        //     '#width' =>$img_vars['width'],
-        //     '#height' => $img_vars['height'],
-        //     '#style_name' => $img_vars['style_name'],
-        //     '#uri' => $img_vars['uri'],
-        //   ];
-        //   $this->addCacheableDependency($img_render, $profile_image);
-        // }
-        // $build['image'] = $img_render;
-
         // Throws notice: "array to string conversion" when adding invokeAll
-        $rendered = (string) $this->renderer->renderPlain($build);
+        // Could remove if not using snippet
+        $rendered = $this->renderer->renderPlain($build);
         $this->addCacheableDependency(CacheableMetadata::createFromRenderArray($build));
-        $rendered .= ' ' . $this->moduleHandler->invokeAll('staff_profile_update_index', [$entity]);
+        $rendered .=  ' ' . $this->moduleHandler->invokeAll('staff_profile_update_index', [$entity]);
 
         $extra = $this->moduleHandler->invokeAll('staff_profile_search_result', [$entity]);
 
         $language = $this->languageManager->getLanguage($item->langcode);
-        //Remove owner account text and "Array" if it is present
-        $rendered = preg_replace('#<div><a href="(.*?)</a></div>.+?Array?#is', '', $rendered);
-        // debug(serialize($rendered));
-        // $rendered = preg_replace('#\<div\>#', '', $rendered);
-        // $rendered = preg_replace('#\<\/div\>#', '', $rendered);
         $result = array(
           'link' => $entity->url(
             'canonical',
@@ -373,18 +340,14 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
             )
           ),
           'type' => 'Staff Profile',
-          'title' => $entity->label(), //$entity->field_first_name->value . ' ' . $entity->field_last_name->value
+          'title' => $entity->label(),
           'staff_profile_profile' => $entity,
           'extra' => $extra,
           'score' => $item->calculated_score,
           'snippet' => search_excerpt($keys, $rendered, $item->langcode),
-          //'snippet' => $rendered,
           'langcode' => $entity->language()->getId(),
         );
 
-        // if ($img_vars) {
-        //   $result['image'] = $img_render;
-        // }
         $this->addCacheableDependency($entity);
         $this->addCacheableDependency($entity->getOwner());
 
@@ -607,6 +570,7 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         '#weight' => 100,
       );
 
+      // Search using advanced keywords (AND, OR, EXACT, etc.)
       // $form['advanced']['keywords-fieldset'] = array(
       //   '#type' => 'fieldset',
       //   '#title' => t('Keywords'),
