@@ -7,7 +7,7 @@
       "type": "git",
       "url": "git@github.com:isueit/taxonomy_import.git"
     },
-  ]
+  ],
 
   "require": {
     "drupal/views_bulk_operations": "^3.2",
