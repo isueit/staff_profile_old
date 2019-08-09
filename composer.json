@@ -2,4 +2,8 @@
   "name": "isueit/staff_profile",
   "type": "drupal-custom-module",
   "description": "Module to Create staff_profile content type"
+
+  "require": {
+    "drupal/views_bulk_operations": "^3.2"
+  }
 }
