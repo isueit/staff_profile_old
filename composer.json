@@ -4,6 +4,7 @@
   "description": "Module to Create staff_profile content type"
 
   "require": {
-    "drupal/views_bulk_operations": "^3.2"
+    "drupal/views_bulk_operations": "^3.2",
+    "drupal/json_feed" : "^1.1"
   }
 }
