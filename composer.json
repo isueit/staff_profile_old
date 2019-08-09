@@ -2,9 +2,16 @@
   "name": "isueit/staff_profile",
   "type": "drupal-custom-module",
   "description": "Module to Create staff_profile content type",
+  "repositories": [
+    {
+      "type": "git",
+      "url": "git@github.com:isueit/taxonomy_import.git"
+    },
+  ]
 
   "require": {
     "drupal/views_bulk_operations": "^3.2",
-    "drupal/json_feed" : "^1.1"
+    "drupal/json_feed" : "^1.1",
+    "isueit/taxonomy_import": "dev-master"
   }
 }
