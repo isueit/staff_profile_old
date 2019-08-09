@@ -230,7 +230,6 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
             $where->condition($info['column'], $value);
           }
           $query->condition($where);
-          debug($query);
           $query->leftJoin('staff_profile_profile__field_counties_served', 'sfcs', 's.id = sfcs.entity_id');
           if (!empty($info['join'])) {
             $query->join($info['join']['table'], $info['join']['alias'], $info['join']['condition']);
@@ -284,17 +283,12 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         $keys = explode(" ", $keys);
         foreach ($keys as $name => $key) {
           $keys[$name] = "%" . $key . "%";
-          debug($keys[$name]);
         }
         $keys = implode(" ", $keys);
-        debug($keys);
         $query->searchExpression($keys, $this->getPluginId());
         $find = $query->execute();
         $status = $query->getStatus();
       }
-
-      debug($query);
-      debug($find);
 
       if ($status & SearchQuery::EXPRESSIONS_IGNORED) {
         drupal_set_message($this->t('Your search used too many AND/OR expressions. Only the first @count terms were included in the search.', array('@count' => $this->searchSettings->get('and_or_limit'))), 'warning');
@@ -357,8 +351,8 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
         // }
         // $build['image'] = $img_render;
 
-        $rendered = $this->renderer->renderPlain($build);
-
+        // Throws notice: "array to string conversion" when adding invokeAll
+        $rendered = (string) $this->renderer->renderPlain($build);
         $this->addCacheableDependency(CacheableMetadata::createFromRenderArray($build));
         $rendered .= ' ' . $this->moduleHandler->invokeAll('staff_profile_update_index', [$entity]);
 
