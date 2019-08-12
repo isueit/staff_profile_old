@@ -16,14 +16,10 @@
  *   displayed in front of the main title tag that appears in the template.
  * - title_suffix: Additional output populated by modules, intended to be
  *   displayed after the main title tag that appears in the template.
- * - result.staff_profile_profile.<field_name>.value: The value of any field
+ * - result.staff_profile_values.<field_name>: The value of any field
  *   from the corresponding entity for a given result card
- * - Images:
- *    result.staff_profile_profile.field_profile_smugmug_image.value
- *    file_url(result.staff_profile_profile.field_profile_image.0.entity.uri.value)
- * - Referenced Entities
- *    result.staff_profile_profile.field_base_county.entity.name.value
- *    result.staff_profile_profile.field_counties_served.<nth>.entity.name.value
+ * - result.staff_profile_values.profile_image_url: Url of image that should
+ *   be used, automatically switches between local and smugmug
  *
  * @see template_preprocess_search_result__staff_profile_profile_search()
  *
@@ -32,18 +28,14 @@
  * TODO: add search_staff_profile_info class to site CSS
  */
 #}
-{% if result.staff_profile_profile.field_profile_smugmug_image.value %}
-  <img src="{{ result.staff_profile_profile.field_profile_smugmug_image.value }}" alt="Staff profile image" width="100">
-{% elseif result.staff_profile_profile.field_profile_image.value %}
-  <img src="{{ file_url(result.staff_profile_profile.field_profile_image.0.entity.uri.value) }}" alt="Staff profile image" width="100">
-{% endif %}
+<img src="{{ result.staff_profile_values.profile_image_url }}" alt="Staff profile image" width="100">
 <div class="search_staff_profile_info" style="display: inline-block; vertical-align: middle;">
   {{ title_prefix }}
   <h3{{ title_attributes }}>
     <a href="{{ url }}">{{ title }}</a>
   </h3>
   {{ title_suffix }}
-  <h6>{{ result.staff_profile_profile.field_position_title.value }}</h6>
-  <h6>{{ result.staff_profile_profile.field_base_county.entity.name.value }} County</h6>
-  <a href="mailto:{{ result.staff_profile_profile.field_email.value }}">{{ result.staff_profile_profile.field_email.value }}</a>
+  <h6>{{ result.staff_profile_values.field_position_title }}</h6>
+  <h6>{{ result.staff_profile_values.field_base_county }} County</h6>
+  <a href="mailto:{{ result.staff_profile_values.field_email }}">{{ result.staff_profile_values.field_email }}</a>
 </div>

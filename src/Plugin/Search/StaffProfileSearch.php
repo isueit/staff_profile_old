@@ -315,21 +315,24 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
 
       foreach ($found as $item) {
         $entity = $entity_storage->load($item->sid)->getTranslation($item->langcode);
-        $build = $entity_render->view($entity, 'search_result', $item->langcode);
-
-        unset($build['#theme']);
-
-        //Invoke removeFromSnippet
-        //$build['#pre_render'][] = array($this, 'removeFromSnippet');
-
-        // Throws notice: "array to string conversion" when adding invokeAll
-        // Could remove if not using snippet
-        $rendered = $this->renderer->renderPlain($build);
-        $this->addCacheableDependency(CacheableMetadata::createFromRenderArray($build));
-        $rendered .=  ' ' . $this->moduleHandler->invokeAll('staff_profile_update_index', [$entity]);
-
-        $extra = $this->moduleHandler->invokeAll('staff_profile_search_result', [$entity]);
-
+        // $build = $entity_render->view($entity, 'search_result', $item->langcode);
+        //
+        // unset($build['#theme']);
+        //
+        // //Invoke removeFromSnippet
+        // //$build['#pre_render'][] = array($this, 'removeFromSnippet');
+        //
+        // // Throws notice: "array to string conversion" when adding invokeAll
+        // // Could remove if not using snippet
+        // $rendered = $this->renderer->renderPlain($build);
+        // $this->addCacheableDependency(CacheableMetadata::createFromRenderArray($build));
+        // $rendered .=  ' ' . $this->moduleHandler->invokeAll('staff_profile_update_index', [$entity]);
+        //
+        // $extra = $this->moduleHandler->invokeAll('staff_profile_search_result', [$entity]);
+        $counties_served = array();
+        foreach ($entity->field_counties_served as $county) {
+          $counties_served[] = Term::load($county->getValue()['target_id'])->getName();
+        }
         $language = $this->languageManager->getLanguage($item->langcode);
         $result = array(
           'link' => $entity->url(
@@ -342,9 +345,30 @@ class StaffProfileSearch extends ConfigurableSearchPluginBase implements Accessi
           'type' => 'Staff Profile',
           'title' => $entity->label(),
           'staff_profile_profile' => $entity,
-          'extra' => $extra,
+          'staff_profile_values' => [
+            'field_first_name' => $entity->field_first_name->value,
+            'field_last_name' => $entity->field_last_name->value,
+            'body' => $entity->body->value,
+            'field_address_1' => $entity->field_address_1->value,
+            'field_address_2' => $entity->field_address_2->value,
+            'field_base_county' => Term::load($entity->field_base_county[0]->getValue()['target_id'])->getName(),
+            'field_extension_region' => $entity->field_extension_region->value,
+            'field_city' => $entity->field_city->value,
+            'field_counties_served' => $counties_served,
+            'field_department_id' => $entity->field_department_id->value,
+            'field_email' => $entity->field_email->value,
+            'field_phone' => $entity->field_phone->value,
+            'field_phone_2' => $entity->field_phone_2->value,
+            'field_location' => $entity->field_location->value,
+            'field_position_title' => $entity->field_position_title->value,
+            'profile_image_url' => ($entity->field_profile_smugmug_image->value ? $entity->field_profile_smugmug_image->value : file_url($entity->field_profile_image[0]->entity->uri->value)),
+            'field_program_area_s_' => $entity->field_program_area_s_->value,
+            'field_state' => $entity->field_state->value,
+            'field_zip' => $entity->field_zip->value,
+          ],
+          //'extra' => $extra,
           'score' => $item->calculated_score,
-          'snippet' => search_excerpt($keys, $rendered, $item->langcode),
+          //'snippet' => search_excerpt($keys, $rendered, $item->langcode),
           'langcode' => $entity->language()->getId(),
         );
 
