@@ -719,10 +719,10 @@ display:
           exclude: false
           alter:
             alter_text: false
-            text: '{{ field_profile_image__target_id }}'
+            text: ''
             make_link: false
-            path: ''
-            absolute: false
+            path: '{{ field_profile_image__target_id }}'
+            absolute: true
             external: false
             replace_spaces: false
             path_case: none
@@ -744,7 +744,7 @@ display:
             trim: false
             preserve_tags: ''
             html: false
-          element_type: '0'
+          element_type: ''
           element_class: ''
           element_label_type: ''
           element_label_class: ''
@@ -817,8 +817,8 @@ display:
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: false
-          empty: ''
-          hide_empty: true
+          empty: '{{ field_profile_image__target_id|replace({site_name: ""}) }}'
+          hide_empty: false
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
@@ -951,55 +951,6 @@ display:
           empty_zero: false
           hide_alter_empty: false
           plugin_id: custom
-        nothing_1:
-          id: nothing_1
-          table: views
-          field: nothing
-          relationship: none
-          group_type: group
-          admin_label: 'Image Url'
-          label: ''
-          exclude: false
-          alter:
-            alter_text: true
-            text: "{% if field_profile_smugmug_image is not empty and field_profile_smugmug_image is not null %}@{{ field_profile_smugmug_image }}{% else %}\r\n\r\n{{field_profile_image__target_id|split('/', 3)[2]}}{% endif %}"
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: false
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: false
-          plugin_id: custom
       filters:
         status:
           value: '1'
@@ -1107,7 +1058,7 @@ display:
           content_html_field: nothing
           content_text_field: field_program_area_s_
           summary_field: ''
-          image_field: nothing_1
+          image_field: field_profile_smugmug_image
           banner_image_field: ''
           date_published_field: created
           date_modified_field: ''
