@@ -6,6 +6,7 @@ version: '8.x-1.0-dev'
 package: 'ISUEO'
 dependencies:
   - drupal:views
+  - drupal:options
   - telephone
   - pathauto
   - views_bulk_operations
