@@ -1,0 +1,5 @@
+county-checkboxes:
+  version: 1.x
+  css:
+    layout:
+      css/form-county-checkboxes.css: {}

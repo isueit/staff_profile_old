@@ -310,7 +310,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         ),
       ))
       ->setDisplayOptions('form', array(
-        'type' => 'options_buttons',
+        'type' => 'options_select',
         'weight' => 16,
         'region' => 'content',
       ))

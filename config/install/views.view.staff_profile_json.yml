@@ -719,10 +719,10 @@ display:
           exclude: false
           alter:
             alter_text: false
-            text: ''
+            text: '{{ field_profile_image__target_id }}'
             make_link: false
             path: '{{ field_profile_image__target_id }}'
-            absolute: true
+            absolute: false
             external: false
             replace_spaces: false
             path_case: none
@@ -784,9 +784,9 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: '/@{{ field_profile_smugmug_image }}'
+            text: '<front>{{ field_profile_smugmug_image__value }}'
             make_link: false
-            path: ''
+            path: '{{ field_profile_smugmug_image__value }}'
             absolute: false
             external: true
             replace_spaces: false
@@ -800,8 +800,8 @@ display:
             target: ''
             nl2br: false
             max_length: 0
-            word_boundary: true
-            ellipsis: true
+            word_boundary: false
+            ellipsis: false
             more_link: false
             more_link_text: ''
             more_link_path: ''
@@ -817,12 +817,12 @@ display:
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: false
-          empty: '{{ "%25" ~ field_profile_image__target_id|split(''/'', 3)[2] }}'
+          empty: '{{ field_profile_image__target_id | removebasepath }} '
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: basic_string
+          type: remote_smugmug_image
           settings: {  }
           group_column: value
           group_columns: {  }

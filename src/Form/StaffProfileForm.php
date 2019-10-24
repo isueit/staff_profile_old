@@ -20,6 +20,7 @@ class StaffProfileForm extends ContentEntityForm {
   public function buildForm(array $form, FormStateInterface $form_state) {
     /* @var $entity \Drupal\staff_profile\Entity\StaffProfile */
     $form = parent::buildForm($form, $form_state);
+    $form['#attached']['library'][] = 'staff_profile/county-checkboxes';
     $entity = $this->entity;
     return $form;
   }
