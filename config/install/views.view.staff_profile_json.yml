@@ -3,7 +3,6 @@ status: true
 dependencies:
   config:
     - image.style.thumbnail
-    - taxonomy.vocabulary.counties-in-iowa
   module:
     - image
     - json_feed
