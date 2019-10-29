@@ -7,6 +7,8 @@ entity.staff_profile_profile.collection:
     _title: 'Staff'
   requirements:
     _permission: 'administer staff profile entity'
+  options:
+    _admin_route: TRUE
 #Display individual profile
 entity.staff_profile_profile.canonical:
   path: '/people/{staff_profile_profile}'

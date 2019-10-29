@@ -16,4 +16,4 @@ staff_profile_profile.admin.config.content.list:
   title: Staff Profile Entities
   description: 'View Admin list of Staff Profiles'
   route_name: staff_profile.staff_profile_list
-  parent: system.admin_config_content
+  parent: system.admin_content
