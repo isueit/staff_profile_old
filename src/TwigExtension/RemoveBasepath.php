@@ -22,6 +22,6 @@ class RemoveBasepath extends \Twig_Extension {
    * Remove the basepath from local urls when using json_feed
    */
   public static function removeBasepath($string) {
-    return preg_replace('/^[\\/]+[a-zA-Z0-9]+[\\/]+/', '', $string);
+    return preg_replace('/^[\\/]+[a-zA-Z0-9]+/', '', $string);
   }
 }

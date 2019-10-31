@@ -21,3 +21,7 @@ function staff_profile_install() {
     ImportForm::loadVocabFromFile($path, $vid, $name);
   }
 }
+
+function staff_profile_uninstall() {
+  Drupal::configFactory()->getEditable('pathauto.pattern.staff_profiles')->delete();
+}

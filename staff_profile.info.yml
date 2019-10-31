@@ -14,3 +14,4 @@ dependencies:
   - image
   - json_feed
   - taxonomy_import
+  - address

@@ -217,17 +217,32 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
-    $fields['field_address_1'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Address 1'))
+    $fields['field_address'] = BaseFieldDefinition::create('address')
+      ->setLabel(t('Address'))
       ->setRevisionable(TRUE)
       ->setRequired(FALSE)
       ->setTranslatable(FALSE)
       ->setSettings(array(
-        'default_value' => '',
-        'max_length' => 255,
+        'fields' => array(
+          'addressLine1' => 'addressLine1',
+          'addressLine2' => 'addressLine2',
+          'administrativeArea' => 'administrativeArea',
+          'locality' => 'locality',
+          'dependentLocality' => 'dependentLocality',
+          'postalCode' => 'postalCode',
+          'sortingCode' => 'sortingCode',
+          'organization' => 0,
+          'givenName' => 0,
+          'additionalName' => 0,
+          'familyName' => 0,
+        ),
+      ))
+      ->setDefaultValue(array(
+        'country_code' => 'US',
+        'administrative_area' => 'IA',
       ))
       ->setDisplayOptions('view', array(
-        'type' => 'string',
+        'type' => 'address',
         'weight' => 3,
         'region' => 'content',
         'label' => 'hidden',
@@ -236,37 +251,7 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         ),
       ))
       ->setDisplayOptions('form', array(
-        'type' => 'string_textfield',
-        'weight' => 4,
-        'region' => 'content',
-        'settings' => array(
-          'size' => 60,
-          'placeholder' => '',
-        ),
-      ))
-      ->setDisplayConfigurable('view', TRUE)
-      ->setDisplayConfigurable('form', TRUE);
-
-    $fields['field_address_2'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Address 2'))
-      ->setRevisionable(TRUE)
-      ->setRequired(FALSE)
-      ->setTranslatable(FALSE)
-      ->setSettings(array(
-        'default_value' => '',
-        'max_length' => 255,
-      ))
-      ->setDisplayOptions('view', array(
-        'type' => 'string',
-        'weight' => 4,
-        'region' => 'content',
-        'label' => 'hidden',
-        'settings' => array(
-          'link_to_entity' => FALSE,
-        ),
-      ))
-      ->setDisplayOptions('form', array(
-        'type' => 'string_textfield',
+        'type' => 'address_default',
         'weight' => 4,
         'region' => 'content',
         'settings' => array(
@@ -347,35 +332,6 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
-    $fields['field_city'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('City'))
-      ->setRevisionable(TRUE)
-      ->setRequired(FALSE)
-      ->setTranslatable(FALSE)
-      ->setSettings(array(
-        'default_value' => '',
-        'max_length' => 255,
-      ))
-      ->setDisplayOptions('view', array(
-        'type' => 'string',
-        'weight' => 5,
-        'region' => 'content',
-        'label' => 'hidden',
-        'settings' => array(
-          'link_to_entity' => FALSE,
-        ),
-      ))
-      ->setDisplayOptions('form', array(
-        'type' => 'string_textfield',
-        'weight' => 6,
-        'region' => 'content',
-        'settings' => array(
-          'size' => 60,
-          'placeholder' => '',
-        ),
-      ))
-      ->setDisplayConfigurable('view', TRUE)
-      ->setDisplayConfigurable('form', TRUE);
 
     $fields['field_counties_served'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Counties Served'))
@@ -740,65 +696,6 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
-    $fields['field_state'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('State'))
-      ->setRevisionable(TRUE)
-      ->setRequired(FALSE)
-      ->setTranslatable(FALSE)
-      ->setSettings(array(
-        'default_value' => '',
-        'max_length' => 255,
-      ))
-      ->setDisplayOptions('view', array(
-        'type' => 'string',
-        'weight' => 6,
-        'region' => 'content',
-        'label' => 'hidden',
-        'settings' => array(
-          'link_to_entity' => FALSE,
-        ),
-      ))
-      ->setDisplayOptions('form', array(
-        'type' => 'string_textfield',
-        'weight' => 7,
-        'region' => 'content',
-        'settings' => array(
-          'size' => 60,
-          'placeholder' => '',
-        ),
-      ))
-      ->setDisplayConfigurable('view', TRUE)
-      ->setDisplayConfigurable('form', TRUE);
-
-    $fields['field_zip'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('ZIP Code'))
-      ->setRevisionable(TRUE)
-      ->setRequired(FALSE)
-      ->setTranslatable(FALSE)
-      ->setSettings(array(
-        'default_value' => '',
-        'max_length' => 255,
-      ))
-      ->setDisplayOptions('view', array(
-        'type' => 'string',
-        'weight' => 7,
-        'region' => 'content',
-        'label' => 'hidden',
-        'settings' => array(
-          'link_to_entity' => FALSE,
-        ),
-      ))
-      ->setDisplayOptions('form', array(
-        'type' => 'string_textfield',
-        'weight' => 8,
-        'region' => 'content',
-        'settings' => array(
-          'size' => 60,
-          'placeholder' => '',
-        ),
-      ))
-      ->setDisplayConfigurable('view', TRUE)
-      ->setDisplayConfigurable('form', TRUE);
 
     $fields['user_id'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('User Name'))
@@ -834,26 +731,6 @@ class StaffProfile extends EditorialContentEntityBase implements StaffProfileInt
         'weight' => 21,
       ))
       ->setDisplayConfigurable('form', TRUE);
-
-    $fields['weight'] = BaseFieldDefinition::create('integer')
-      ->setLabel(t('Public List weight'))
-      ->setRevisionable(TRUE)
-      ->setTranslatable(TRUE)
-      ->setSettings(array(
-        'max_length' => 255,
-      ))
-      ->setDefaultValue(0)
-      ->setDisplayOptions('form', array(
-        '#type' => 'weight',
-        'weight' => 20,
-        'region' => 'content',
-        'label' => 'inline',
-        'settings' => array(
-          'size' => 60,
-          'placeholder' => '',
-        ),
-      ))
-    ->setDisplayConfigurable('form', TRUE);
 
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created'));
