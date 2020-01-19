@@ -1,0 +1,49 @@
+<?php
+use \Drupal\taxonomy\Entity\Vocabulary;
+use \Drupal\taxonomy\Entity\Term;
+use \Drupal\taxonomy_import\Form\ImportForm;
+
+function staff_profile_install() {
+  // Chron entity update needs to be run before search index
+  module_set_weight("staff_profile", -1);
+  $name = "Counties in Iowa";
+  $vid = "counties-in-iowa";
+  $desc = "List of counties in Iowa. This vocabulary is required for Staff Profiles.";
+  $path = DRUPAL_ROOT . '/' . drupal_get_path('module', 'taxonomy_import') . '/src/data/IowaCounties.txt';
+  $vocabs = Vocabulary::loadMultiple();
+
+  //Create taxonomy if it does not exist
+  if (!isset($vocabs[$vid])) {
+    $vocab = Vocabulary::create(array(
+      'vid' => $vid,
+      'description' => $desc,
+      'name' => $name,
+    ));
+    $vocab->save();
+
+    ImportForm::loadVocabFromFile($path, $vid, $name);
+  }
+
+  $vid = 'program_areas';
+  if (!isset($vocabs[$vid])) {
+    $vocab = Vocabulary::create(array(
+      'vid' => $vid,
+      'description' => 'Program Areas used by Staff Profiles',
+      'name' => 'Program Areas',
+    ));
+    $vocab->save();
+
+    $term = Term::create(array('vid' => $vid, 'name' => 'Agriculture'))->save();
+    $term = Term::create(array('vid' => $vid, 'name' => 'Communities'))->save();
+    $term = Term::create(array('vid' => $vid, 'name' => '4-H Youth'))->save();
+    $term = Term::create(array('vid' => $vid, 'name' => 'Human Sciences'))->save();
+    $term = Term::create(array('vid' => $vid, 'name' => 'Administration'))->save();
+    $term = Term::create(array('vid' => $vid, 'name' => 'Business & Industry'))->save();
+  }
+}
+
+/*
+function staff_profile_uninstall() {
+  Drupal::configFactory()->getEditable('pathauto.pattern.staff_profiles')->delete();
+}
+*/
