@@ -9,8 +9,7 @@
     },
 
   "require": {
-    "drupal/views_bulk_operations": "^3.2",
-    "drupal/json_feed" : "^1.1",
+    "drupal/address": "^1.7",
     "isueit/taxonomy_import": "dev-master"
   }
 }

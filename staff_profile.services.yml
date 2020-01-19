@@ -1,6 +1,0 @@
-services:
-  staff_profile.twig_extension:
-      arguments: ['@renderer']
-      class: Drupal\staff_profile\TwigExtension\RemoveBasepath
-      tags:
-        - { name: twig.extension }
