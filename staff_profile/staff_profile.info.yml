@@ -11,4 +11,5 @@ dependencies:
   - pathauto:pathauto
   - drupal:taxonomy
   - taxonomy_import:taxonomy_import
+  - field_group:field_group
   - address:address
