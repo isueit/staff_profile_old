@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_college
+    - node.type.staff_profile
+  module:
+    - options
+id: node.staff_profile.field_college
+field_name: field_college
+entity_type: node
+bundle: staff_profile
+label: College
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_staffid
+    - node.type.staff_profile
+id: node.staff_profile.field_staffid
+field_name: field_staffid
+entity_type: node
+bundle: staff_profile
+label: StaffID
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 1
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

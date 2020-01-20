@@ -1,0 +1,69 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.staff_profile.body
+    - field.field.node.staff_profile.field_addr
+    - field.field.node.staff_profile.field_base_county
+    - field.field.node.staff_profile.field_cell_phone
+    - field.field.node.staff_profile.field_college
+    - field.field.node.staff_profile.field_counties_served
+    - field.field.node.staff_profile.field_departmentid
+    - field.field.node.staff_profile.field_email
+    - field.field.node.staff_profile.field_fax
+    - field.field.node.staff_profile.field_first_name
+    - field.field.node.staff_profile.field_job_title
+    - field.field.node.staff_profile.field_last_name
+    - field.field.node.staff_profile.field_location
+    - field.field.node.staff_profile.field_phone
+    - field.field.node.staff_profile.field_preferred_name
+    - field.field.node.staff_profile.field_preferred_phone
+    - field.field.node.staff_profile.field_program_areas
+    - field.field.node.staff_profile.field_region
+    - field.field.node.staff_profile.field_staffid
+    - field.field.node.staff_profile.field_working_title
+    - node.type.staff_profile
+  module:
+    - text
+    - user
+_core:
+  default_config_hash: iHFIGTm5o4VJFBWShENKQzyu-0O_zXcw9lZCCnG_X-Q
+id: node.staff_profile.teaser
+targetEntityType: node
+bundle: staff_profile
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_addr: true
+  field_base_county: true
+  field_cell_phone: true
+  field_college: true
+  field_counties_served: true
+  field_departmentid: true
+  field_email: true
+  field_fax: true
+  field_first_name: true
+  field_job_title: true
+  field_last_name: true
+  field_location: true
+  field_phone: true
+  field_preferred_name: true
+  field_preferred_phone: true
+  field_program_areas: true
+  field_region: true
+  field_staffid: true
+  field_working_title: true
