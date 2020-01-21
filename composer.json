@@ -10,7 +10,7 @@
 
   "require": {
     "drupal/address": "^1.7",
-    "drupal/field_group": "^1.0",
+    "drupal/field_group": "^3.0",
     "isueit/taxonomy_import": "dev-master"
   }
 }
