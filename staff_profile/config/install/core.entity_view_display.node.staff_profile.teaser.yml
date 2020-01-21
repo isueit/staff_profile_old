@@ -16,6 +16,7 @@ dependencies:
     - field.field.node.staff_profile.field_job_title
     - field.field.node.staff_profile.field_last_name
     - field.field.node.staff_profile.field_location
+    - field.field.node.staff_profile.field_netid
     - field.field.node.staff_profile.field_phone
     - field.field.node.staff_profile.field_preferred_name
     - field.field.node.staff_profile.field_preferred_phone
@@ -28,7 +29,7 @@ dependencies:
     - text
     - user
 _core:
-  default_config_hash: iHFIGTm5o4VJFBWShENKQzyu-0O_zXcw9lZCCnG_X-Q
+  default_config_hash: 0bl7XtJy6s8ScrAsW6h3Q-ukd8FRFiwloLWs-oh1DiY
 id: node.staff_profile.teaser
 targetEntityType: node
 bundle: staff_profile
@@ -60,6 +61,7 @@ hidden:
   field_job_title: true
   field_last_name: true
   field_location: true
+  field_netid: true
   field_phone: true
   field_preferred_name: true
   field_preferred_phone: true

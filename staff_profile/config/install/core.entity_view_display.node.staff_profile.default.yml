@@ -15,6 +15,7 @@ dependencies:
     - field.field.node.staff_profile.field_job_title
     - field.field.node.staff_profile.field_last_name
     - field.field.node.staff_profile.field_location
+    - field.field.node.staff_profile.field_netid
     - field.field.node.staff_profile.field_phone
     - field.field.node.staff_profile.field_preferred_name
     - field.field.node.staff_profile.field_preferred_phone
@@ -29,7 +30,7 @@ dependencies:
     - text
     - user
 _core:
-  default_config_hash: Qix_6IWRDofADFVWoC5Bdp-mGeca6gYq5O7YFW-7Ucc
+  default_config_hash: DVXMzJxs935JfLIo-0kBkf3t2UykzAzVKu-BOwWMxwE
 id: node.staff_profile.default
 targetEntityType: node
 bundle: staff_profile
@@ -132,6 +133,14 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: list_default
+    region: content
+  field_netid:
+    weight: 121
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
     region: content
   field_phone:
     weight: 107
