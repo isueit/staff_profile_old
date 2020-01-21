@@ -44,6 +44,7 @@ third_party_settings:
         classes: ''
         effect: none
       label: 'Main Accordion'
+      region: content
     group_name:
       children:
         - field_first_name
@@ -58,11 +59,12 @@ third_party_settings:
         required_fields: true
         description: ''
       label: Name
+      region: content
     group_from_staff_directory:
       children:
         - group_main_accordion
       parent_name: ''
-      weight: 5
+      weight: 1
       format_type: fieldset
       format_settings:
         id: ''
@@ -70,6 +72,7 @@ third_party_settings:
         description: ''
         required_fields: true
       label: 'From Staff Directory'
+      region: content
     group_more_from_staff_directory:
       children:
         - field_staffid
@@ -95,6 +98,7 @@ third_party_settings:
         required_fields: true
         description: ''
       label: 'More from Staff Directory'
+      region: content
     group_extra_staff_info:
       children:
         - body
@@ -103,7 +107,7 @@ third_party_settings:
         - field_cell_phone
         - field_preferred_phone
       parent_name: ''
-      weight: 6
+      weight: 2
       format_type: fieldset
       format_settings:
         id: ''
@@ -111,8 +115,9 @@ third_party_settings:
         description: ''
         required_fields: true
       label: 'Extra Staff Info'
+      region: content
 _core:
-  default_config_hash: Bin54_ATtJNvN2DqHmoxOI71DwRv450u4fwK_yJqIFA
+  default_config_hash: laHJlTPVhu8C8xe-JLPta0R4yV1IeToYJ3nANC8Q6w0
 id: node.staff_profile.default
 targetEntityType: node
 bundle: staff_profile
@@ -130,7 +135,7 @@ content:
     region: content
   created:
     type: datetime_timestamp
-    weight: 2
+    weight: 4
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -277,7 +282,7 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 3
+    weight: 5
     region: content
     third_party_settings: {  }
   publish_on:
@@ -297,7 +302,7 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 4
+    weight: 6
     region: content
     third_party_settings: {  }
   title:
@@ -310,7 +315,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 1
+    weight: 3
     settings:
       match_operator: CONTAINS
       size: 60
