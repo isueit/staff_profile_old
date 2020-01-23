@@ -1,0 +1,105 @@
+<?php
+
+use \Drupal\node\Entity\Node;
+
+/**
+ * Implements hook_rebuild()
+ */
+function staff_profile_mastersync_rebuild() {
+  staff_profile_mastersync_profile_from_database();
+}
+
+function staff_profile_mastersync_profile_from_database () {
+  // Get all Staff Profile nodes
+  $nids = \Drupal::entityQuery('node')->condition('type','staff_profile')->execute();
+  $nodes =  \Drupal\node\Entity\Node::loadMultiple($nids);
+
+  // Unpublish all published nodes from the Staff Directory Database
+  foreach ($nodes as $node) {
+    if ($node->isPublished() && !empty($node->field_staffid->value)) {
+      $node->setUnpublished()->save();
+    }
+  }
+
+  // Query the staff profiles from the database
+  $dbhandle = sqlsrv_connect('ext-db-server.its.iastate.edu', array("Database" => 'StaffDir', "UID" => 'StaffDirUser', "PWD" => 'PXnUSjAZqX6a7kpYxLv9W76My+'))
+    or die("Couldn't connect to SQL Server on $myServer");
+  $results = sqlsrv_query($dbhandle, "dbo.Staff_GetFullDirectory");
+  if ($results === false) {
+    die( print_r(sqlsrv_errors(), true));
+  }
+
+
+$count = 0;
+  while ($profile = sqlsrv_fetch_object($results)) {
+
+    $mynode = '';
+    foreach ($nodes as $node) {
+      if (strtolower($node->field_email->value) == strtolower($profile->email)) {
+        $mynode = $node;
+        break;
+      }
+    }
+
+    // Need to create a node
+    if (empty($mynode)) {
+      $mynode = Node::create(array('type' => 'staff_profile', 'title' => $profile->LastName . ', ' . $profile->FirstName));
+      $mynode->field_email->value = $profile->email;
+      $mynode->field_netid->value = str_replace('@iastate.edu', '', strtolower($profile->email));
+      $mynode->field_working_title = $profile->UniversityTitle;
+      $mynode->field_preferred_name->value = $profile->FirstName;
+      $mynode->field_preferred_phone->value = $profile->Phone;
+    }
+
+    $mynode->field_staffid->value = $profile->StaffID;
+    $mynode->field_first_name->value = $profile->FirstName;
+    $mynode->field_last_name->value = $profile->LastName;
+    $mynode->field_addr = array(
+      'country_code' => 'US',
+      'address_line1' => $profile->Address1,
+      'address_line2' => $profile->Address2,
+      'locality' => $profile->City,
+      'administrative_area' => $profile->State,
+      'postal_code' => $profile->Zip,
+    );
+    $mynode->field_departmentid->value = $profile->DepartmentID;
+    $mynode->field_job_title->value = $profile->UniversityTitle;
+    $mynode->field_phone->value = $profile->Phone;
+    $mynode->field_fax->value = $profile->Fax;
+
+    $taxonomy = taxonomy_term_load_multiple_by_name($profile->CountyName, 'counties-in-iowa');
+    $base_county = (!empty($taxonomy) ? array_keys($taxonomy)[0] : 0);
+    $mynode->field_base_county = [['target_id' => $base_county]];
+
+    $mynode->field_college = [['value' => $profile->CollegeName]];
+    $mynode->field_location = [['value' => $profile->Location]];
+
+    $mynode->field_region->value = (!empty($profile->ExtensionArea) && (intval($profile->ExtensionArea) > 0)) ? $profile->ExtensionArea : '';
+
+    $mynode->field_counties_served = [array()];
+    $temp_array = explode(", ", $profile->CountiesServed);
+    foreach ($temp_array as $index => $temp_term) {
+      $taxon = taxonomy_term_load_multiple_by_name($temp_term, 'counties-in-iowa');
+      if (!empty($taxon) && array_keys($taxon)[0] > 0) {
+        $mynode->field_counties_served[] = ['target_id' => array_keys($taxon)[0]];
+      }
+    }
+
+    $mynode->field_program_areas = [array()];
+    $temp_array = explode(", ", $profile->ProgramAreas);
+    foreach ($temp_array as $index => $temp_term) {
+      $taxon = taxonomy_term_load_multiple_by_name($temp_term, 'program_areas');
+      if (!empty($taxon) && array_keys($taxon)[0] > 0) {
+        $mynode->field_program_areas[] = ['target_id' => array_keys($taxon)[0]];
+      }
+    }
+
+    $mynode->setPublished();
+    $mynode->save();
+
+    $count++;
+  }
+
+  sqlsrv_close($dbhandle);
+  \Drupal::logger('staff_profile_mastersync')->info('Staff from Staff Directory Database: ' . $count);
+}
