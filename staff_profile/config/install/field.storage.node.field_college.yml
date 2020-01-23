@@ -11,16 +11,16 @@ type: list_string
 settings:
   allowed_values:
     -
-      value: AG
+      value: Agriculture
       label: Agriculture
     -
-      value: DE
+      value: Design
       label: Design
     -
-      value: HS
+      value: 'Human Sciences'
       label: 'Human Sciences'
     -
-      value: VM
+      value: 'Vet Med'
       label: 'Vet Med'
   allowed_values_function: ''
 module: options
