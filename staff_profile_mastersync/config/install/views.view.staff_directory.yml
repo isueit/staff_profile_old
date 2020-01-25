@@ -618,7 +618,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      path: Search
+      path: search_staff
     cache_metadata:
       max-age: -1
       contexts:

@@ -3,8 +3,11 @@ use \Drupal\taxonomy\Entity\Vocabulary;
 use \Drupal\taxonomy\Entity\Term;
 use \Drupal\taxonomy_import\Form\ImportForm;
 
-function staff_profile_install() {
+/**
+ * Implements hook_install()
+ */
+function staff_profile_mastersync_install() {
   $config = \Drupal::configFactory()->getEditable('system.site');
 
-  $config->set('page.front', '/Search')->save();
+  $config->set('page.front', '/search_staff')->save();
 }
