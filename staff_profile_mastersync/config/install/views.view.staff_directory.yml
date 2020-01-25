@@ -42,7 +42,7 @@ display:
           query_comment: ''
           query_tags: {  }
       exposed_form:
-        type: basic
+        type: input_required
         options:
           submit_button: Apply
           reset_button: false
@@ -51,6 +51,8 @@ display:
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
+          text_input_required: 'Select any filter and click on Apply to see results'
+          text_input_required_format: wysiwyg
       pager:
         type: full
         options:
@@ -616,7 +618,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      path: StaffSearch
+      path: Search
     cache_metadata:
       max-age: -1
       contexts:

@@ -1,0 +1,10 @@
+<?php
+use \Drupal\taxonomy\Entity\Vocabulary;
+use \Drupal\taxonomy\Entity\Term;
+use \Drupal\taxonomy_import\Form\ImportForm;
+
+function staff_profile_install() {
+  $config = \Drupal::configFactory()->getEditable('system.site');
+
+  $config->set('page.front', '/Search')->save();
+}
