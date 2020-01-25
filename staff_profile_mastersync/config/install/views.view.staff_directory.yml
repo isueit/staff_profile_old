@@ -6,7 +6,7 @@ dependencies:
     - field.storage.node.field_preferred_phone
     - field.storage.node.field_working_title
     - node.type.staff_profile
-    - taxonomy.vocabulary.counties-in-iowa
+    - taxonomy.vocabulary.counties_in_iowa
     - taxonomy.vocabulary.program_areas
   module:
     - node
@@ -473,7 +473,7 @@ display:
           reduce_duplicates: false
           type: select
           limit: true
-          vid: counties-in-iowa
+          vid: counties_in_iowa
           hierarchy: false
           error_message: true
           plugin_id: taxonomy_index_tid
@@ -520,7 +520,7 @@ display:
           reduce_duplicates: false
           type: select
           limit: true
-          vid: counties-in-iowa
+          vid: counties_in_iowa
           hierarchy: false
           error_message: true
           plugin_id: taxonomy_index_tid

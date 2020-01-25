@@ -4,7 +4,6 @@ dependencies:
   config:
     - field.storage.node.field_base_county
     - node.type.staff_profile
-    - taxonomy.vocabulary.counties-in-iowa
 id: node.staff_profile.field_base_county
 field_name: field_base_county
 entity_type: node
@@ -19,7 +18,7 @@ settings:
   handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
-      counties-in-iowa: counties-in-iowa
+      counties_in_iowa: counties_in_iowa
     sort:
       field: name
       direction: asc

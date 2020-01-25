@@ -4,7 +4,6 @@ dependencies:
   config:
     - field.storage.node.field_program_areas
     - node.type.staff_profile
-    - taxonomy.vocabulary.program_areas
 id: node.staff_profile.field_program_areas
 field_name: field_program_areas
 entity_type: node

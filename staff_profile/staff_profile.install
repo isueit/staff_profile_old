@@ -7,7 +7,7 @@ function staff_profile_install() {
   // Chron entity update needs to be run before search index
   module_set_weight("staff_profile", -1);
   $name = "Counties in Iowa";
-  $vid = "counties-in-iowa";
+  $vid = "counties_in_iowa";
   $desc = "List of counties in Iowa. This vocabulary is required for Staff Profiles.";
   $path = DRUPAL_ROOT . '/' . drupal_get_path('module', 'taxonomy_import') . '/src/data/IowaCounties.txt';
   $vocabs = Vocabulary::loadMultiple();

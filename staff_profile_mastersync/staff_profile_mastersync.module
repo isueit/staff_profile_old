@@ -67,7 +67,7 @@ $count = 0;
     $mynode->field_phone->value = $profile->Phone;
     $mynode->field_fax->value = $profile->Fax;
 
-    $taxonomy = taxonomy_term_load_multiple_by_name($profile->CountyName, 'counties-in-iowa');
+    $taxonomy = taxonomy_term_load_multiple_by_name($profile->CountyName, 'counties_in_iowa');
     $base_county = (!empty($taxonomy) ? array_keys($taxonomy)[0] : 0);
     $mynode->field_base_county = [['target_id' => $base_county]];
 
@@ -79,7 +79,7 @@ $count = 0;
     $mynode->field_counties_served = [array()];
     $temp_array = explode(", ", $profile->CountiesServed);
     foreach ($temp_array as $index => $temp_term) {
-      $taxon = taxonomy_term_load_multiple_by_name($temp_term, 'counties-in-iowa');
+      $taxon = taxonomy_term_load_multiple_by_name($temp_term, 'counties_in_iowa');
       if (!empty($taxon) && array_keys($taxon)[0] > 0) {
         $mynode->field_counties_served[] = ['target_id' => array_keys($taxon)[0]];
       }
