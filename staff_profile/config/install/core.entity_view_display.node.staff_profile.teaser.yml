@@ -6,7 +6,6 @@ dependencies:
     - field.field.node.staff_profile.body
     - field.field.node.staff_profile.field_addr
     - field.field.node.staff_profile.field_base_county
-    - field.field.node.staff_profile.field_cell_phone
     - field.field.node.staff_profile.field_college
     - field.field.node.staff_profile.field_counties_served
     - field.field.node.staff_profile.field_departmentid
@@ -28,8 +27,6 @@ dependencies:
   module:
     - text
     - user
-_core:
-  default_config_hash: 0bl7XtJy6s8ScrAsW6h3Q-ukd8FRFiwloLWs-oh1DiY
 id: node.staff_profile.teaser
 targetEntityType: node
 bundle: staff_profile
@@ -51,7 +48,6 @@ content:
 hidden:
   field_addr: true
   field_base_county: true
-  field_cell_phone: true
   field_college: true
   field_counties_served: true
   field_departmentid: true

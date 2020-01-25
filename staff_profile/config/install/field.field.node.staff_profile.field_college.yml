@@ -10,7 +10,7 @@ id: node.staff_profile.field_college
 field_name: field_college
 entity_type: node
 bundle: staff_profile
-label: College
+label: 'College:'
 description: ''
 required: false
 translatable: false

@@ -5,7 +5,6 @@ dependencies:
     - field.field.node.staff_profile.body
     - field.field.node.staff_profile.field_addr
     - field.field.node.staff_profile.field_base_county
-    - field.field.node.staff_profile.field_cell_phone
     - field.field.node.staff_profile.field_college
     - field.field.node.staff_profile.field_counties_served
     - field.field.node.staff_profile.field_departmentid
@@ -118,8 +117,6 @@ third_party_settings:
         required_fields: true
       label: 'Extra Staff Info'
       region: content
-_core:
-  default_config_hash: gihRJUZAaFpc7xKnu0XAIynVxpRJ5HX_CZ8nFItbhRk
 id: node.staff_profile.default
 targetEntityType: node
 bundle: staff_profile
@@ -152,13 +149,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: options_select
-    region: content
-  field_cell_phone:
-    weight: 14
-    settings:
-      placeholder: ''
-    third_party_settings: {  }
-    type: telephone_default
     region: content
   field_college:
     weight: 22

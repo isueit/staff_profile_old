@@ -5,7 +5,6 @@ dependencies:
     - field.field.node.staff_profile.body
     - field.field.node.staff_profile.field_addr
     - field.field.node.staff_profile.field_base_county
-    - field.field.node.staff_profile.field_cell_phone
     - field.field.node.staff_profile.field_college
     - field.field.node.staff_profile.field_counties_served
     - field.field.node.staff_profile.field_departmentid
@@ -26,11 +25,44 @@ dependencies:
     - node.type.staff_profile
   module:
     - address
+    - field_group
     - options
+    - telephone
     - text
     - user
-_core:
-  default_config_hash: DVXMzJxs935JfLIo-0kBkf3t2UykzAzVKu-BOwWMxwE
+third_party_settings:
+  field_group:
+    group_contact_:
+      children:
+        - field_addr
+        - field_email
+        - field_preferred_phone
+      parent_name: ''
+      weight: 1
+      format_type: fieldset
+      region: content
+      format_settings:
+        id: ''
+        classes: ''
+        description: ''
+      label: 'Contact Information'
+    group_location_information:
+      children:
+        - field_region
+        - field_college
+        - field_program_areas
+        - field_location
+        - field_base_county
+        - field_counties_served
+      parent_name: ''
+      weight: 2
+      format_type: fieldset
+      region: content
+      format_settings:
+        id: sp_location
+        classes: ''
+        description: ''
+      label: 'Location Information'
 id: node.staff_profile.default
 targetEntityType: node
 bundle: staff_profile
@@ -39,151 +71,73 @@ content:
   body:
     label: hidden
     type: text_default
-    weight: 101
+    weight: 9
     settings: {  }
     third_party_settings: {  }
     region: content
   field_addr:
-    weight: 104
-    label: above
+    weight: 2
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     type: address_default
     region: content
   field_base_county:
-    weight: 115
-    label: above
+    weight: 7
+    label: inline
     settings:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
     region: content
-  field_cell_phone:
-    weight: 119
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    type: basic_string
-    region: content
   field_college:
-    weight: 111
-    label: above
+    weight: 4
+    label: inline
     settings: {  }
     third_party_settings: {  }
     type: list_default
     region: content
   field_counties_served:
-    weight: 116
+    weight: 8
     label: above
     settings:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
     region: content
-  field_departmentid:
-    weight: 112
-    label: above
-    settings:
-      thousand_separator: ''
-      prefix_suffix: true
-    third_party_settings: {  }
-    type: number_integer
-    region: content
   field_email:
-    weight: 106
-    label: above
+    weight: 3
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     type: basic_string
-    region: content
-  field_fax:
-    weight: 108
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    type: basic_string
-    region: content
-  field_first_name:
-    weight: 102
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    type: string
-    region: content
-  field_job_title:
-    weight: 114
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    type: string
-    region: content
-  field_last_name:
-    weight: 103
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    type: string
     region: content
   field_location:
-    weight: 110
-    label: above
+    weight: 6
+    label: inline
     settings: {  }
     third_party_settings: {  }
     type: list_default
     region: content
-  field_netid:
-    weight: 121
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    type: string
-    region: content
-  field_phone:
-    weight: 107
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    type: basic_string
-    region: content
-  field_preferred_name:
-    weight: 118
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    type: string
-    region: content
   field_preferred_phone:
-    weight: 120
-    label: above
-    settings: {  }
+    weight: 4
+    label: hidden
+    settings:
+      title: ''
     third_party_settings: {  }
-    type: basic_string
+    type: telephone_link
     region: content
   field_program_areas:
-    weight: 113
-    label: above
+    weight: 5
+    label: inline
     settings:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
     region: content
   field_region:
-    weight: 109
-    label: above
-    settings:
-      thousand_separator: ''
-      prefix_suffix: true
-    third_party_settings: {  }
-    type: number_integer
-    region: content
-  field_staffid:
-    weight: 105
-    label: above
+    weight: 3
+    label: inline
     settings:
       thousand_separator: ''
       prefix_suffix: true
@@ -191,16 +145,21 @@ content:
     type: number_integer
     region: content
   field_working_title:
-    weight: 117
-    label: above
+    weight: 0
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
     type: string
     region: content
-  links:
-    weight: 100
-    settings: {  }
-    third_party_settings: {  }
-    region: content
-hidden: {  }
+hidden:
+  field_departmentid: true
+  field_fax: true
+  field_first_name: true
+  field_job_title: true
+  field_last_name: true
+  field_netid: true
+  field_phone: true
+  field_preferred_name: true
+  field_staffid: true
+  links: true

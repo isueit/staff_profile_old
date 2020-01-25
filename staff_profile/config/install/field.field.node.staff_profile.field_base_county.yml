@@ -4,11 +4,12 @@ dependencies:
   config:
     - field.storage.node.field_base_county
     - node.type.staff_profile
+    - taxonomy.vocabulary.counties-in-iowa
 id: node.staff_profile.field_base_county
 field_name: field_base_county
 entity_type: node
 bundle: staff_profile
-label: 'Base County'
+label: 'Base County:'
 description: ''
 required: false
 translatable: false

@@ -8,7 +8,7 @@ id: node.staff_profile.field_region
 field_name: field_region
 entity_type: node
 bundle: staff_profile
-label: Region
+label: 'Region:'
 description: ''
 required: false
 translatable: false

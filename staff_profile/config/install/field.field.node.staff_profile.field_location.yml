@@ -10,7 +10,7 @@ id: node.staff_profile.field_location
 field_name: field_location
 entity_type: node
 bundle: staff_profile
-label: Location
+label: 'Location:'
 description: ''
 required: true
 translatable: false
