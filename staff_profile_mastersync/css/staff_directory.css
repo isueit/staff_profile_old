@@ -1,0 +1,5 @@
+div.form-group {width:100%; padding:0; margin:3px;}
+div.form-group label {float:left; width: 20%;}
+div.form-group input, div.form-group select {width:50%;}
+div.item-list ul {list-style:none; padding-left:0px;}
+div.item-list ul li {margin-bottom:10px;}

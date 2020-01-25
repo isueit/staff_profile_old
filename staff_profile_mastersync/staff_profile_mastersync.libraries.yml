@@ -1,0 +1,5 @@
+staff_directory:
+  version: 1.x
+  css:
+    layout:
+      css/staff_directory.css: {}

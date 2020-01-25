@@ -103,3 +103,13 @@ $count = 0;
   sqlsrv_close($dbhandle);
   \Drupal::logger('staff_profile_mastersync')->info('Staff from Staff Directory Database: ' . $count);
 }
+
+/*
+ * Implements hook_preprocess_views_view()
+ */
+function staff_profile_preprocess_views_view(&$variables) {
+  $variables['#cache']['contexts'][] = 'route';
+  if ($variables['view_array']['#name'] == 'staff_directory') {
+    $variables['#attached']['library'][] = 'staff_profile_mastersync/staff_directory';
+  }
+}

@@ -1,0 +1,12 @@
+<?php
+
+/*
+ * Implements hook_preprocess_node()
+ */
+function staff_profile_preprocess_node(&$variables) {
+  $node = $variables['node'];
+  //check content type
+  if ($node->getType() == 'staff_profile') {
+    $variables['#attached']['library'][] = 'staff_profile/staff_profile'; 
+  }
+}
