@@ -27,7 +27,6 @@ dependencies:
     - address
     - field_group
     - options
-    - telephone
     - text
     - user
 third_party_settings:
@@ -110,7 +109,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    type: basic_string
+    type: email_mailto
     region: content
   field_location:
     weight: 6
@@ -123,9 +122,9 @@ content:
     weight: 4
     label: hidden
     settings:
-      title: ''
+      link_to_entity: false
     third_party_settings: {  }
-    type: telephone_link
+    type: string
     region: content
   field_program_areas:
     weight: 5

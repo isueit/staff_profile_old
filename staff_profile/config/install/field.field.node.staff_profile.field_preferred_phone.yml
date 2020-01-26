@@ -11,7 +11,7 @@ field_name: field_preferred_phone
 entity_type: node
 bundle: staff_profile
 label: 'Preferred Phone'
-description: ''
+description: 'Displayed on public web pages. Can use your office phone, cell phone. Blank field won''t display any phone number.'
 required: false
 translatable: false
 default_value: {  }

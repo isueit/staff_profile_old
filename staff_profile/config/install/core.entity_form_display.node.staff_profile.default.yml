@@ -67,10 +67,10 @@ third_party_settings:
       weight: 1
       format_type: fieldset
       format_settings:
-        id: ''
-        classes: ''
         description: ''
         required_fields: true
+        id: staff-profile-from-staff-directory
+        classes: ''
       label: 'From Staff Directory'
       region: content
     group_more_from_staff_directory:
@@ -105,7 +105,6 @@ third_party_settings:
         - body
         - field_working_title
         - field_preferred_name
-        - field_cell_phone
         - field_preferred_phone
       parent_name: ''
       weight: 2
