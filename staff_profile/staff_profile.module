@@ -10,3 +10,16 @@ function staff_profile_preprocess_node(&$variables) {
     $variables['#attached']['library'][] = 'staff_profile/staff_profile'; 
   }
 }
+
+/**
+ * Implements hook_form_alter().
+ */
+function staff_profile_form_node_form_alter(&$form, &$form_state, $form_id) {
+  /* @var Drupal\Core\Entity\FieldableEntityInterface $node */
+  $node = $form_state->getFormObject()->getEntity();
+
+  if ($node->getType() == 'staff_profile') {
+   /* var_dump($node);*/
+    $form['#attached']['library'][] = 'staff_profile/staff_profile_edit';
+  }
+}
