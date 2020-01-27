@@ -41,14 +41,23 @@ $count = 0;
       }
     }
 
+    // Don't let the Job Title start with, or end with ' - '
+    $jobtitle = $profile->JobTitle;
+    if (substr($jobtitle, 0, 3) === ' - ') {
+      $jobtitle = '';
+    } elseif (substr($jobtitle,  -3) === ' - ') {
+      $jobtitle = substr($jobtitle, 0, strlen($jobtitle)  - 3);
+    }
+
     // Need to create a node
     if (empty($mynode)) {
       $mynode = Node::create(array('type' => 'staff_profile', 'title' => $profile->LastName . ', ' . $profile->FirstName));
       $mynode->field_email->value = $profile->email;
       $mynode->field_netid->value = str_replace('@iastate.edu', '', strtolower($profile->email));
-      $mynode->field_working_title = $profile->UniversityTitle;
       $mynode->field_preferred_name->value = $profile->FirstName;
       $mynode->field_preferred_phone->value = $profile->Phone;
+
+      $mynode->field_working_title = $jobtitle;
     }
 
     $mynode->field_staffid->value = $profile->StaffID;
@@ -63,7 +72,7 @@ $count = 0;
       'postal_code' => $profile->Zip,
     );
     $mynode->field_departmentid->value = $profile->DepartmentID;
-    $mynode->field_job_title->value = $profile->UniversityTitle;
+    $mynode->field_job_title->value = $jobtitle;
     $mynode->field_phone->value = $profile->Phone;
     $mynode->field_fax->value = $profile->Fax;
 
