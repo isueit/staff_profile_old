@@ -14,19 +14,19 @@ function staff_profile_mastersync_profile_from_database () {
   $nids = \Drupal::entityQuery('node')->condition('type','staff_profile')->execute();
   $nodes =  \Drupal\node\Entity\Node::loadMultiple($nids);
 
-  // Unpublish all published nodes from the Staff Directory Database
-  foreach ($nodes as $node) {
-    if ($node->isPublished() && !empty($node->field_staffid->value)) {
-      $node->setUnpublished()->save();
-    }
-  }
-
   // Query the staff profiles from the database
   $dbhandle = sqlsrv_connect('ext-db-server.its.iastate.edu', array("Database" => 'StaffDir', "UID" => 'StaffDirUser', "PWD" => 'PXnUSjAZqX6a7kpYxLv9W76My+'))
     or die("Couldn't connect to SQL Server on $myServer");
   $results = sqlsrv_query($dbhandle, "dbo.Staff_GetFullDirectory");
   if ($results === false) {
     die( print_r(sqlsrv_errors(), true));
+  }
+
+  // Unpublish all published nodes from the Staff Directory Database
+  foreach ($nodes as $node) {
+    if ($node->isPublished() && !empty($node->field_staffid->value)) {
+      $node->setUnpublished()->save();
+    }
   }
 
 
