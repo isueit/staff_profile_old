@@ -5,7 +5,14 @@ dependencies:
     - field.storage.node.body
     - node.type.staff_profile
   module:
+    - allowed_formats
     - text
+third_party_settings:
+  allowed_formats:
+    basic: basic
+    wysiwyg: '0'
+    full_html: '0'
+    plain_text: '0'
 id: node.staff_profile.body
 field_name: body
 entity_type: node
