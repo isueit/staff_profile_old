@@ -13,7 +13,6 @@ function staff_profile_mastersync_install() {
 
   // Set up permissions, allow users to edit their own staff profile
   user_role_grant_permissions('authenticated', array(
-    'delete own staff_profile content',
     'edit own staff_profile content',
     'use text format basic',
   ));
