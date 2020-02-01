@@ -1,6 +1,8 @@
 <?php
 
 use \Drupal\node\Entity\Node;
+use \Drupal\user\Entity\User;
+use \Drupal\Component\Utility\Random;
 
 /**
  * Implements hook_rebuild()
@@ -12,7 +14,7 @@ function staff_profile_mastersync_rebuild() {
 function staff_profile_mastersync_profile_from_database () {
   // Get all Staff Profile nodes
   $nids = \Drupal::entityQuery('node')->condition('type','staff_profile')->execute();
-  $nodes =  \Drupal\node\Entity\Node::loadMultiple($nids);
+  $nodes =  Node::loadMultiple($nids);
 
   // Query the staff profiles from the database
   $dbhandle = sqlsrv_connect('ext-db-server.its.iastate.edu', array("Database" => 'StaffDir', "UID" => 'StaffDirUser', "PWD" => 'PXnUSjAZqX6a7kpYxLv9W76My+'))
@@ -56,8 +58,16 @@ $count = 0;
       $mynode->field_netid->value = str_replace('@iastate.edu', '', strtolower($profile->email));
       $mynode->field_preferred_name->value = $profile->FirstName;
       $mynode->field_preferred_phone->value = $profile->Phone;
-
       $mynode->field_working_title = $jobtitle;
+
+      // Set the owner of the new node, will probably need to create the user
+      $users =\Drupal::entityTypeManager()->getStorage('user')->loadByProperties(array('name' => $mynode->field_netid->value));
+      $owner = reset($users);
+      if (!$owner) {
+        $owner = User::create(array('name' => $mynode->field_netid, 'email' => $profile->email->value, 'pass' => Random::string(40)));
+        $owner->activate()->save();
+      }
+      $mynode->setOwner($owner);
     }
 
     $mynode->field_staffid->value = $profile->StaffID;
