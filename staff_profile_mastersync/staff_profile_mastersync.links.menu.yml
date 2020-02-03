@@ -1,5 +1,5 @@
 staff_profile_sync.mastersync_settings_form:
-  title: 'Staff Profile Sync Settings'
+  title: 'Staff Profile MasterSync Settings'
   route_name: staff_profile_mastersync.sync_settings_form
   description: 'Change settings for Staff Profile Syncing'
   parent: system.admin_config_system
