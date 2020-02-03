@@ -31,25 +31,34 @@ class SettingsForm extends ConfigFormBase {
     public function buildForm(array $form, FormStateInterface $form_state) {
       $config = $this->config('staff_profile_mastersync.settings');
       $site_vars = \Drupal::config('system.site');
-      $form['username'] = array(
+      $form['minimum_staff'] = array(
+        '#type' => 'number',
+        '#title' => $this->t('Minimum Number of Staff'),
+        '#description' => $this->t('Minimum number of staff we should expect from the database. If we get less than this, then something\'s wrong, don\'t process the records.'),
+        '#maxlength' => 4,
+        '#size' => 4,
+        '#default_value' => !empty($config->get('minimum_staff')) ? $config->get('minimum_staff') : 800,
+        '#required' => TRUE,
+      );
+      $form['db_username'] = array(
         '#type' => 'textfield',
-        '#title' => $this->t('Username'),
+        '#title' => $this->t('Database Username'),
         '#description' => $this->t('The username used to connect to the staff database.'),
         '#maxlength' => 64,
         '#size' => 64,
         '#default_value' => $config->get('db_username'),
         '#required' => TRUE,
       );
-      $form['password'] = array(
+      $form['db_password'] = array(
         '#type' => 'password',
-        '#title' => $this->t('Password'),
+        '#title' => $this->t('Database Password'),
         '#description' => $this->t('The password used to connect to the staff database. Note: This is not a secure password storage facility, use an account with the fewest permissions. This field will always show up blank even when a password is saved.'),
         '#size' => 64,
         '#default_value' => $this->t(""),
       );
-      $form['server_url'] = array(
+      $form['db_server_url'] = array(
         '#type' => 'textfield',
-        '#title' => $this->t('URL'),
+        '#title' => $this->t('Database URL'),
         '#description' => $this->t('The url used to connect to the staff database.'),
         '#maxlength' => 64,
         '#size' => 64,
@@ -58,7 +67,7 @@ class SettingsForm extends ConfigFormBase {
       );
       $form['database'] = array(
         '#type' => 'textfield',
-        '#title' => $this->t('Database'),
+        '#title' => $this->t('Database Name'),
         '#description' => $this->t('The database containing the staff profiles.'),
         '#maxlength' => 64,
         '#size' => 64,
@@ -115,13 +124,13 @@ class SettingsForm extends ConfigFormBase {
 
       $config = $this->config('staff_profile_mastersync.settings');
       $saved_pwd = $config->get('db_password');
-      $new_pwd = $form_state->getValue('password');
+      $new_pwd = $form_state->getValue('db_password');
       $encrypt_profile = EncryptionProfile::load($form_state->getValue('encrypt_profile'));
 
       if (empty($new_pwd)) {
-        $form_state->setValue('password', $saved_pwd);
+        $form_state->setValue('db_password', $saved_pwd);
       } else {
-        $form_state->setValue('password', \Drupal::service('encryption')->encrypt($new_pwd, $encrypt_profile));
+        $form_state->setValue('db_password', \Drupal::service('encryption')->encrypt($new_pwd, $encrypt_profile));
       }
 
       $saved_pwd_smug = $config->get('smug_mug_password');
@@ -148,9 +157,10 @@ class SettingsForm extends ConfigFormBase {
       parent::submitForm($form, $form_state);
       //If checked, run sync
       $this->config('staff_profile_mastersync.settings')
-        ->set('db_username', $form_state->getValue('username'))
-        ->set('db_password', $form_state->getValue('password'))
-        ->set('db_address', $form_state->getValue('server_url'))
+        ->set('minimum_staff', $form_state->getValue('minimum_staff'))
+        ->set('db_username', $form_state->getValue('db_username'))
+        ->set('db_password', $form_state->getValue('db_password'))
+        ->set('db_address', $form_state->getValue('db_server_url'))
         ->set('db_database', $form_state->getValue('database'))
         ->set('smug_mug_password', $form_state->getValue('smugmug_pwd'))
         ->set('smug_mug_api_key', $form_state->getValue('smugmug_api'))
