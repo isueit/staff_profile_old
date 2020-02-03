@@ -6,3 +6,6 @@ version: '8.x-1.1-dev'
 package: 'ISUEO'
 dependencies:
   - staff_profile:staff_profile
+  - encrypt:encrypt
+  - key:key
+  - real_aes:real_aes
