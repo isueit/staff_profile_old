@@ -13,41 +13,24 @@ class SettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-   protected function getEditableConfigNames() {
-     return [
-       'staff_profile_sync.settings',
-     ]; }
+  protected function getEditableConfigNames() {
+    return [
+      'staff_profile_mastersync.settings',
+    ]; }
+
+  /**
+   * {@inheritdoc}
+   */
+   public function getFormID() {
+     return 'settings_form';
+   }
 
    /**
     * {@inheritdoc}
     */
-    public function getFormID() {
-      return 'settings_form';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-     public function buildForm(array $form, FormStateInterface $form_state) {
-       $config = $this->config('staff_profile_sync.settings');
-       $site_vars = \Drupal::config('system.site');
-       $form['run_on_chron'] = [
-         '#type' => 'checkbox',
-         '#title' => t('Run sync on next Chron'),
-         '#default_value' => false,
-         '#description' => t('Check this and save the settings to run profile sync on the next chron')
-       ];
-      $form['run_on_save'] = [
-        '#type' => 'checkbox',
-        '#title' => t('Run sync on form Submit'),
-        '#default_value' => false,
-        '#description' => t('Check this and save the settings to run profile sync')
-      ];
-      if ($config->get('staff_profile_sync_last')>0) {
-        $form['last_run'] = [
-          '#markup' => 'Last Updated on: ' . $config->get('staff_profile_sync_last'),
-        ];
-      }
+    public function buildForm(array $form, FormStateInterface $form_state) {
+      $config = $this->config('staff_profile_mastersync.settings');
+      $site_vars = \Drupal::config('system.site');
       $form['username'] = array(
         '#type' => 'textfield',
         '#title' => $this->t('Username'),
@@ -55,6 +38,7 @@ class SettingsForm extends ConfigFormBase {
         '#maxlength' => 64,
         '#size' => 64,
         '#default_value' => $config->get('db_username'),
+        '#required' => TRUE,
       );
       $form['password'] = array(
         '#type' => 'password',
@@ -70,6 +54,7 @@ class SettingsForm extends ConfigFormBase {
         '#maxlength' => 64,
         '#size' => 64,
         '#default_value' => $config->get('db_address'),
+        '#required' => TRUE,
       );
       $form['database'] = array(
         '#type' => 'textfield',
@@ -78,6 +63,7 @@ class SettingsForm extends ConfigFormBase {
         '#maxlength' => 64,
         '#size' => 64,
         '#default_value' => $config->get('db_database'),
+        '#required' => TRUE,
       );
 
       $form['smugmug_pwd'] = array(
@@ -98,6 +84,12 @@ class SettingsForm extends ConfigFormBase {
       // List of encryption profiles for selector
       $encrypt_ids = \Drupal::entityQuery('encryption_profile')->execute();
       $encrypt_list = array();
+
+      if (empty($encrypt_ids)) {
+        $messenger = \Drupal::messenger();
+        $messenger->addMessage('You need to add an Encryption Profile');
+      }
+
       foreach ($encrypt_ids as $eid) {
         $encrypt_prof = \Drupal::entityTypeManager()->getStorage('encryption_profile')->load($eid);
         $encrypt_list[$eid] = $encrypt_prof->label();
@@ -109,8 +101,8 @@ class SettingsForm extends ConfigFormBase {
         '#description' => $this->t('Encryption profile used for encryption.'),
         '#options' => $encrypt_list,
         '#default_value' => $config->get('sync_encrypt_profile'),
+        '#required' => TRUE,
       );
-
 
       return parent::buildForm($form, $form_state);
     }
@@ -121,7 +113,7 @@ class SettingsForm extends ConfigFormBase {
     public function validateForm(array &$form, FormStateInterface $form_state) {
       parent::validateForm($form, $form_state);
 
-      $config = $this->config('staff_profile_sync.settings');
+      $config = $this->config('staff_profile_mastersync.settings');
       $saved_pwd = $config->get('db_password');
       $new_pwd = $form_state->getValue('password');
       $encrypt_profile = EncryptionProfile::load($form_state->getValue('encrypt_profile'));
@@ -155,15 +147,7 @@ class SettingsForm extends ConfigFormBase {
     public function submitForm(array &$form, FormStateInterface $form_state) {
       parent::submitForm($form, $form_state);
       //If checked, run sync
-      if ($form_state->getValue('run_on_save')) {
-        staff_profile_sync_updater();
-      }
-      //Set time of last sync to zero so it runs on next chron
-      if ($form_state->getValue('run_on_chron')) {
-        $this->config('staff_profile_sync.settings')
-          ->set('staff_profile_sync_last', 0);
-      }
-      $this->config('staff_profile_sync.settings')
+      $this->config('staff_profile_mastersync.settings')
         ->set('db_username', $form_state->getValue('username'))
         ->set('db_password', $form_state->getValue('password'))
         ->set('db_address', $form_state->getValue('server_url'))
