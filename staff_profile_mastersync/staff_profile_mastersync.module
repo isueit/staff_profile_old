@@ -3,6 +3,7 @@
 use \Drupal\node\Entity\Node;
 use \Drupal\user\Entity\User;
 use \Drupal\Component\Utility\Random;
+use \Drupal\encrypt\Entity\EncryptionProfile;
 
 /**
  * Implements hook_rebuild()
@@ -16,13 +17,33 @@ function staff_profile_mastersync_profile_from_database () {
   $nids = \Drupal::entityQuery('node')->condition('type','staff_profile')->execute();
   $nodes =  Node::loadMultiple($nids);
 
-  // Query the staff profiles from the database
-  $dbhandle = sqlsrv_connect('ext-db-server.its.iastate.edu', array("Database" => 'StaffDir', "UID" => 'StaffDirUser', "PWD" => 'PXnUSjAZqX6a7kpYxLv9W76My+'))
-    or die("Couldn't connect to SQL Server on $myServer");
-  $results = sqlsrv_query($dbhandle, "dbo.Staff_GetFullDirectory");
-  if ($results === false) {
-    die( print_r(sqlsrv_errors(), true));
+  $mastersync_config = \Drupal::config('staff_profile_mastersync.settings');
+
+  if (empty($mastersync_config->get('db_password'))) {
+    \Drupal::logger('staff_profile_mastersync')->warning('Configuration not found');
+    return;
   }
+
+  $db_database = $mastersync_config->get('db_database');
+  $db_username = $mastersync_config->get('db_username');
+  $db_server = $mastersync_config->get('db_address');
+
+  $encrypt_profile = EncryptionProfile::load($mastersync_config->get('sync_encrypt_profile'));
+  $db_password = \Drupal::service('encryption')->decrypt( $mastersync_config->get('db_password'), $encrypt_profile);
+
+
+  // Query the staff profiles from the database
+  $dbhandle = sqlsrv_connect($db_server, array('Database' => $db_database, 'UID' => $db_username, 'PWD' => $db_password));
+  if ($dbhandle === FALSE) {
+    \Drupal::logger('staff_profile_mastersync')->error('Couldn\'t connect to SQL Server on ' . $db_server);
+    return;
+  }
+  $results = sqlsrv_query($dbhandle, 'dbo.Staff_GetFullDirectory');
+  if ($results === false) {
+    \Drupal::logger('staff_profile_mastersync')->error(print_r(sqlsrv_errors(), true));
+    return;
+  }
+//\Drupal::logger('staff_profile_mastersync')->info('Count: ' . sqlsrv_num_rows($results));
 
   // Unpublish all published nodes from the Staff Directory Database
   foreach ($nodes as $node) {
@@ -96,7 +117,7 @@ $count = 0;
     $mynode->field_region->value = (!empty($profile->ExtensionArea) && (intval($profile->ExtensionArea) > 0)) ? $profile->ExtensionArea : '';
 
     $mynode->field_counties_served = [array()];
-    $temp_array = explode(", ", $profile->CountiesServed);
+    $temp_array = explode(', ', $profile->CountiesServed);
     foreach ($temp_array as $index => $temp_term) {
       $taxon = taxonomy_term_load_multiple_by_name($temp_term, 'counties_in_iowa');
       if (!empty($taxon) && array_keys($taxon)[0] > 0) {
@@ -105,7 +126,7 @@ $count = 0;
     }
 
     $mynode->field_program_areas = [array()];
-    $temp_array = explode(", ", $profile->ProgramAreas);
+    $temp_array = explode(', ', $profile->ProgramAreas);
     foreach ($temp_array as $index => $temp_term) {
       $taxon = taxonomy_term_load_multiple_by_name($temp_term, 'program_areas');
       if (!empty($taxon) && array_keys($taxon)[0] > 0) {
